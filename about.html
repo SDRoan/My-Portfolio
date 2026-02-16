@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About | Saibyasachi Ruhan</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="about.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="about-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">SR</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section muted">
+        <div class="container section-inner about-inner">
+          <div class="section-header center">
+            <p class="about-eyebrow">About me</p>
+            <h2>Building things that matter</h2>
+          </div>
+          <div class="about-card about-reddit-post scroll-reveal">
+            <header class="reddit-post-header">
+              <span class="reddit-avatar" aria-hidden="true">SR</span>
+              <div class="reddit-meta">
+                <span>Posted by <strong>u/saibyasachi</strong></span>
+                <span class="reddit-dot">·</span>
+                <span>r/cs_students</span>
+                <span class="reddit-dot">·</span>
+                <span class="reddit-time">2h ago</span>
+              </div>
+            </header>
+            <h3 class="reddit-title">
+              I'm a Queens College CS student who learns best by building real things
+            </h3>
+            <div class="reddit-body">
+              <span id="about-typed"></span><span class="typing-cursor" id="about-cursor" aria-hidden="true">|</span>
+            </div>
+            <footer class="reddit-footer">
+              <button type="button" class="reddit-action" aria-label="Upvote">↑ <span>127</span></button>
+              <button type="button" class="reddit-action" aria-label="Downvote">↓</button>
+              <button type="button" class="reddit-action">💬 <span>23</span></button>
+              <button type="button" class="reddit-action">↗ Share</button>
+              <button type="button" class="reddit-action">···</button>
+            </footer>
+          </div>
+
+          <div class="rotary-nav-wrap" data-page="about">
+            <div class="rotary-nav" role="navigation">
+              <div class="de">
+                <div class="den">
+                  <div class="switch">
+                    <a href="index.html" class="rotary-link" data-pos="top"><span>Top</span></a>
+                    <a href="about.html" class="rotary-link" data-pos="about"><span>About</span></a>
+                    <a href="skills.html" class="rotary-link" data-pos="skills"><span>Skills</span></a>
+                    <a href="experience.html" class="rotary-link" data-pos="experience"><span>Experience</span></a>
+                    <a href="projects.html" class="rotary-link" data-pos="projects"><span>Projects</span></a>
+                    <a href="contact.html" class="rotary-link" data-pos="contact"><span>Contact</span></a>
+                  </div>
+                  <div class="light"><span></span></div>
+                  <div class="dot"><span></span></div>
+                  <hr class="line">
+                  <hr class="line">
+                </div>
+                <div class="dene"></div>
+                <div class="denem"></div>
+                <div class="deneme"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year"></span> Saibyasachi Ruhan</span>
+      </div>
+    </footer>
+
+    <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+    <script src="rotary.js"></script>
+    <script src="features.js"></script>
+    <script src="enhancements.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      (function () {
+        const fullText =
+          "and then carefully measuring whether they actually helped.\n\n" +
+          "Over the last few years I've bounced between full‑stack work, " +
+          "AI‑flavored side projects, and a product engineering internship in biotech. " +
+          "I like being close to the problem: talking to people, understanding what's slow or " +
+          "confusing today, and then shipping a change we can measure in numbers or user stories.";
+        const el = document.getElementById("about-typed");
+        const cursor = document.getElementById("about-cursor");
+        if (!el) return;
+
+        let i = 0;
+        function type() {
+          if (i < fullText.length) {
+            i++;
+            const visible = fullText.substring(0, i).replace(/\n/g, "<br>");
+            el.innerHTML = visible;
+            setTimeout(type, 28 + Math.random() * 18);
+          } else {
+            if (cursor) cursor.classList.add("typing-cursor--done");
+          }
+        }
+        const observer = new IntersectionObserver(
+          function (entries) {
+            if (entries[0].isIntersecting) {
+              setTimeout(type, 400);
+              observer.disconnect();
+            }
+          },
+          { threshold: 0.3 }
+        );
+        const card = document.querySelector(".about-card");
+        if (card) observer.observe(card);
+      })();
+    </script>
+  </body>
+</html>

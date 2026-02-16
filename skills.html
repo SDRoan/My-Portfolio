@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Skills | Saibyasachi Ruhan</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">SR</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container section-inner skills-inner">
+          <div class="section-header center">
+            <h2>Skills</h2>
+          </div>
+
+          <div class="skills-grid">
+            <div class="skill-card">
+              <p class="skill-kicker">Languages</p>
+              <h3>Programming</h3>
+              <p>C++, Java, Python, JavaScript</p>
+            </div>
+            <div class="skill-card">
+              <p class="skill-kicker">Models & tooling</p>
+              <h3>AI / Machine Learning</h3>
+              <p>Transformers, FLAN‑T5, Ollama</p>
+            </div>
+            <div class="skill-card">
+              <p class="skill-kicker">Product work</p>
+              <h3>Platform & Full‑Stack</h3>
+              <p>Next.js, React, Node.js, REST APIs, Airtable APIs, MongoDB</p>
+            </div>
+            <div class="skill-card">
+              <p class="skill-kicker">Infra</p>
+              <h3>Cloud & Infrastructure</h3>
+              <p>AWS (EC2, S3, IAM)</p>
+            </div>
+          </div>
+
+          <div class="rotary-nav-wrap" data-page="skills">
+            <div class="rotary-nav" role="navigation">
+              <div class="de">
+                <div class="den">
+                  <div class="switch">
+                    <a href="index.html" class="rotary-link" data-pos="top"><span>Top</span></a>
+                    <a href="about.html" class="rotary-link" data-pos="about"><span>About</span></a>
+                    <a href="skills.html" class="rotary-link" data-pos="skills"><span>Skills</span></a>
+                    <a href="experience.html" class="rotary-link" data-pos="experience"><span>Experience</span></a>
+                    <a href="projects.html" class="rotary-link" data-pos="projects"><span>Projects</span></a>
+                    <a href="contact.html" class="rotary-link" data-pos="contact"><span>Contact</span></a>
+                  </div>
+                  <div class="light"><span></span></div>
+                  <div class="dot"><span></span></div>
+                  <hr class="line">
+                  <hr class="line">
+                </div>
+                <div class="dene"></div>
+                <div class="denem"></div>
+                <div class="deneme"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year"></span> Saibyasachi Ruhan</span>
+      </div>
+    </footer>
+
+    <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+    <script src="rotary.js"></script>
+    <script src="features.js"></script>
+    <script src="enhancements.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

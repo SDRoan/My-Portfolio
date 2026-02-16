@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact | Saibyasachi Ruhan</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">SR</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container section-inner narrow">
+          <div class="section-header center">
+            <h2>Say hi</h2>
+            <p>
+              I'm always down to talk about internships, projects, or anything
+              related to building software as a student in New York.
+            </p>
+          </div>
+          <div class="contact-card">
+            <p>
+              Email me at
+              <a href="mailto:sabyasachidasrohan71@gmail.com" data-copy-email="sabyasachidasrohan71@gmail.com">sabyasachidasrohan71@gmail.com</a>
+              and I'll get back to you as soon as I can.
+            </p>
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/saibyasachi-ruhan-b6351718a/" class="text-link">LinkedIn</a>
+              <a href="https://github.com/SDRoan" class="text-link">GitHub</a>
+            </div>
+          </div>
+
+          <div class="rotary-nav-wrap" data-page="contact">
+            <div class="rotary-nav" role="navigation">
+              <div class="de">
+                <div class="den">
+                  <div class="switch">
+                    <a href="index.html" class="rotary-link" data-pos="top"><span>Top</span></a>
+                    <a href="about.html" class="rotary-link" data-pos="about"><span>About</span></a>
+                    <a href="skills.html" class="rotary-link" data-pos="skills"><span>Skills</span></a>
+                    <a href="experience.html" class="rotary-link" data-pos="experience"><span>Experience</span></a>
+                    <a href="projects.html" class="rotary-link" data-pos="projects"><span>Projects</span></a>
+                    <a href="contact.html" class="rotary-link" data-pos="contact"><span>Contact</span></a>
+                  </div>
+                  <div class="light"><span></span></div>
+                  <div class="dot"><span></span></div>
+                  <hr class="line">
+                  <hr class="line">
+                </div>
+                <div class="dene"></div>
+                <div class="denem"></div>
+                <div class="deneme"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year"></span> Saibyasachi Ruhan</span>
+      </div>
+    </footer>
+
+    <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+    <script src="rotary.js"></script>
+    <script src="features.js"></script>
+    <script src="enhancements.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

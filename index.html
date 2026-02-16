@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Saibyasachi Ruhan | Portfolio</title>
+    <meta
+      name="description"
+      content="Portfolio of Saibyasachi Ruhan, software engineer with experience in full-stack development, AI/ML, and product engineering."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Intro gate -->
+    <div id="hello-gate" class="hello-gate">
+      <button id="hello-button" class="hello-pill" type="button">
+        <span>H&nbsp;e&nbsp;l&nbsp;l&nbsp;o</span>
+      </button>
+    </div>
+
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">SR</a>
+      </div>
+    </header>
+
+    <main id="top" id="site-main">
+      <!-- Hero -->
+      <section class="section hero">
+        <div class="container hero-inner">
+          <p class="eyebrow">CS Student · Software Engineering</p>
+          <p class="hero-code-line">
+            <span id="hero-code-typed"></span><span class="hero-code-cursor" id="hero-code-cursor" aria-hidden="true">|</span>
+          </p>
+          <div class="hero-meta">
+            <span> New York City </span>
+            <span>·</span>
+            <a href="mailto:sabyasachidasrohan71@gmail.com" data-copy-email="sabyasachidasrohan71@gmail.com"
+              >sabyasachidasrohan71@gmail.com</a
+            >
+          </div>
+          <div class="hero-actions">
+            <a
+              href="https://www.linkedin.com/in/saibyasachi-ruhan-b6351718a/"
+              class="btn primary"
+              aria-label="Open Saibyasachi Ruhan LinkedIn profile"
+              >LinkedIn</a
+            >
+            <a
+              href="https://github.com/SDRoan"
+              class="btn secondary"
+              aria-label="Open Saibyasachi Ruhan GitHub profile"
+              >GitHub</a
+            >
+          </div>
+
+          <!-- Rotary switch nav - links to separate pages -->
+          <div class="rotary-nav-wrap" data-page="top">
+            <div class="rotary-nav" role="navigation">
+              <div class="de">
+                <div class="den">
+                  <div class="switch">
+                    <a href="index.html" class="rotary-link" data-pos="top"><span>Top</span></a>
+                    <a href="about.html" class="rotary-link" data-pos="about"><span>About</span></a>
+                    <a href="skills.html" class="rotary-link" data-pos="skills"><span>Skills</span></a>
+                    <a href="experience.html" class="rotary-link" data-pos="experience"><span>Experience</span></a>
+                    <a href="projects.html" class="rotary-link" data-pos="projects"><span>Projects</span></a>
+                    <a href="contact.html" class="rotary-link" data-pos="contact"><span>Contact</span></a>
+                  </div>
+                  <div class="light"><span></span></div>
+                  <div class="dot"><span></span></div>
+                  <hr class="line">
+                  <hr class="line">
+                </div>
+                <div class="dene"></div>
+                <div class="denem"></div>
+                <div class="deneme"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="site-footer">
+      <div class="container footer-inner">
+        <span>© <span id="year"></span> Saibyasachi Ruhan</span>
+      </div>
+    </footer>
+
+    <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+
+    <script src="rotary.js"></script>
+    <script src="features.js"></script>
+    <script src="enhancements.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+      const gate = document.getElementById("hello-gate");
+      const helloButton = document.getElementById("hello-button");
+      const MATRIX_CHARS = "01IJHGFEDCBAKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      function attachMatrixToElement(el, restText) {
+        if (!el) return;
+        const len = restText.length;
+        let matrixInterval = null;
+        el.addEventListener("mouseenter", function () {
+          matrixInterval = setInterval(function () {
+            let s = "";
+            for (let j = 0; j < len; j++) {
+              s += MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+            }
+            el.textContent = s;
+          }, 50);
+        });
+        el.addEventListener("mouseleave", function () {
+          if (matrixInterval) clearInterval(matrixInterval);
+          matrixInterval = null;
+          el.textContent = restText;
+        });
+      }
+      (function () {
+        const heroName = document.getElementById("hero-name-value");
+        if (heroName) attachMatrixToElement(heroName, '"Saibyasachi Ruhan"');
+      })();
+      const heroCodeTyped = document.getElementById("hero-code-typed");
+      const heroCodeCursor = document.getElementById("hero-code-cursor");
+      const TYPING_CHUNKS = [
+        { text: '"name"', class: "code-key" },
+        { text: ": ", class: "code-colon" },
+        { text: '"Saibyasachi Ruhan"', class: "code-value hero-name-value" },
+        { text: ",", class: "code-comma" }
+      ];
+      function runTypingAnimation() {
+        if (!heroCodeTyped) return;
+        heroCodeTyped.innerHTML = "";
+        let chunkIndex = 0;
+        let charIndex = 0;
+        function typeNext() {
+          if (chunkIndex >= TYPING_CHUNKS.length) {
+            if (heroCodeCursor) heroCodeCursor.classList.add("hero-code-cursor--done");
+            const heroName = document.getElementById("hero-code-typed")?.querySelector(".hero-name-value");
+            if (heroName) attachMatrixToElement(heroName, '"Saibyasachi Ruhan"');
+            return;
+          }
+          const chunk = TYPING_CHUNKS[chunkIndex];
+          if (charIndex === 0) {
+            const span = document.createElement("span");
+            span.className = chunk.class;
+            span.setAttribute("aria-hidden", "true");
+            heroCodeTyped.appendChild(span);
+            chunk.span = span;
+          }
+          if (charIndex < chunk.text.length) {
+            chunk.span.textContent += chunk.text[charIndex];
+            charIndex++;
+            setTimeout(typeNext, 45 + Math.random() * 25);
+          } else {
+            chunkIndex++;
+            charIndex = 0;
+            setTimeout(typeNext, 80);
+          }
+        }
+        typeNext();
+      }
+      if (gate && helloButton) {
+        document.body.classList.add("hello-gate-active");
+        helloButton.addEventListener("click", () => {
+          gate.classList.add("hello-gate--hidden");
+          document.body.classList.remove("hello-gate-active");
+          runTypingAnimation();
+        });
+      }
+    </script>
+  </body>
+</html>
