@@ -12,169 +12,308 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
-    <!-- Intro gate -->
-    <div id="hello-gate" class="hello-gate">
-      <button id="hello-button" class="hello-pill" type="button">
-        <span>H&nbsp;e&nbsp;l&nbsp;l&nbsp;o</span>
-      </button>
-    </div>
-
-    <header class="site-header" id="site-header">
-      <div class="container header-inner">
-        <a href="index.html" class="logo">SR</a>
-      </div>
-    </header>
-
+  <body class="home-immersive">
     <main id="top" id="site-main">
-      <!-- Hero -->
-      <section class="section hero">
-        <div class="container hero-inner">
-          <p class="eyebrow">CS Student · Software Engineering</p>
-          <p class="hero-code-line">
-            <span id="hero-code-typed"></span><span class="hero-code-cursor" id="hero-code-cursor" aria-hidden="true">|</span>
-          </p>
-          <div class="hero-meta">
-            <span> New York City </span>
-            <span>·</span>
-            <a href="mailto:sabyasachidasrohan71@gmail.com" data-copy-email="sabyasachidasrohan71@gmail.com"
-              >sabyasachidasrohan71@gmail.com</a
-            >
+      <section class="section spline-section" id="interactive-3d">
+        <div class="spline-stage">
+          <canvas id="spline-canvas"></canvas>
+          <div class="spline-loader" id="spline-loader" aria-hidden="true">
+            <span class="spline-loader-dot"></span>
           </div>
-          <div class="hero-actions">
-            <a
-              href="https://www.linkedin.com/in/saibyasachi-ruhan-b6351718a/"
-              class="btn primary"
-              aria-label="Open Saibyasachi Ruhan LinkedIn profile"
-              >LinkedIn</a
-            >
-            <a
-              href="https://github.com/SDRoan"
-              class="btn secondary"
-              aria-label="Open Saibyasachi Ruhan GitHub profile"
-              >GitHub</a
-            >
-          </div>
-
-          <!-- Rotary switch nav - links to separate pages -->
-          <div class="rotary-nav-wrap" data-page="top">
-            <div class="rotary-nav" role="navigation">
-              <div class="de">
-                <div class="den">
-                  <div class="switch">
-                    <a href="index.html" class="rotary-link" data-pos="top"><span>Top</span></a>
-                    <a href="about.html" class="rotary-link" data-pos="about"><span>About</span></a>
-                    <a href="skills.html" class="rotary-link" data-pos="skills"><span>Skills</span></a>
-                    <a href="experience.html" class="rotary-link" data-pos="experience"><span>Experience</span></a>
-                    <a href="projects.html" class="rotary-link" data-pos="projects"><span>Projects</span></a>
-                    <a href="contact.html" class="rotary-link" data-pos="contact"><span>Contact</span></a>
-                  </div>
-                  <div class="light"><span></span></div>
-                  <div class="dot"><span></span></div>
-                  <hr class="line">
-                  <hr class="line">
-                </div>
-                <div class="dene"></div>
-                <div class="denem"></div>
-                <div class="deneme"></div>
-              </div>
-            </div>
-          </div>
+          <nav class="robot-orbit" role="navigation" aria-label="Main navigation">
+            <div class="robot-orbit-ring" aria-hidden="true"></div>
+            <a href="#about" class="orbit-node" data-modal="about" data-index="0" aria-label="About">
+              <span class="orbit-node-dot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <span class="orbit-node-label">About</span>
+            </a>
+            <a href="#skills" class="orbit-node" data-modal="skills" data-index="1" aria-label="Skills">
+              <span class="orbit-node-dot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="16" height="16" x="4" y="4" rx="2"/>
+                  <rect width="6" height="6" x="9" y="9"/>
+                  <path d="M15 2v2"/>
+                  <path d="M15 20v2"/>
+                  <path d="M2 15h2"/>
+                  <path d="M2 9h2"/>
+                  <path d="M20 15h2"/>
+                  <path d="M20 9h2"/>
+                  <path d="M9 2v2"/>
+                  <path d="M9 20v2"/>
+                </svg>
+              </span>
+              <span class="orbit-node-label">Skills</span>
+            </a>
+            <a href="#experience" class="orbit-node" data-modal="experience" data-index="2" aria-label="Experience">
+              <span class="orbit-node-dot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </span>
+              <span class="orbit-node-label">Experience</span>
+            </a>
+            <a href="#projects" class="orbit-node" data-modal="projects" data-index="3" aria-label="Projects">
+              <span class="orbit-node-dot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+                  <path d="M8 10v4"/>
+                  <path d="M12 10v2"/>
+                  <path d="M16 10v6"/>
+                </svg>
+              </span>
+              <span class="orbit-node-label">Projects</span>
+            </a>
+            <a href="#contact" class="orbit-node" data-modal="contact" data-index="4" aria-label="Contact">
+              <span class="orbit-node-dot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </span>
+              <span class="orbit-node-label">Contact</span>
+            </a>
+          </nav>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer" id="site-footer">
-      <div class="container footer-inner">
-        <span>© <span id="year"></span> Saibyasachi Ruhan</span>
+    <div class="signature" id="signature" aria-hidden="true">Saibyasachi Ruhan</div>
+
+    <div class="orbit-modal-overlay" id="orbit-modal" aria-hidden="true">
+      <div class="orbit-modal-card" role="dialog" aria-modal="true" aria-labelledby="orbit-modal-title">
+        <button type="button" class="orbit-modal-close" id="orbit-modal-close" aria-label="Close">×</button>
+        <div class="orbit-modal-body" id="orbit-modal-body"></div>
       </div>
-    </footer>
+    </div>
 
-    <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+    <template id="modal-about">
+      <h2 class="orbit-modal-title" id="orbit-modal-title">About</h2>
+      <p class="orbit-modal-eyebrow">Queens College CS · NYC</p>
+      <p>I'm a CS student who learns best by building real things and then carefully measuring whether they actually helped.</p>
+      <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+    </template>
 
-    <script src="rotary.js"></script>
+    <template id="modal-skills">
+      <h2 class="orbit-modal-title">Skills</h2>
+      <div class="orbit-modal-group">
+        <span class="orbit-modal-label">Languages</span>
+        <p>Python, Java, C++, JavaScript, TypeScript</p>
+      </div>
+      <div class="orbit-modal-group">
+        <span class="orbit-modal-label">Frontend</span>
+        <p>React, Next.js, HTML, CSS, Vite</p>
+      </div>
+      <div class="orbit-modal-group">
+        <span class="orbit-modal-label">Backend / Web Services</span>
+        <p>Node.js, Express.js, REST API, API Integrations (Airtable APIs), SQL</p>
+      </div>
+      <div class="orbit-modal-group">
+        <span class="orbit-modal-label">Cloud / Tools</span>
+        <p>AWS (EC2, S3, IAM), GitHub, Linux, CI/CD, Microsoft Office</p>
+      </div>
+      <div class="orbit-modal-group">
+        <span class="orbit-modal-label">AI</span>
+        <p>LLM applications, Transformers, Ollama</p>
+      </div>
+      <div class="orbit-modal-group">
+        <span class="orbit-modal-label">Data &amp; Analytics</span>
+        <p>PowerBI, Tableau</p>
+      </div>
+    </template>
+
+    <template id="modal-experience">
+      <h2 class="orbit-modal-title">Experience</h2>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Software Engineer Intern</strong>
+        </div>
+        <p class="orbit-modal-company">Uptown and Boogie Healthy Project</p>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Web Designer</strong>
+        </div>
+        <p class="orbit-modal-company">Cybercritters</p>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Software Engineering Program</strong>
+        </div>
+        <p class="orbit-modal-company">Google</p>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Product Engineering Intern</strong>
+        </div>
+        <p class="orbit-modal-company">Sentinel Biotech</p>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Software Engineering Fellow</strong>
+        </div>
+        <p class="orbit-modal-company">CodePath</p>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Lead Code Instructor Intern</strong>
+        </div>
+        <p class="orbit-modal-company">CodeAdvantage</p>
+      </div>
+    </template>
+
+    <template id="modal-projects">
+      <h2 class="orbit-modal-title">Projects</h2>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Dailo</strong>
+        </div>
+        <p>Weekly activity and XP progress tracker.</p>
+        <a href="https://github.com/SDRoan/Dailo" target="_blank" rel="noopener" class="orbit-modal-link">GitHub →</a>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Debate Me</strong>
+        </div>
+        <p>AI debate website.</p>
+        <a href="https://github.com/SDRoan/Debate-Me" target="_blank" rel="noopener" class="orbit-modal-link">GitHub →</a>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Climatrack</strong>
+        </div>
+        <p>AI‑powered climate and environmental information website.</p>
+        <a href="https://github.com/SDRoan/Clima-Track" target="_blank" rel="noopener" class="orbit-modal-link">GitHub →</a>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>File Box</strong>
+        </div>
+        <p>File and folder management.</p>
+        <a href="https://github.com/SDRoan/Filebox" target="_blank" rel="noopener" class="orbit-modal-link">GitHub →</a>
+      </div>
+      <div class="orbit-modal-item">
+        <div class="orbit-modal-item-head">
+          <strong>Shoe Finder</strong>
+        </div>
+        <p>E‑commerce (MLH Hackathon).</p>
+        <a href="https://github.com/SDRoan/sbu-hacks-2024" target="_blank" rel="noopener" class="orbit-modal-link">GitHub →</a>
+      </div>
+    </template>
+
+    <template id="modal-contact">
+      <h2 class="orbit-modal-title">Say hi.</h2>
+      <p class="orbit-modal-eyebrow">Let's connect</p>
+      <a href="mailto:sabyasachidasrohan71@gmail.com" class="orbit-modal-link">sabyasachidasrohan71@gmail.com</a>
+      <div class="orbit-modal-socials">
+        <a href="https://www.linkedin.com/in/saibyasachi-ruhan-b6351718a/" target="_blank" rel="noopener" class="orbit-modal-link">LinkedIn →</a>
+        <a href="https://github.com/SDRoan" target="_blank" rel="noopener" class="orbit-modal-link">GitHub →</a>
+      </div>
+    </template>
+
     <script src="features.js"></script>
     <script src="enhancements.js"></script>
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-      const gate = document.getElementById("hello-gate");
-      const helloButton = document.getElementById("hello-button");
-      const MATRIX_CHARS = "01IJHGFEDCBAKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-      function attachMatrixToElement(el, restText) {
-        if (!el) return;
-        const len = restText.length;
-        let matrixInterval = null;
-        el.addEventListener("mouseenter", function () {
-          matrixInterval = setInterval(function () {
-            let s = "";
-            for (let j = 0; j < len; j++) {
-              s += MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
-            }
-            el.textContent = s;
-          }, 50);
-        });
-        el.addEventListener("mouseleave", function () {
-          if (matrixInterval) clearInterval(matrixInterval);
-          matrixInterval = null;
-          el.textContent = restText;
-        });
+    <script type="module">
+      import { Application } from "https://esm.sh/@splinetool/runtime@1.9.54";
+
+      const canvas = document.getElementById("spline-canvas");
+      const loader = document.getElementById("spline-loader");
+      const orbit = document.querySelector(".robot-orbit");
+
+      function startOrbit() {
+        if (!orbit) return;
+        const nodes = Array.from(orbit.querySelectorAll(".orbit-node"));
+        const ring = orbit.querySelector(".robot-orbit-ring");
+        if (!nodes.length) return;
+
+        let rotation = 0;
+        let paused = false;
+        orbit.addEventListener("mouseenter", () => (paused = true), true);
+        orbit.addEventListener("mouseleave", () => (paused = false), true);
+
+        const tick = () => {
+          if (!paused) rotation = (rotation + 0.25) % 360;
+          const radius = ring ? ring.getBoundingClientRect().width / 2 : 380;
+          nodes.forEach((node, i) => {
+            const angle = ((i / nodes.length) * 360 + rotation) % 360;
+            const rad = (angle * Math.PI) / 180;
+            const x = radius * Math.cos(rad);
+            const y = radius * Math.sin(rad);
+            const z = Math.round(100 + 50 * Math.cos(rad));
+            const op = Math.max(0.35, Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(rad)) / 2)));
+            node.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            node.style.zIndex = String(z);
+            node.style.opacity = String(op);
+          });
+          requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
       }
-      (function () {
-        const heroName = document.getElementById("hero-name-value");
-        if (heroName) attachMatrixToElement(heroName, '"Saibyasachi Ruhan"');
-      })();
-      const heroCodeTyped = document.getElementById("hero-code-typed");
-      const heroCodeCursor = document.getElementById("hero-code-cursor");
-      const TYPING_CHUNKS = [
-        { text: '"name"', class: "code-key" },
-        { text: ": ", class: "code-colon" },
-        { text: '"Saibyasachi Ruhan"', class: "code-value hero-name-value" },
-        { text: ",", class: "code-comma" }
-      ];
-      function runTypingAnimation() {
-        if (!heroCodeTyped) return;
-        heroCodeTyped.innerHTML = "";
-        let chunkIndex = 0;
-        let charIndex = 0;
-        function typeNext() {
-          if (chunkIndex >= TYPING_CHUNKS.length) {
-            if (heroCodeCursor) heroCodeCursor.classList.add("hero-code-cursor--done");
-            const heroName = document.getElementById("hero-code-typed")?.querySelector(".hero-name-value");
-            if (heroName) attachMatrixToElement(heroName, '"Saibyasachi Ruhan"');
-            return;
-          }
-          const chunk = TYPING_CHUNKS[chunkIndex];
-          if (charIndex === 0) {
-            const span = document.createElement("span");
-            span.className = chunk.class;
-            span.setAttribute("aria-hidden", "true");
-            heroCodeTyped.appendChild(span);
-            chunk.span = span;
-          }
-          if (charIndex < chunk.text.length) {
-            chunk.span.textContent += chunk.text[charIndex];
-            charIndex++;
-            setTimeout(typeNext, 45 + Math.random() * 25);
-          } else {
-            chunkIndex++;
-            charIndex = 0;
-            setTimeout(typeNext, 80);
-          }
+
+      function initModals() {
+        const overlay = document.getElementById("orbit-modal");
+        const body = document.getElementById("orbit-modal-body");
+        const closeBtn = document.getElementById("orbit-modal-close");
+
+        function openModal(name) {
+          const tpl = document.getElementById("modal-" + name);
+          if (!tpl) return;
+          body.innerHTML = "";
+          body.appendChild(tpl.content.cloneNode(true));
+          overlay.classList.add("is-open");
+          overlay.setAttribute("aria-hidden", "false");
         }
-        typeNext();
-      }
-      if (gate && helloButton) {
-        document.body.classList.add("hello-gate-active");
-        helloButton.addEventListener("click", () => {
-          gate.classList.add("hello-gate--hidden");
-          document.body.classList.remove("hello-gate-active");
-          runTypingAnimation();
+        function closeModal() {
+          overlay.classList.remove("is-open");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+
+        document.querySelectorAll(".orbit-node").forEach((node) => {
+          node.addEventListener("click", (e) => {
+            e.preventDefault();
+            const name = node.getAttribute("data-modal");
+            if (name) openModal(name);
+          });
+        });
+
+        closeBtn.addEventListener("click", closeModal);
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeModal();
         });
       }
+
+      if (canvas) {
+        const app = new Application(canvas);
+        app
+          .load("https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode")
+          .then(() => {
+            if (loader) loader.style.opacity = "0";
+            setTimeout(() => {
+              if (orbit) orbit.classList.add("is-ready");
+              const sig = document.getElementById("signature");
+              if (sig) setTimeout(() => sig.classList.add("is-signed"), 600);
+            }, 800);
+          })
+          .catch((err) => {
+            console.error("Spline failed to load", err);
+            if (loader) loader.innerHTML = '<span style="color:#888">3D scene unavailable</span>';
+            if (orbit) orbit.classList.add("is-ready");
+          });
+      }
+
+      startOrbit();
+      initModals();
     </script>
   </body>
 </html>
