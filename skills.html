@@ -8,11 +8,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="skills-page">
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="logo">SR</a>
@@ -20,33 +20,58 @@
     </header>
 
     <main>
-      <section class="section">
-        <div class="container section-inner skills-inner">
-          <div class="section-header center">
+      <section class="section skills-galaxy-section">
+        <canvas id="skills-page-galaxy" class="skills-page-galaxy-canvas" aria-hidden="true"></canvas>
+        <div class="container section-inner skills-inner skills-galaxy-inner">
+          <div class="section-header center skills-galaxy-header">
+            <p class="skills-galaxy-kicker">Toolkit galaxy</p>
             <h2>Skills</h2>
           </div>
 
-          <div class="skills-grid">
-            <div class="skill-card">
+          <div class="skills-orbit" aria-label="Skills arranged as galaxy systems">
+            <div class="skills-galaxy-core" aria-hidden="true">
+              <span></span>
+            </div>
+            <article class="skill-card galaxy-skill-card galaxy-skill-card--programming" style="--x: -32%; --y: -20%; --c: 124, 196, 255;">
               <p class="skill-kicker">Languages</p>
               <h3>Programming</h3>
-              <p>C++, Java, Python, JavaScript</p>
-            </div>
-            <div class="skill-card">
-              <p class="skill-kicker">Models & tooling</p>
+              <div class="skill-star-list">
+                <span>C++</span>
+                <span>Java</span>
+                <span>Python</span>
+                <span>JavaScript</span>
+              </div>
+            </article>
+            <article class="skill-card galaxy-skill-card galaxy-skill-card--ai" style="--x: 33%; --y: -10%; --c: 167, 139, 250;">
+              <p class="skill-kicker">Models &amp; tooling</p>
               <h3>AI / Machine Learning</h3>
-              <p>Transformers, FLAN‑T5, Ollama</p>
-            </div>
-            <div class="skill-card">
+              <div class="skill-star-list">
+                <span>Transformers</span>
+                <span>FLAN-T5</span>
+                <span>Ollama</span>
+              </div>
+            </article>
+            <article class="skill-card galaxy-skill-card galaxy-skill-card--platform" style="--x: -20%; --y: 28%; --c: 110, 231, 168;">
               <p class="skill-kicker">Product work</p>
-              <h3>Platform & Full‑Stack</h3>
-              <p>Next.js, React, Node.js, REST APIs, Airtable APIs, MongoDB</p>
-            </div>
-            <div class="skill-card">
+              <h3>Platform &amp; Full-Stack</h3>
+              <div class="skill-star-list">
+                <span>Next.js</span>
+                <span>React</span>
+                <span>Node.js</span>
+                <span>REST APIs</span>
+                <span>Airtable APIs</span>
+                <span>MongoDB</span>
+              </div>
+            </article>
+            <article class="skill-card galaxy-skill-card galaxy-skill-card--cloud" style="--x: 28%; --y: 31%; --c: 251, 191, 114;">
               <p class="skill-kicker">Infra</p>
-              <h3>Cloud & Infrastructure</h3>
-              <p>AWS (EC2, S3, IAM)</p>
-            </div>
+              <h3>Cloud &amp; Infrastructure</h3>
+              <div class="skill-star-list">
+                <span>AWS EC2</span>
+                <span>S3</span>
+                <span>IAM</span>
+              </div>
+            </article>
           </div>
 
           <div class="rotary-nav-wrap" data-page="skills">
@@ -84,6 +109,7 @@
 
     <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
 
+    <script src="skills-galaxy.js"></script>
     <script src="rotary.js"></script>
     <script src="features.js"></script>
     <script src="enhancements.js"></script>
