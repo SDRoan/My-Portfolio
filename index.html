@@ -1926,14 +1926,14 @@
           // the altitude via Kepler's third law, so the period, the speed on the HUD
           // and how fast the ground slides past all agree with each other.
           //
-          // The clock runs at true rate: one second here is one second up there.
-          // Earth turns 0.0042°/s, which is imperceptible — that is genuinely what
-          // it looks like from orbit — and in exchange the whole scene is correct
-          // for the actual present moment: real UTC, the real terminator, tonight's
-          // real Moon phase, the planets where they really are right now.
-          // Raising this is the one lever that speeds everything up together while
-          // keeping every ratio physically correct.
-          const TIMEWARP = 1;
+          // Played as a time-lapse, the way orbital footage always is. Nothing is
+          // faked by raising this: one clock drives Earth's rotation, the orbit and
+          // the ephemeris together, so every ratio stays physically correct —
+          // RELAY-1 still completes four orbits per rotation of the Earth, which is
+          // what a 10,000 km orbit really does. At true rate an orbit takes 5.9
+          // hours and nothing visibly moves; at 600x it takes 35 seconds and Earth
+          // turns in 2.4 minutes.
+          const TIMEWARP = 600;
           const CRAFT = [
             { call: "RELAY-1", alt: 1.60, incl: 0.32, phase: 0.0 },
             { call: "SCOPE-2", alt: 3.20, incl: 1.16, phase: 2.1 },
