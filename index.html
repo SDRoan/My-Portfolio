@@ -1931,9 +1931,10 @@
           // the ephemeris together, so every ratio stays physically correct —
           // RELAY-1 still completes four orbits per rotation of the Earth, which is
           // what a 10,000 km orbit really does. At true rate an orbit takes 5.9
-          // hours and nothing visibly moves; at 600x it takes 35 seconds and Earth
-          // turns in 2.4 minutes.
-          const TIMEWARP = 600;
+          // hours and nothing visibly moves; at 300x it takes 70 seconds and Earth
+          // turns in just under five minutes — slow enough to frame a shot, fast
+          // enough to watch the ground go by.
+          const TIMEWARP = 300;
           const CRAFT = [
             { call: "RELAY-1", alt: 1.60, incl: 0.32, phase: 0.0 },
             { call: "SCOPE-2", alt: 3.20, incl: 1.16, phase: 2.1 },
