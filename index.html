@@ -1142,7 +1142,7 @@
       // Bright stars: RA hours, Dec degrees, visual magnitude, colour.
       const STAR_CATALOG = [
         ["Sirius", 6.7525, -16.7161, -1.46, 0xa8c4ff], ["Canopus", 6.3992, -52.6957, -0.74, 0xf6f2e8],
-        ["Rigil Kent.", 14.6600, -60.8339, -0.27, 0xfff2d8], ["Arcturus", 14.2610, 19.1825, -0.05, 0xffc98a],
+        ["Rigil Kentaurus", 14.6600, -60.8339, -0.27, 0xfff2d8], ["Arcturus", 14.2610, 19.1825, -0.05, 0xffc98a],
         ["Vega", 18.6156, 38.7837, 0.03, 0xcadcff], ["Capella", 5.2782, 45.9980, 0.08, 0xffe9b0],
         ["Rigel", 5.2423, -8.2017, 0.13, 0xb8d0ff], ["Procyon", 7.6550, 5.2250, 0.34, 0xfff4de],
         ["Betelgeuse", 5.9195, 7.4071, 0.50, 0xff9b6a], ["Achernar", 1.6286, -57.2367, 0.46, 0xb4ccff],
@@ -1211,7 +1211,10 @@
 
         // ── surface textures, generated rather than fetched ──
         function surfaceTexture(kind) {
-          const W = 512, H = 256;
+          // Kept modest on purpose: these are generated per pixel in JS, and at
+          // 512×256 across eight bodies that is a multi-second freeze. Even filling
+          // the frame, a planet only ever shows one hemisphere of this.
+          const W = 320, H = 160;
           const c = document.createElement("canvas");
           c.width = W; c.height = H;
           const g = c.getContext("2d");
@@ -1235,12 +1238,12 @@
                 // Zonal bands: latitude-driven, with turbulence smearing them out.
                 const lat = (y / H) * 2 - 1;
                 const freq = kind === "jupiter" ? 15 : kind === "saturn" ? 10 : 4;
-                const warp = fbm(x * 0.03, y * 0.16, 11, 3) * (kind === "uranus" || kind === "neptune" ? 0.6 : 2.2);
+                const warp = fbm(x * 0.048, y * 0.26, 11, 2) * (kind === "uranus" || kind === "neptune" ? 0.6 : 2.2);
                 t = 0.5 + 0.5 * Math.sin(lat * freq + warp);
-                t = t * 0.72 + fbm(x * 0.02, y * 0.09, 3, 3) * 0.28;
+                t = t * 0.72 + fbm(x * 0.032, y * 0.14, 3, 2) * 0.28;
               } else {
-                t = fbm(x * 0.045, y * 0.045, 7, 5);
-                if (kind === "mars") t = t * 0.8 + fbm(x * 0.012, y * 0.012, 21, 3) * 0.2;
+                t = fbm(x * 0.072, y * 0.072, 7, 3);
+                if (kind === "mars") t = t * 0.8 + fbm(x * 0.019, y * 0.019, 21, 2) * 0.2;
               }
               const i = (y * W + x) * 4;
               D[i] = bands[0][0] + (bands[1][0] - bands[0][0]) * t;
@@ -1322,19 +1325,32 @@
           return new THREE.ShaderMaterial({
             uniforms: { dpr: { value: 1 }, fade: { value: 0 } },
             vertexShader: [
-              "attribute float size; attribute vec3 tint; attribute float alpha;",
-              "varying vec3 vT; varying float vA; uniform float dpr;",
-              "void main(){ vT = tint; vA = alpha;",
+              "attribute float size; attribute vec3 tint; attribute float alpha; attribute float spike;",
+              "varying vec3 vT; varying float vA; varying float vK; varying float vS;",
+              "uniform float dpr;",
+              "void main(){ vT = tint; vA = alpha; vS = spike;",
+              // Spiked stars get a larger sprite to hold the arms; vK scales the
+              // core back down so the star itself stays the same size.
+              "  vK = 1.0 + 3.2 * spike;",
               "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);",
-              "  gl_PointSize = size * dpr; }"
+              "  gl_PointSize = size * vK * dpr; }"
             ].join("\n"),
             fragmentShader: [
-              "varying vec3 vT; varying float vA; uniform float fade;",
+              "varying vec3 vT; varying float vA; varying float vK; varying float vS;",
+              "uniform float fade;",
               "void main(){",
-              "  float r = length(gl_PointCoord - vec2(0.5)) * 2.0;",
+              "  vec2 p = (gl_PointCoord - vec2(0.5)) * 2.0;",
+              "  float r = length(p);",
               "  if (r > 1.0) discard;",
-              "  float a = pow(1.0 - r, 2.4);",
-              "  gl_FragColor = vec4(vT, a * vA * fade); }"
+              "  float a = pow(max(0.0, 1.0 - r * vK), 2.4);",
+              // Six-armed diffraction pattern — the giveaway of a segmented
+              // hexagonal mirror, and why Webb's stars look the way they do.
+              "  if (vS > 0.001) {",
+              "    float th = atan(p.y, p.x);",
+              "    float arms = pow(abs(cos(3.0 * th)), 34.0);",
+              "    a += arms * pow(max(0.0, 1.0 - r), 2.2) * vS * 0.85;",
+              "  }",
+              "  gl_FragColor = vec4(vT, min(1.0, a) * vA * fade); }"
             ].join("\n"),
             transparent: true, depthWrite: false, depthTest: false,
             blending: THREE.AdditiveBlending
@@ -1342,11 +1358,14 @@
         }
 
         // ── stars ──
-        const starCount = STAR_CATALOG.length + 1400;
+        // Enough faint filler that a magnified field still has stars in it —
+        // 1400 over the whole sphere leaves a 1.6° frame essentially empty.
+        const starCount = STAR_CATALOG.length + 12000;
         const sPos = new Float32Array(starCount * 3);
         const sTint = new Float32Array(starCount * 3);
         const sSize = new Float32Array(starCount);
         const sAlpha = new Float32Array(starCount);
+        const sSpike = new Float32Array(starCount);
         STAR_CATALOG.forEach((s, i) => {
           const v = eqToWorld(s[1], s[2]);
           sPos[i * 3] = v[0] * SKY_R; sPos[i * 3 + 1] = v[1] * SKY_R; sPos[i * 3 + 2] = v[2] * SKY_R;
@@ -1354,9 +1373,14 @@
           sTint[i * 3] = c.r; sTint[i * 3 + 1] = c.g; sTint[i * 3 + 2] = c.b;
           sSize[i] = Math.max(3, 11 - s[3] * 2.4);
           sAlpha[i] = 1;
+          // Only the genuinely bright ones throw visible spikes.
+          sSpike[i] = Math.max(0, Math.min(1, (2.6 - s[3]) / 2.6));
           targets.push({
             name: s[0], kind: "star", group: "Stars",
-            dir: new THREE.Vector3(v[0], v[1], v[2]), arcmin: 0.02, mag: s[3]
+            dir: new THREE.Vector3(v[0], v[1], v[2]), arcmin: 0.02, mag: s[3],
+            // A star has no disc to magnify — no eyepiece resolves one. Framing it
+            // means showing it among its neighbours, not an empty arcsecond field.
+            frameDeg: 1.6
           });
         });
         for (let i = STAR_CATALOG.length; i < starCount; i++) {
@@ -1367,20 +1391,25 @@
           sPos[i * 3 + 2] = Math.sin(a) * s2 * SKY_R;
           const w = 0.72 + Math.random() * 0.28;
           sTint[i * 3] = w; sTint[i * 3 + 1] = w * 0.96; sTint[i * 3 + 2] = 1;
-          sSize[i] = 1.2 + Math.pow(Math.random(), 3) * 2.6;
-          sAlpha[i] = 0.35 + Math.random() * 0.5;
+          // Steeply weighted toward the faint end, the way a real star count is:
+          // a handful stand out, the rest are barely there.
+          const f = Math.pow(Math.random(), 3.2);
+          sSize[i] = 1.0 + f * 2.8;
+          sAlpha[i] = 0.16 + f * 0.7;
+          sSpike[i] = 0;
         }
         const starGeo = new THREE.BufferGeometry();
         starGeo.setAttribute("position", new THREE.BufferAttribute(sPos, 3));
         starGeo.setAttribute("tint", new THREE.BufferAttribute(sTint, 3));
         starGeo.setAttribute("size", new THREE.BufferAttribute(sSize, 1));
         starGeo.setAttribute("alpha", new THREE.BufferAttribute(sAlpha, 1));
+        starGeo.setAttribute("spike", new THREE.BufferAttribute(sSpike, 1));
         const starMat = pointMaterial();
         scene.add(new THREE.Points(starGeo, starMat));
 
         // ── deep sky ──
         function nebulaTexture(kind, tint) {
-          const N = 256;
+          const N = 160;
           const c = document.createElement("canvas");
           c.width = c.height = N;
           const g = c.getContext("2d");
@@ -1402,8 +1431,8 @@
               } else {
                 // Ridged noise makes filaments and dust lanes instead of a smooth
                 // blob — emission nebulae are structure, not a gradient.
-                const n1 = fbm(x * 0.085, y * 0.085, 5, 5);
-                const n2 = fbm(x * 0.21, y * 0.21, 17, 4);
+                const n1 = fbm(x * 0.136, y * 0.136, 5, 3);
+                const n2 = fbm(x * 0.34, y * 0.34, 17, 3);
                 const ridge = 1 - Math.abs(n1 * 2 - 1);
                 v = Math.exp(-r * 1.55) * Math.pow(ridge, 2.0) * (0.45 + 1.05 * n2);
                 v += Math.exp(-r * 5.5) * 0.5;              // ionised core
@@ -1563,6 +1592,7 @@
         const gTint = new Float32Array(glowNames.length * 3);
         const gSize = new Float32Array(glowNames.length);
         const gAlpha = new Float32Array(glowNames.length);
+        const gSpike = new Float32Array(glowNames.length);
         const GLOW_TINT = {
           Mercury: [1, 0.94, 0.84], Venus: [1, 0.98, 0.9], Mars: [1, 0.72, 0.55],
           Jupiter: [1, 0.95, 0.82], Saturn: [1, 0.93, 0.76], Uranus: [0.76, 0.95, 1],
@@ -1577,6 +1607,7 @@
         glowGeo.setAttribute("tint", new THREE.BufferAttribute(gTint, 3));
         glowGeo.setAttribute("size", new THREE.BufferAttribute(gSize, 1));
         glowGeo.setAttribute("alpha", new THREE.BufferAttribute(gAlpha, 1));
+        glowGeo.setAttribute("spike", new THREE.BufferAttribute(gSpike, 1));
         const glowMat = pointMaterial();
         const glows = new THREE.Points(glowGeo, glowMat);
         glows.frustumCulled = false;
@@ -1656,10 +1687,12 @@
             const discPx = angDiam * pxPerRad;
             gSize[i] = Math.max(3.5, Math.min(13, 26 / Math.sqrt(distKm / 1e6 + 1)));
             gAlpha[i] = Math.max(0, Math.min(1, 1 - (discPx - 3) / 9));
+            gSpike[i] = name === "Moon" ? 0 : 0.75;
           });
           glowGeo.attributes.position.needsUpdate = true;
           glowGeo.attributes.size.needsUpdate = true;
           glowGeo.attributes.alpha.needsUpdate = true;
+          glowGeo.attributes.spike.needsUpdate = true;
         }
 
         return {
@@ -1931,7 +1964,16 @@
           let telAlt = 0, telVel = 0, telLat = 0, telLon = 0;
           let telRA = 0, telDec = 0, telTarget = "—", onEarth = false;
 
-          const sky = buildSky();
+          // Built on the first boarding, not when the contact stage opens. Opening
+          // contact should never pay for a sky nobody has asked to look at yet.
+          let sky = null;
+          function ensureSky() {
+            if (!sky) {
+              sky = buildSky();
+              sky.setDpr(Math.min(window.devicePixelRatio || 1, 2));
+            }
+            return sky;
+          }
           const bootReal = Date.now();
           function simDate() {
             return new Date(bootReal + (Date.now() - bootReal) * TIMEWARP);
@@ -2110,7 +2152,7 @@
             renderer.setPixelRatio(dpr);
             renderer.setSize(width, height, false);
             // Point sizes are in device pixels, so the sky needs to know the ratio.
-            sky.setDpr(dpr);
+            if (sky) sky.setDpr(dpr);
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             // Measured against the resting camera, never the live one — in ride
@@ -2149,7 +2191,7 @@
             // camera holds its pointing and the sky sits still while you orbit.
             if (track === "Earth") {
               aimAt(tmpV.copy(ridePos).negate().normalize());
-            } else if (track && sky.byName[track]) {
+            } else if (track && sky && sky.byName[track]) {
               aimAt(sky.byName[track].dir);
             }
             const kAim = Math.min(1, dt * 0.009);
@@ -2185,10 +2227,12 @@
             ambient.intensity = 0.9 + 0.5 * e;
             // The decorative key light gives way to the real Sun as the ride takes
             // over, so the terminator lands where it actually is.
-            sunVec.copy(decoSun).lerp(sky.sunDir, e).normalize();
+            sunVec.copy(decoSun);
+            if (sky) sunVec.lerp(sky.sunDir, e);
+            sunVec.normalize();
             sun.position.copy(sunVec).multiplyScalar(50);
 
-            const showRig = rideT > 0.02;
+            const showRig = rideT > 0.02 && !!sky;
             craftRig.visible = showRig;
 
             const h = renderer.domElement.height || 900;
@@ -2318,6 +2362,7 @@
             ride: {
               craft: CRAFT.map((c) => c.call),
               board: (i) => {
+                ensureSky();
                 if (typeof i === "number") {
                   rideIdx = ((i % CRAFT.length) + CRAFT.length) % CRAFT.length;
                   orbA = CRAFT[rideIdx].phase;
@@ -2348,18 +2393,21 @@
               // Slew to a catalogued object and frame it about three times its own
               // width — the same thing you'd do at an eyepiece.
               slew: (name) => {
-                const t = sky.byName[name];
+                const t = ensureSky().byName[name];
                 if (!t) return null;
                 track = name;
-                const want = (t.arcmin / 60) * (t.spread || 1) * 2.4;
+                const want = t.frameDeg != null
+                  ? t.frameDeg
+                  : (t.arcmin / 60) * (t.spread || 1) * 2.4;
                 tLensFov = THREE.MathUtils.clamp(want, 0.012, 70);
                 return t;
               },
               lookAtEarth: () => { track = "Earth"; tLensFov = 38; },
-              targets: () => sky.targets.map((t) => ({
-                name: t.name, sub: t.sub, group: t.group, kind: t.kind, arcmin: t.arcmin
+              targets: () => ensureSky().targets.map((t) => ({
+                name: t.name, sub: t.sub, group: t.group, kind: t.kind,
+                arcmin: t.arcmin, mag: t.mag
               })),
-              hasTarget: (n) => !!sky.byName[n],
+              hasTarget: (n) => !!ensureSky().byName[n],
               shoot: capture,
               telemetry: () => ({
                 call: CRAFT[rideIdx].call,
@@ -2374,7 +2422,7 @@
             },
             stop: () => {
               alive = false;
-              sky.scene.traverse((o) => {
+              if (sky) sky.scene.traverse((o) => {
                 if (o.geometry) o.geometry.dispose();
                 if (o.material) {
                   if (o.material.map) o.material.map.dispose();
@@ -3823,7 +3871,12 @@
               b.addEventListener("click", () => { r.slew(t.name); });
               // Solar-system sizes aren't known until the first ephemeris pass, and
               // they drift over weeks, so the labels are refreshed rather than baked.
-              if (t.kind !== "star") catMeta.push({ name: t.name, el: b.querySelector(".ct-cat-meta") });
+              // Stars are labelled by brightness; everything else by apparent size.
+              if (t.kind === "star") {
+                b.querySelector(".ct-cat-meta").textContent = "m " + t.mag.toFixed(1);
+              } else {
+                catMeta.push({ name: t.name, el: b.querySelector(".ct-cat-meta") });
+              }
               frag.appendChild(b);
             });
           });
@@ -3832,8 +3885,14 @@
         }
 
         function boardRide() {
+          if (riding) return;
           const r = ride();
-          if (!r || riding) return;
+          // The uplink is built on the first animation frame after the stage opens.
+          // A click that lands before then should still board, not quietly do nothing.
+          if (!r) {
+            if (contactActive) setTimeout(boardRide, 120);
+            return;
+          }
           riding = true;
           ctStage.classList.add("is-riding");
           ctRide.setAttribute("aria-hidden", "false");
