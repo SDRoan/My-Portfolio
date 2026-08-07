@@ -1925,7 +1925,15 @@
           // Altitudes in Earth radii. Orbital rate isn't authored — it falls out of
           // the altitude via Kepler's third law, so the period, the speed on the HUD
           // and how fast the ground slides past all agree with each other.
-          const TIMEWARP = 150;
+          //
+          // The clock runs at true rate: one second here is one second up there.
+          // Earth turns 0.0042°/s, which is imperceptible — that is genuinely what
+          // it looks like from orbit — and in exchange the whole scene is correct
+          // for the actual present moment: real UTC, the real terminator, tonight's
+          // real Moon phase, the planets where they really are right now.
+          // Raising this is the one lever that speeds everything up together while
+          // keeping every ratio physically correct.
+          const TIMEWARP = 1;
           const CRAFT = [
             { call: "RELAY-1", alt: 1.60, incl: 0.32, phase: 0.0 },
             { call: "SCOPE-2", alt: 3.20, incl: 1.16, phase: 2.1 },
@@ -1945,6 +1953,7 @@
           const hudPos = new THREE.Vector3();
           let rideWant = 0, rideT = 0, rideIdx = 0;
           let orbA = CRAFT[0].phase;
+          let orbEpoch = Date.now();
           // Aim is absolute in the sky frame, not an offset from nadir — the camera
           // is a telescope that can point anywhere, and holds its pointing while the
           // craft moves under it.
@@ -2181,7 +2190,12 @@
             if (rideT > 0.9996) rideT = 1;
 
             const C = CRAFT[rideIdx];
-            orbA += dt * C.sp * (rideT > 0 ? 1 : 0);
+            // Taken from the clock rather than accumulated per frame, so the orbit
+            // and Earth's rotation can never drift apart when frames are dropped.
+            if (rideT > 0) {
+              orbA = C.phase + (2 * Math.PI) *
+                ((Date.now() - orbEpoch) * TIMEWARP / 1000) / C.periodS;
+            }
             const r = 1 + C.alt;
             const ci = Math.cos(C.incl), si = Math.sin(C.incl);
             const ox = Math.cos(orbA) * r, oz = Math.sin(orbA) * r;
@@ -2365,16 +2379,20 @@
                 ensureSky();
                 if (typeof i === "number") {
                   rideIdx = ((i % CRAFT.length) + CRAFT.length) % CRAFT.length;
-                  orbA = CRAFT[rideIdx].phase;
                 }
+                orbEpoch = Date.now();
                 track = "Earth";
                 tLensFov = lensFov = 38;
                 rideWant = 1;
+                // Seeded now so the HUD never shows a zeroed craft in the gap
+                // between boarding and the first frame that renders the ride.
+                telAlt = CRAFT[rideIdx].alt * EARTH_KM;
+                telVel = 7.905 / Math.sqrt(1 + CRAFT[rideIdx].alt);
                 return rideIdx;
               },
               hop: (dir) => {
                 rideIdx = ((rideIdx + dir) % CRAFT.length + CRAFT.length) % CRAFT.length;
-                orbA = CRAFT[rideIdx].phase;
+                orbEpoch = Date.now();
                 return rideIdx;
               },
               leave: () => { rideWant = 0; },
