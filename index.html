@@ -230,14 +230,27 @@
         <div class="ct-hud ct-hud--tl">
           <span class="ct-rec"><i></i>LIVE</span>
           <span class="ct-callsign" id="ct-callsign">RELAY-1</span>
+          <span class="ct-utc" id="ct-utc">—</span>
         </div>
         <div class="ct-hud ct-hud--tr" id="ct-tel">
+          <div class="ct-tel-row ct-tel-row--wide"><span>TARGET</span><b id="ct-t-target">—</b></div>
+          <div class="ct-tel-row"><span>R.A.</span><b id="ct-t-ra">—</b></div>
+          <div class="ct-tel-row"><span>DEC</span><b id="ct-t-dec">—</b></div>
+          <div class="ct-tel-row"><span>FIELD</span><b id="ct-t-fov">—</b></div>
+          <div class="ct-tel-row" id="ct-ground-row"><span>GROUND</span><b id="ct-t-ground">—</b></div>
           <div class="ct-tel-row"><span>ALT</span><b id="ct-t-alt">—</b></div>
           <div class="ct-tel-row"><span>VEL</span><b id="ct-t-vel">—</b></div>
-          <div class="ct-tel-row"><span>LAT</span><b id="ct-t-lat">—</b></div>
-          <div class="ct-tel-row"><span>LON</span><b id="ct-t-lon">—</b></div>
-          <div class="ct-tel-row"><span>LENS</span><b id="ct-t-fov">—</b></div>
         </div>
+
+        <!-- Observing list: slew to anything in it and it frames itself. -->
+        <div class="ct-catalog" id="ct-catalog">
+          <div class="ct-cat-head">
+            <span>Observing list</span>
+            <button type="button" class="ct-cat-toggle" id="ct-cat-toggle" aria-label="Hide observing list">−</button>
+          </div>
+          <div class="ct-cat-body" id="ct-cat-body"></div>
+        </div>
+        <button type="button" class="ct-cat-open" id="ct-cat-open" aria-label="Show observing list">☰ Targets</button>
         <div class="ct-deck">
           <button type="button" class="ct-hop" id="ct-prev" aria-label="Previous satellite">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
@@ -247,7 +260,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
         </div>
-        <span class="ct-ride-hint">Drag to aim · scroll to zoom · <kbd>Space</kbd> to shoot</span>
+        <span class="ct-ride-hint">Drag to aim · scroll to zoom · <kbd>Space</kbd> to shoot · <kbd>E</kbd> back to Earth</span>
         <button type="button" class="ct-eject" id="ct-eject">Back to orbit view</button>
         <div class="ct-roll" id="ct-roll" aria-label="Photographs taken"></div>
         <div class="ct-flash" id="ct-flash" aria-hidden="true"></div>
@@ -1019,6 +1032,657 @@
         };
       }
 
+      // ══ A real sky ═══════════════════════════════════════════════════════
+      // Everything the onboard camera can point at sits where it actually is:
+      // planets from mean orbital elements, the Moon from a truncated lunar
+      // theory, stars and deep-sky objects from catalogued coordinates. Good to
+      // a few arcminutes, which is finer than the deepest zoom resolves — so
+      // pointing at Jupiter really does put you on Jupiter.
+      const DEG = Math.PI / 180;
+      const AU_KM = 149597870.7;
+      const OBLIQ = 23.4392911 * DEG;
+      const EARTH_RAD_KM = 6371;
+      const MU_EARTH = 398600.4418;           // km³/s², for orbital periods
+
+      function julianDay(date) { return date.getTime() / 86400000 + 2440587.5; }
+
+      // Standish's mean elements (J2000, valid 1800–2050):
+      // a, e, I, L, longitude of perihelion, longitude of node — then rates/century.
+      const PLANETS = {
+        Mercury: [0.38709927, 0.20563593, 7.00497902, 252.25032350, 77.45779628, 48.33076593,
+                  0.00000037, 0.00001906, -0.00594749, 149472.67411175, 0.16047689, -0.12534081],
+        Venus:   [0.72333566, 0.00677672, 3.39467605, 181.97909950, 131.60246718, 76.67984255,
+                  0.00000390, -0.00004107, -0.00078890, 58517.81538729, 0.00268329, -0.27769418],
+        Earth:   [1.00000261, 0.01671123, -0.00001531, 100.46457166, 102.93768193, 0.0,
+                  0.00000562, -0.00004392, -0.01294668, 35999.37244981, 0.32327364, 0.0],
+        Mars:    [1.52371034, 0.09339410, 1.84969142, -4.55343205, -23.94362959, 49.55953891,
+                  0.00001847, 0.00007882, -0.00813131, 19140.30268499, 0.44441088, -0.29257343],
+        Jupiter: [5.20288700, 0.04838624, 1.30439695, 34.39644051, 14.72847983, 100.47390909,
+                  -0.00011607, -0.00013253, -0.00183714, 3034.74612775, 0.21252668, 0.20469106],
+        Saturn:  [9.53667594, 0.05386179, 2.48599187, 49.95424423, 92.59887831, 113.66242448,
+                  -0.00125060, -0.00050991, 0.00193609, 1222.49362201, -0.41897216, -0.28867794],
+        Uranus:  [19.18916464, 0.04725744, 0.77263783, 313.23810451, 170.95427630, 74.01692503,
+                  -0.00196176, -0.00004397, -0.00242939, 428.48202785, 0.40805281, 0.04240589],
+        Neptune: [30.06992276, 0.00859048, 1.77004347, -55.12002969, 44.96476227, 131.78422574,
+                  0.00026291, 0.00005105, 0.00035372, 218.45945325, -0.32241464, -0.00508664]
+      };
+      // Equatorial radii, km — what sets the apparent disc.
+      const BODY_RAD = {
+        Sun: 696000, Moon: 1737.4, Mercury: 2439.7, Venus: 6051.8, Mars: 3389.5,
+        Jupiter: 69911, Saturn: 58232, Uranus: 25362, Neptune: 24622
+      };
+
+      // Heliocentric ecliptic position, AU, in the astronomical frame (z north).
+      function helioVec(name, T) {
+        const p = PLANETS[name];
+        const a = p[0] + p[6] * T, e = p[1] + p[7] * T;
+        const I = (p[2] + p[8] * T) * DEG;
+        const L = (p[3] + p[9] * T) * DEG;
+        const peri = (p[4] + p[10] * T) * DEG;
+        const node = (p[5] + p[11] * T) * DEG;
+        let M = L - peri;
+        M = ((M + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+        let E = M + e * Math.sin(M);
+        for (let i = 0; i < 8; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+        const xv = a * (Math.cos(E) - e), yv = a * Math.sqrt(1 - e * e) * Math.sin(E);
+        const w = peri - node;
+        const cw = Math.cos(w), sw = Math.sin(w), cn = Math.cos(node), sn = Math.sin(node);
+        const ci = Math.cos(I), si = Math.sin(I);
+        return [
+          (cw * cn - sw * sn * ci) * xv + (-sw * cn - cw * sn * ci) * yv,
+          (cw * sn + sw * cn * ci) * xv + (-sw * sn + cw * cn * ci) * yv,
+          (sw * si) * xv + (cw * si) * yv
+        ];
+      }
+
+      // Astronomical ecliptic (z north) → three.js world (y up), right-handed.
+      function astroToWorld(v) { return [v[0], v[2], -v[1]]; }
+
+      function eqToWorld(raHours, decDeg) {
+        const a = raHours * 15 * DEG, d = decDeg * DEG;
+        const x = Math.cos(d) * Math.cos(a), y = Math.cos(d) * Math.sin(a), z = Math.sin(d);
+        return astroToWorld([x, y * Math.cos(OBLIQ) + z * Math.sin(OBLIQ),
+                             -y * Math.sin(OBLIQ) + z * Math.cos(OBLIQ)]);
+      }
+      function worldToEq(v) {
+        const x = v.x, ye = -v.z, ze = v.y;                 // back to ecliptic
+        const y = ye * Math.cos(OBLIQ) - ze * Math.sin(OBLIQ);
+        const z = ye * Math.sin(OBLIQ) + ze * Math.cos(OBLIQ);
+        let ra = Math.atan2(y, x) / DEG / 15;
+        if (ra < 0) ra += 24;
+        return { ra: ra, dec: Math.asin(Math.max(-1, Math.min(1, z))) / DEG };
+      }
+
+      // Truncated lunar theory — the main terms only, good to roughly 0.2°.
+      function moonGeo(T) {
+        const D = (297.8501921 + 445267.1114034 * T) * DEG;
+        const M = (357.5291092 + 35999.0502909 * T) * DEG;
+        const Mp = (134.9633964 + 477198.8675055 * T) * DEG;
+        const F = (93.2720950 + 483202.0175233 * T) * DEG;
+        const lon = (218.3164477 + 481267.88123421 * T
+          + 6.289 * Math.sin(Mp) - 1.274 * Math.sin(Mp - 2 * D) + 0.658 * Math.sin(2 * D)
+          + 0.214 * Math.sin(2 * Mp) - 0.186 * Math.sin(M) - 0.114 * Math.sin(2 * F)) * DEG;
+        const lat = (5.128 * Math.sin(F) + 0.281 * Math.sin(Mp + F)
+          - 0.278 * Math.sin(F - Mp) - 0.173 * Math.sin(F - 2 * D)) * DEG;
+        const par = (0.9508 + 0.0518 * Math.cos(Mp) + 0.0095 * Math.cos(Mp - 2 * D)
+          + 0.0078 * Math.cos(2 * D) + 0.0028 * Math.cos(2 * Mp)) * DEG;
+        return {
+          dir: astroToWorld([Math.cos(lat) * Math.cos(lon), Math.cos(lat) * Math.sin(lon), Math.sin(lat)]),
+          distKm: EARTH_RAD_KM / Math.sin(par)
+        };
+      }
+
+      // Greenwich mean sidereal time, degrees — fixes which face of Earth is up.
+      function gmstDeg(jd) {
+        const T = (jd - 2451545.0) / 36525;
+        const t = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * T * T;
+        return ((t % 360) + 360) % 360;
+      }
+
+      // Bright stars: RA hours, Dec degrees, visual magnitude, colour.
+      const STAR_CATALOG = [
+        ["Sirius", 6.7525, -16.7161, -1.46, 0xa8c4ff], ["Canopus", 6.3992, -52.6957, -0.74, 0xf6f2e8],
+        ["Rigil Kent.", 14.6600, -60.8339, -0.27, 0xfff2d8], ["Arcturus", 14.2610, 19.1825, -0.05, 0xffc98a],
+        ["Vega", 18.6156, 38.7837, 0.03, 0xcadcff], ["Capella", 5.2782, 45.9980, 0.08, 0xffe9b0],
+        ["Rigel", 5.2423, -8.2017, 0.13, 0xb8d0ff], ["Procyon", 7.6550, 5.2250, 0.34, 0xfff4de],
+        ["Betelgeuse", 5.9195, 7.4071, 0.50, 0xff9b6a], ["Achernar", 1.6286, -57.2367, 0.46, 0xb4ccff],
+        ["Hadar", 14.0637, -60.3730, 0.61, 0xb0c8ff], ["Altair", 19.8464, 8.8683, 0.77, 0xeaf2ff],
+        ["Acrux", 12.4433, -63.0991, 0.77, 0xb0c8ff], ["Aldebaran", 4.5987, 16.5093, 0.85, 0xffb072],
+        ["Antares", 16.4901, -26.4319, 1.09, 0xff8f5e], ["Spica", 13.4199, -11.1613, 0.98, 0xaec6ff],
+        ["Pollux", 7.7553, 28.0262, 1.14, 0xffcc8e], ["Fomalhaut", 22.9608, -29.6222, 1.16, 0xdfeaff],
+        ["Deneb", 20.6905, 45.2803, 1.25, 0xe6efff], ["Mimosa", 12.7953, -59.6888, 1.25, 0xb0c8ff],
+        ["Regulus", 10.1395, 11.9672, 1.35, 0xc8daff], ["Adhara", 6.9770, -28.9721, 1.50, 0xb4ccff],
+        ["Castor", 7.5766, 31.8883, 1.57, 0xdfeaff], ["Gacrux", 12.5194, -57.1132, 1.63, 0xff9d6a],
+        ["Shaula", 17.5601, -37.1038, 1.63, 0xb4ccff], ["Bellatrix", 5.4185, 6.3497, 1.64, 0xbcd4ff],
+        ["Elnath", 5.4382, 28.6075, 1.65, 0xe4ecff], ["Miaplacidus", 9.2200, -69.7172, 1.67, 0xdfeaff],
+        ["Alnilam", 5.6036, -1.2019, 1.69, 0xb0c8ff], ["Alnitak", 5.6793, -1.9426, 1.77, 0xb0c8ff],
+        ["Alioth", 12.9005, 55.9598, 1.76, 0xe8f0ff], ["Dubhe", 11.0621, 61.7510, 1.79, 0xffd39a],
+        ["Mirfak", 3.4054, 49.8612, 1.79, 0xfff0cc], ["Wezen", 7.1399, -26.3932, 1.83, 0xfff4de],
+        ["Sargas", 17.6220, -42.9978, 1.87, 0xfff0cc], ["Avior", 8.3752, -59.5096, 1.86, 0xffbe86],
+        ["Alkaid", 13.7923, 49.3133, 1.85, 0xdfeaff], ["Menkalinan", 5.9922, 44.9474, 1.90, 0xe8f0ff],
+        ["Atria", 16.8111, -69.0277, 1.91, 0xffbe86], ["Alhena", 6.6285, 16.3993, 1.93, 0xeaf2ff],
+        ["Peacock", 20.4275, -56.7351, 1.94, 0xbcd4ff], ["Mirzam", 6.3783, -17.9559, 1.98, 0xb0c8ff],
+        ["Alphard", 9.4597, -8.6586, 1.98, 0xffb884], ["Polaris", 2.5302, 89.2641, 1.98, 0xfff2d8],
+        ["Hamal", 2.1195, 23.4624, 2.00, 0xffc98a], ["Diphda", 0.7265, -17.9866, 2.04, 0xffcc8e],
+        ["Nunki", 18.9211, -26.2967, 2.05, 0xb8d0ff], ["Mintaka", 5.5334, -0.2991, 2.23, 0xb0c8ff]
+      ];
+
+      // Deep sky: RA hours, Dec deg, apparent size in arcminutes, kind, tint.
+      const DEEP_SKY = [
+        ["Orion Nebula", "M42", 5.5881, -5.3911, 65, "nebula", 0xff7aa2],
+        ["Andromeda Galaxy", "M31", 0.7122, 41.2687, 190, "galaxy", 0xcfd8ff],
+        ["Pleiades", "M45", 3.7833, 24.1167, 110, "cluster", 0x9fc0ff],
+        ["Carina Nebula", "NGC 3372", 10.7500, -59.8667, 120, "nebula", 0xff8f6a],
+        ["Pillars of Creation", "M16", 18.3133, -13.8167, 7, "nebula", 0xffa878],
+        ["Ring Nebula", "M57", 18.8931, 33.0289, 1.4, "nebula", 0x7fe0d0],
+        ["Sombrero Galaxy", "M104", 12.6664, -11.6231, 9, "galaxy", 0xe8dcc0],
+        ["Lagoon Nebula", "M8", 18.0606, -24.3867, 45, "nebula", 0xff86a8],
+        ["Whirlpool Galaxy", "M51", 13.4978, 47.1953, 11, "galaxy", 0xd6e0ff]
+      ];
+
+      // The sky renders in its own pass with its own camera, all of it parked on a
+      // shell 1000 units out. Trying to keep Earth (radius 1) and Neptune in one
+      // depth buffer would shred the precision; two passes cost nothing and the
+      // parallax we lose across an orbit is far below one pixel.
+      const SKY_R = 1000;
+
+      function buildSky() {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(38, 1, 1, SKY_R * 3);
+        const targets = [];
+        const fadeables = [];       // plain materials that fade with the ride
+
+        function noise2(x, y, s) {
+          let n = Math.imul(x | 0, 1619) ^ Math.imul(y | 0, 31337) ^ Math.imul(s, 6971);
+          n = Math.imul(n ^ (n >>> 13), 2246822519);
+          return ((n ^ (n >>> 16)) >>> 0) / 4294967295;
+        }
+        function smooth(x, y, s) {
+          const xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi;
+          const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy);
+          return (noise2(xi, yi, s) * (1 - u) + noise2(xi + 1, yi, s) * u) * (1 - v) +
+                 (noise2(xi, yi + 1, s) * (1 - u) + noise2(xi + 1, yi + 1, s) * u) * v;
+        }
+        function fbm(x, y, s, oct) {
+          let a = 0.5, f = 1, sum = 0;
+          for (let i = 0; i < (oct || 4); i++) { sum += a * smooth(x * f, y * f, s + i); f *= 2; a *= 0.5; }
+          return sum;
+        }
+
+        // ── surface textures, generated rather than fetched ──
+        function surfaceTexture(kind) {
+          const W = 512, H = 256;
+          const c = document.createElement("canvas");
+          c.width = W; c.height = H;
+          const g = c.getContext("2d");
+          const img = g.createImageData(W, H);
+          const D = img.data;
+          const bands = {
+            rock:   [[110, 106, 100], [150, 146, 138]],
+            moon:   [[118, 118, 122], [176, 176, 180]],
+            venus:  [[196, 166, 108], [236, 214, 160]],
+            mars:   [[142, 78, 48], [198, 128, 88]],
+            jupiter:[[168, 134, 100], [226, 204, 176]],
+            saturn: [[192, 168, 124], [226, 206, 168]],
+            uranus: [[150, 200, 208], [186, 224, 228]],
+            neptune:[[54, 84, 168], [96, 132, 208]]
+          }[kind] || [[130, 130, 130], [180, 180, 180]];
+          const gassy = kind === "jupiter" || kind === "saturn" || kind === "uranus" || kind === "neptune";
+          for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+              let t;
+              if (gassy) {
+                // Zonal bands: latitude-driven, with turbulence smearing them out.
+                const lat = (y / H) * 2 - 1;
+                const freq = kind === "jupiter" ? 15 : kind === "saturn" ? 10 : 4;
+                const warp = fbm(x * 0.03, y * 0.16, 11, 3) * (kind === "uranus" || kind === "neptune" ? 0.6 : 2.2);
+                t = 0.5 + 0.5 * Math.sin(lat * freq + warp);
+                t = t * 0.72 + fbm(x * 0.02, y * 0.09, 3, 3) * 0.28;
+              } else {
+                t = fbm(x * 0.045, y * 0.045, 7, 5);
+                if (kind === "mars") t = t * 0.8 + fbm(x * 0.012, y * 0.012, 21, 3) * 0.2;
+              }
+              const i = (y * W + x) * 4;
+              D[i] = bands[0][0] + (bands[1][0] - bands[0][0]) * t;
+              D[i + 1] = bands[0][1] + (bands[1][1] - bands[0][1]) * t;
+              D[i + 2] = bands[0][2] + (bands[1][2] - bands[0][2]) * t;
+              D[i + 3] = 255;
+            }
+          }
+          g.putImageData(img, 0, 0);
+          // Craters for the airless bodies, polar caps for Mars.
+          if (kind === "rock" || kind === "moon") {
+            for (let i = 0; i < 90; i++) {
+              const x = Math.random() * W, y = 20 + Math.random() * (H - 40);
+              const r = 2 + Math.pow(Math.random(), 2.4) * 16;
+              const rg = g.createRadialGradient(x, y, 0, x, y, r);
+              rg.addColorStop(0, "rgba(70,70,74,0.5)");
+              rg.addColorStop(0.72, "rgba(90,90,94,0.28)");
+              rg.addColorStop(1, "rgba(210,210,214,0.16)");
+              g.fillStyle = rg;
+              g.beginPath(); g.ellipse(x, y, r, r * 0.85, 0, 0, Math.PI * 2); g.fill();
+            }
+          }
+          if (kind === "mars") {
+            g.fillStyle = "rgba(244,248,255,0.88)";
+            g.beginPath(); g.ellipse(W * 0.5, 0, W * 0.42, 15, 0, 0, Math.PI * 2); g.fill();
+            g.beginPath(); g.ellipse(W * 0.5, H, W * 0.36, 12, 0, 0, Math.PI * 2); g.fill();
+          }
+          if (kind === "jupiter") {
+            const rg = g.createRadialGradient(W * 0.63, H * 0.63, 0, W * 0.63, H * 0.63, 34);
+            rg.addColorStop(0, "rgba(196,96,62,0.92)");
+            rg.addColorStop(1, "rgba(196,96,62,0)");
+            g.fillStyle = rg;
+            g.beginPath(); g.ellipse(W * 0.63, H * 0.63, 34, 17, 0, 0, Math.PI * 2); g.fill();
+          }
+          if (kind === "neptune") {
+            const rg = g.createRadialGradient(W * 0.35, H * 0.6, 0, W * 0.35, H * 0.6, 26);
+            rg.addColorStop(0, "rgba(18,34,92,0.85)");
+            rg.addColorStop(1, "rgba(18,34,92,0)");
+            g.fillStyle = rg;
+            g.beginPath(); g.ellipse(W * 0.35, H * 0.6, 26, 13, 0, 0, Math.PI * 2); g.fill();
+          }
+          const tex = new THREE.CanvasTexture(c);
+          if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+          tex.anisotropy = 4;
+          return tex;
+        }
+
+        // Lit like the real thing: the terminator falls where the Sun actually is,
+        // which is what gives Venus its crescent and the Moon its phase.
+        function bodyMaterial(tex) {
+          return new THREE.ShaderMaterial({
+            transparent: true,
+            uniforms: {
+              map: { value: tex },
+              sunDir: { value: new THREE.Vector3(1, 0, 0) },
+              ambient: { value: 0.025 },
+              fade: { value: 0 }
+            },
+            vertexShader: [
+              "varying vec2 vUv; varying vec3 vN;",
+              "void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal);",
+              "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }"
+            ].join("\n"),
+            fragmentShader: [
+              "uniform sampler2D map; uniform vec3 sunDir; uniform float ambient; uniform float fade;",
+              "varying vec2 vUv; varying vec3 vN;",
+              "void main(){",
+              "  float d = max(dot(normalize(vN), normalize(sunDir)), 0.0);",
+              "  d = d * smoothstep(0.0, 0.12, d);",
+              "  vec3 c = texture2D(map, vUv).rgb;",
+              "  gl_FragColor = vec4(c * (ambient + d * 1.9), fade); }"
+            ].join("\n")
+          });
+        }
+
+        // Point sprites for anything too small to resolve — stars, and planets
+        // until you zoom far enough in for the disc to take over.
+        function pointMaterial() {
+          return new THREE.ShaderMaterial({
+            uniforms: { dpr: { value: 1 }, fade: { value: 0 } },
+            vertexShader: [
+              "attribute float size; attribute vec3 tint; attribute float alpha;",
+              "varying vec3 vT; varying float vA; uniform float dpr;",
+              "void main(){ vT = tint; vA = alpha;",
+              "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);",
+              "  gl_PointSize = size * dpr; }"
+            ].join("\n"),
+            fragmentShader: [
+              "varying vec3 vT; varying float vA; uniform float fade;",
+              "void main(){",
+              "  float r = length(gl_PointCoord - vec2(0.5)) * 2.0;",
+              "  if (r > 1.0) discard;",
+              "  float a = pow(1.0 - r, 2.4);",
+              "  gl_FragColor = vec4(vT, a * vA * fade); }"
+            ].join("\n"),
+            transparent: true, depthWrite: false, depthTest: false,
+            blending: THREE.AdditiveBlending
+          });
+        }
+
+        // ── stars ──
+        const starCount = STAR_CATALOG.length + 1400;
+        const sPos = new Float32Array(starCount * 3);
+        const sTint = new Float32Array(starCount * 3);
+        const sSize = new Float32Array(starCount);
+        const sAlpha = new Float32Array(starCount);
+        STAR_CATALOG.forEach((s, i) => {
+          const v = eqToWorld(s[1], s[2]);
+          sPos[i * 3] = v[0] * SKY_R; sPos[i * 3 + 1] = v[1] * SKY_R; sPos[i * 3 + 2] = v[2] * SKY_R;
+          const c = new THREE.Color(s[4]);
+          sTint[i * 3] = c.r; sTint[i * 3 + 1] = c.g; sTint[i * 3 + 2] = c.b;
+          sSize[i] = Math.max(3, 11 - s[3] * 2.4);
+          sAlpha[i] = 1;
+          targets.push({
+            name: s[0], kind: "star", group: "Stars",
+            dir: new THREE.Vector3(v[0], v[1], v[2]), arcmin: 0.02, mag: s[3]
+          });
+        });
+        for (let i = STAR_CATALOG.length; i < starCount; i++) {
+          // Faint filler so the sky has depth between the named stars.
+          const u = Math.random() * 2 - 1, a = Math.random() * Math.PI * 2, s2 = Math.sqrt(1 - u * u);
+          sPos[i * 3] = Math.cos(a) * s2 * SKY_R;
+          sPos[i * 3 + 1] = u * SKY_R;
+          sPos[i * 3 + 2] = Math.sin(a) * s2 * SKY_R;
+          const w = 0.72 + Math.random() * 0.28;
+          sTint[i * 3] = w; sTint[i * 3 + 1] = w * 0.96; sTint[i * 3 + 2] = 1;
+          sSize[i] = 1.2 + Math.pow(Math.random(), 3) * 2.6;
+          sAlpha[i] = 0.35 + Math.random() * 0.5;
+        }
+        const starGeo = new THREE.BufferGeometry();
+        starGeo.setAttribute("position", new THREE.BufferAttribute(sPos, 3));
+        starGeo.setAttribute("tint", new THREE.BufferAttribute(sTint, 3));
+        starGeo.setAttribute("size", new THREE.BufferAttribute(sSize, 1));
+        starGeo.setAttribute("alpha", new THREE.BufferAttribute(sAlpha, 1));
+        const starMat = pointMaterial();
+        scene.add(new THREE.Points(starGeo, starMat));
+
+        // ── deep sky ──
+        function nebulaTexture(kind, tint) {
+          const N = 256;
+          const c = document.createElement("canvas");
+          c.width = c.height = N;
+          const g = c.getContext("2d");
+          const img = g.createImageData(N, N);
+          const D = img.data;
+          const col = new THREE.Color(tint);
+          for (let y = 0; y < N; y++) {
+            for (let x = 0; x < N; x++) {
+              const dx = (x / N - 0.5) * 2, dy = (y / N - 0.5) * 2;
+              const r = Math.hypot(dx, dy);
+              let v;
+              if (kind === "galaxy") {
+                // Spiral: brightness falls off exponentially, arms wind with radius.
+                const th = Math.atan2(dy, dx);
+                const arms = 0.5 + 0.5 * Math.cos(2 * (th - Math.log(r + 0.08) * 2.6));
+                v = Math.exp(-r * 3.1) * (0.45 + 0.55 * arms) + Math.exp(-r * 9) * 0.7;
+              } else if (kind === "cluster") {
+                v = Math.exp(-r * 2.6) * 0.35;
+              } else {
+                // Ridged noise makes filaments and dust lanes instead of a smooth
+                // blob — emission nebulae are structure, not a gradient.
+                const n1 = fbm(x * 0.085, y * 0.085, 5, 5);
+                const n2 = fbm(x * 0.21, y * 0.21, 17, 4);
+                const ridge = 1 - Math.abs(n1 * 2 - 1);
+                v = Math.exp(-r * 1.55) * Math.pow(ridge, 2.0) * (0.45 + 1.05 * n2);
+                v += Math.exp(-r * 5.5) * 0.5;              // ionised core
+              }
+              v *= Math.max(0, 1 - r);
+              const i = (y * N + x) * 4;
+              // Hot core cools toward the rim, the way ionisation actually falls off.
+              const hot = Math.min(1, v * 1.9);
+              const cr = col.r + (1 - col.r) * hot * 0.75;
+              const cg = col.g + (1 - col.g) * hot * 0.55;
+              const cb = col.b + (1 - col.b) * hot * 0.8;
+              D[i] = Math.min(255, cr * 255 * v * 1.7);
+              D[i + 1] = Math.min(255, cg * 255 * v * 1.4);
+              D[i + 2] = Math.min(255, cb * 255 * v * 1.8);
+              D[i + 3] = Math.min(255, 255 * v * 1.6);
+            }
+          }
+          g.putImageData(img, 0, 0);
+          if (kind === "nebula") {
+            // Young stars sit inside the gas that made them.
+            g.globalCompositeOperation = "lighter";
+            for (let i = 0; i < 26; i++) {
+              const a = Math.random() * Math.PI * 2, rr = Math.pow(Math.random(), 0.7) * 0.4;
+              const x = N / 2 + Math.cos(a) * rr * N, y = N / 2 + Math.sin(a) * rr * N;
+              const s = 1 + Math.random() * 2.6;
+              const rg = g.createRadialGradient(x, y, 0, x, y, s * 3.5);
+              rg.addColorStop(0, "rgba(255,248,236,0.9)");
+              rg.addColorStop(1, "rgba(255,210,170,0)");
+              g.fillStyle = rg;
+              g.beginPath(); g.arc(x, y, s * 3.5, 0, Math.PI * 2); g.fill();
+            }
+            g.globalCompositeOperation = "source-over";
+          }
+          if (kind === "cluster") {
+            g.globalCompositeOperation = "lighter";
+            for (let i = 0; i < 40; i++) {
+              const a = Math.random() * Math.PI * 2, rr = Math.pow(Math.random(), 0.6) * 0.44;
+              const x = N / 2 + Math.cos(a) * rr * N, y = N / 2 + Math.sin(a) * rr * N;
+              const s = 1.4 + Math.random() * 3.4;
+              const rg = g.createRadialGradient(x, y, 0, x, y, s * 3);
+              rg.addColorStop(0, "rgba(214,232,255,0.95)");
+              rg.addColorStop(1, "rgba(150,190,255,0)");
+              g.fillStyle = rg;
+              g.beginPath(); g.arc(x, y, s * 3, 0, Math.PI * 2); g.fill();
+            }
+          }
+          const tex = new THREE.CanvasTexture(c);
+          if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+          return tex;
+        }
+
+        DEEP_SKY.forEach((o) => {
+          const v = eqToWorld(o[2], o[3]);
+          const dir = new THREE.Vector3(v[0], v[1], v[2]);
+          const ang = (o[4] / 60) * DEG;                    // arcmin → radians
+          const size = 2 * SKY_R * Math.tan(ang / 2);
+          const mesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(size, size * (o[5] === "galaxy" ? 0.52 : 0.88)),
+            new THREE.MeshBasicMaterial({
+              map: nebulaTexture(o[5], o[6]), transparent: true,
+              blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, opacity: 1
+            })
+          );
+          mesh.position.copy(dir).multiplyScalar(SKY_R);
+          mesh.lookAt(0, 0, 0);
+          mesh.rotateZ(o[3] * 0.03);
+          mesh.renderOrder = -1;
+          fadeables.push(mesh.material);
+          scene.add(mesh);
+          targets.push({ name: o[0], sub: o[1], kind: "deepsky", group: "Deep sky", dir: dir, arcmin: o[4] });
+        });
+
+        // ── solar system ──
+        const BODY_KIND = {
+          Mercury: "rock", Venus: "venus", Mars: "mars", Jupiter: "jupiter",
+          Saturn: "saturn", Uranus: "uranus", Neptune: "neptune", Moon: "moon"
+        };
+        const bodies = {};
+        Object.keys(BODY_KIND).forEach((name) => {
+          const mat = bodyMaterial(surfaceTexture(BODY_KIND[name]));
+          const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), mat);
+          mesh.visible = false;
+          scene.add(mesh);
+          const rec = { mesh: mesh, mat: mat, name: name };
+          if (name === "Saturn") {
+            const RN = 128;
+            const rc = document.createElement("canvas");
+            rc.width = RN; rc.height = 4;
+            const rg2 = rc.getContext("2d");
+            for (let i = 0; i < RN; i++) {
+              const t = i / RN;
+              // Cassini division sits about two thirds of the way out.
+              const gap = Math.abs(t - 0.63) < 0.045 ? 0.12 : 1;
+              const b = (0.55 + 0.45 * Math.sin(t * 34)) * gap * (t < 0.28 ? 0 : 1);
+              rg2.fillStyle = "rgba(226,208,172," + (b * 0.85).toFixed(3) + ")";
+              rg2.fillRect(i, 0, 1, 4);
+            }
+            const rtex = new THREE.CanvasTexture(rc);
+            const ring = new THREE.Mesh(
+              new THREE.RingGeometry(1.24, 2.27, 96),
+              new THREE.MeshBasicMaterial({ map: rtex, transparent: true, side: THREE.DoubleSide, depthWrite: false })
+            );
+            // Remap the ring UVs so the texture runs radially, not around.
+            const pos = ring.geometry.attributes.position, uv = ring.geometry.attributes.uv;
+            for (let i = 0; i < pos.count; i++) {
+              const r = Math.hypot(pos.getX(i), pos.getY(i));
+              uv.setXY(i, (r - 1.24) / (2.27 - 1.24), 0.5);
+            }
+            uv.needsUpdate = true;
+            ring.rotation.x = Math.PI / 2 - 0.47;           // Saturn's ring plane tilt
+            mesh.add(ring);
+            rec.ring = ring;
+          }
+          bodies[name] = rec;
+          // The Moon is listed once, further down, alongside the Sun.
+          if (name !== "Moon") {
+            targets.push({
+              name: name, kind: "planet", group: "Solar system",
+              dir: new THREE.Vector3(1, 0, 0), arcmin: 0.5,
+              // Saturn has to be framed on the rings, not the globe.
+              spread: name === "Saturn" ? 2.3 : 1
+            });
+          }
+        });
+
+        // The Sun: no phase, just a hot disc with a corona around it.
+        const sunMesh = new THREE.Mesh(
+          new THREE.SphereGeometry(1, 48, 32),
+          new THREE.MeshBasicMaterial({ color: 0xfff4e0 })
+        );
+        scene.add(sunMesh);
+        const coronaTex = (function () {
+          const N = 128, c = document.createElement("canvas");
+          c.width = c.height = N;
+          const g = c.getContext("2d");
+          const rg = g.createRadialGradient(N / 2, N / 2, 0, N / 2, N / 2, N / 2);
+          rg.addColorStop(0, "rgba(255,246,224,0.95)");
+          rg.addColorStop(0.16, "rgba(255,226,160,0.45)");
+          rg.addColorStop(0.44, "rgba(255,186,96,0.12)");
+          rg.addColorStop(1, "rgba(255,170,80,0)");
+          g.fillStyle = rg; g.fillRect(0, 0, N, N);
+          return new THREE.CanvasTexture(c);
+        })();
+        const corona = new THREE.Mesh(
+          new THREE.PlaneGeometry(1, 1),
+          new THREE.MeshBasicMaterial({ map: coronaTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false })
+        );
+        corona.renderOrder = 2;
+        scene.add(corona);
+        targets.push({ name: "Sun", kind: "sun", group: "Solar system", dir: new THREE.Vector3(1, 0, 0), arcmin: 32 });
+        targets.push({ name: "Moon", kind: "moon", group: "Solar system", dir: new THREE.Vector3(1, 0, 0), arcmin: 31 });
+
+        // Glow sprites for the solar-system bodies, so they read as bright stars
+        // before you have the magnification to resolve them.
+        const glowNames = Object.keys(BODY_KIND);
+        const gPos = new Float32Array(glowNames.length * 3);
+        const gTint = new Float32Array(glowNames.length * 3);
+        const gSize = new Float32Array(glowNames.length);
+        const gAlpha = new Float32Array(glowNames.length);
+        const GLOW_TINT = {
+          Mercury: [1, 0.94, 0.84], Venus: [1, 0.98, 0.9], Mars: [1, 0.72, 0.55],
+          Jupiter: [1, 0.95, 0.82], Saturn: [1, 0.93, 0.76], Uranus: [0.76, 0.95, 1],
+          Neptune: [0.72, 0.84, 1], Moon: [1, 1, 0.98]
+        };
+        glowNames.forEach((n, i) => {
+          const t = GLOW_TINT[n];
+          gTint[i * 3] = t[0]; gTint[i * 3 + 1] = t[1]; gTint[i * 3 + 2] = t[2];
+        });
+        const glowGeo = new THREE.BufferGeometry();
+        glowGeo.setAttribute("position", new THREE.BufferAttribute(gPos, 3));
+        glowGeo.setAttribute("tint", new THREE.BufferAttribute(gTint, 3));
+        glowGeo.setAttribute("size", new THREE.BufferAttribute(gSize, 1));
+        glowGeo.setAttribute("alpha", new THREE.BufferAttribute(gAlpha, 1));
+        const glowMat = pointMaterial();
+        const glows = new THREE.Points(glowGeo, glowMat);
+        glows.frustumCulled = false;
+        scene.add(glows);
+
+        const byName = {};
+        targets.forEach((t) => (byName[t.name] = t));
+        const sunDirWorld = new THREE.Vector3(1, 0, 0);
+        const scratchA = new THREE.Vector3();   // reused; update() runs every frame
+        let earthHelio = [1, 0, 0];
+
+        // Recompute where everything is, for a given instant.
+        function update(date, fovDeg, heightPx) {
+          const jd = julianDay(date);
+          const T = (jd - 2451545.0) / 36525;
+          earthHelio = helioVec("Earth", T);
+          const sunGeo = [-earthHelio[0], -earthHelio[1], -earthHelio[2]];
+          const sunDist = Math.hypot(sunGeo[0], sunGeo[1], sunGeo[2]);
+          const sw = astroToWorld(sunGeo.map((v) => v / sunDist));
+          sunDirWorld.set(sw[0], sw[1], sw[2]);
+
+          // Pixels per radian, for deciding when a disc has out-grown its glow.
+          const pxPerRad = heightPx / (fovDeg * DEG);
+
+          function place(mesh, dirArr, distKm, radiusKm) {
+            const ang = 2 * Math.asin(Math.min(1, radiusKm / distKm));
+            const r = SKY_R * Math.tan(ang / 2);
+            mesh.position.set(dirArr[0] * SKY_R, dirArr[1] * SKY_R, dirArr[2] * SKY_R);
+            mesh.scale.setScalar(Math.max(r, 1e-4));
+            return ang;
+          }
+
+          // Sun
+          const sunAng = place(sunMesh, sw, sunDist * AU_KM, BODY_RAD.Sun);
+          byName.Sun.dir.copy(sunDirWorld);
+          byName.Sun.arcmin = sunAng / DEG * 60;
+          const coronaSize = Math.max(SKY_R * Math.tan(sunAng / 2) * 9, SKY_R * Math.tan(fovDeg * DEG / 2) * 0.16);
+          corona.position.copy(sunMesh.position);
+          corona.scale.set(coronaSize, coronaSize, 1);
+          corona.lookAt(0, 0, 0);
+
+          // Moon
+          const mg = moonGeo(T);
+          const moonAng = place(bodies.Moon.mesh, mg.dir, mg.distKm, BODY_RAD.Moon);
+          bodies.Moon.mesh.visible = true;
+          // Lit from wherever the Sun is relative to the Moon, which is what
+          // makes the phase come out right.
+          scratchA.set(mg.dir[0], mg.dir[1], mg.dir[2]).multiplyScalar(mg.distKm);
+          bodies.Moon.mat.uniforms.sunDir.value
+            .copy(sunDirWorld).multiplyScalar(sunDist * AU_KM)
+            .sub(scratchA).normalize();
+          byName.Moon.dir.set(mg.dir[0], mg.dir[1], mg.dir[2]);
+          byName.Moon.arcmin = moonAng / DEG * 60;
+
+          glowNames.forEach((name, i) => {
+            let dirArr, distKm, angDiam;
+            if (name === "Moon") {
+              dirArr = mg.dir; distKm = mg.distKm; angDiam = moonAng;
+            } else {
+              const h = helioVec(name, T);
+              const g = [h[0] - earthHelio[0], h[1] - earthHelio[1], h[2] - earthHelio[2]];
+              const dAU = Math.hypot(g[0], g[1], g[2]);
+              distKm = dAU * AU_KM;
+              dirArr = astroToWorld(g.map((v) => v / dAU));
+              const rec = bodies[name];
+              angDiam = place(rec.mesh, dirArr, distKm, BODY_RAD[name]);
+              rec.mesh.visible = true;
+              // Sun as seen from the planet itself — gives Venus its crescent.
+              rec.mat.uniforms.sunDir.value.set(-h[0], -h[2], h[1]).normalize();
+              byName[name].dir.set(dirArr[0], dirArr[1], dirArr[2]);
+              byName[name].arcmin = angDiam / DEG * 60;
+            }
+            gPos[i * 3] = dirArr[0] * SKY_R * 0.999;
+            gPos[i * 3 + 1] = dirArr[1] * SKY_R * 0.999;
+            gPos[i * 3 + 2] = dirArr[2] * SKY_R * 0.999;
+            // Once the disc covers more than a few pixels, hand over to it.
+            const discPx = angDiam * pxPerRad;
+            gSize[i] = Math.max(3.5, Math.min(13, 26 / Math.sqrt(distKm / 1e6 + 1)));
+            gAlpha[i] = Math.max(0, Math.min(1, 1 - (discPx - 3) / 9));
+          });
+          glowGeo.attributes.position.needsUpdate = true;
+          glowGeo.attributes.size.needsUpdate = true;
+          glowGeo.attributes.alpha.needsUpdate = true;
+        }
+
+        return {
+          scene: scene, camera: camera, targets: targets, byName: byName,
+          sunDir: sunDirWorld,
+          earthHelio: function () { return earthHelio; },
+          setDpr: function (d) { starMat.uniforms.dpr.value = d; glowMat.uniforms.dpr.value = d; },
+          setFade: function (f) {
+            starMat.uniforms.fade.value = f;
+            glowMat.uniforms.fade.value = f;
+            Object.keys(bodies).forEach((n) => {
+              bodies[n].mat.uniforms.fade.value = f;
+              if (bodies[n].ring) bodies[n].ring.material.opacity = f;
+            });
+            sunMesh.material.opacity = f;
+            sunMesh.material.transparent = true;
+            corona.material.opacity = f;
+            fadeables.forEach((m) => (m.opacity = f));
+          },
+          update: update
+        };
+      }
+
       function initUplink(cnv) {
         const ctx = cnv.getContext("2d");
         const stage = cnv.parentElement;
@@ -1146,6 +1810,8 @@
           }
 
           renderer.setClearColor(0x000000, 0);
+          // The sky and the Earth are drawn as two passes, so clearing is manual.
+          renderer.autoClear = false;
           renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
           if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -1161,7 +1827,7 @@
           const textureSet = makeEarthTextures();
           const earthRig = new THREE.Group();
           const tiltedAxis = new THREE.Group();
-          tiltedAxis.rotation.z = THREE.MathUtils.degToRad(-23.4);
+          // Orientation is set per frame from the clock — see orientEarth().
           earthRig.add(tiltedAxis);
           scene.add(earthRig);
 
@@ -1223,14 +1889,20 @@
           // body the camera actually orbits, so what you photograph is the real
           // lit hemisphere, terminator and all.
           const EARTH_KM = 6371;
-          // Altitudes in Earth radii, chosen for how each one frames the planet at
-          // the default lens: a dramatic partial disc, a full disc with space
-          // around it, and a low pass where the surface fills the frame.
+          // Altitudes in Earth radii. Orbital rate isn't authored — it falls out of
+          // the altitude via Kepler's third law, so the period, the speed on the HUD
+          // and how fast the ground slides past all agree with each other.
+          const TIMEWARP = 150;
           const CRAFT = [
-            { call: "RELAY-1", alt: 1.60, incl: 0.32, phase: 0.0, sp: 0.000052 },
-            { call: "SCOPE-2", alt: 3.20, incl: 1.16, phase: 2.1, sp: 0.000026 },
-            { call: "PROBE-3", alt: 0.90, incl: -0.58, phase: 4.2, sp: 0.000068 }
+            { call: "RELAY-1", alt: 1.60, incl: 0.32, phase: 0.0 },
+            { call: "SCOPE-2", alt: 3.20, incl: 1.16, phase: 2.1 },
+            { call: "PROBE-3", alt: 0.90, incl: -0.58, phase: 4.2 }
           ];
+          CRAFT.forEach((c) => {
+            const aKm = (1 + c.alt) * EARTH_KM;
+            c.periodS = 2 * Math.PI * Math.sqrt((aKm * aKm * aKm) / MU_EARTH);
+            c.sp = (2 * Math.PI * TIMEWARP) / (c.periodS * 1000);   // rad per real ms
+          });
           const HUD_POS = new THREE.Vector3(0, 0, 4.2);
           const HUD_Q = new THREE.Quaternion();
           const HUD_FOV = 32;
@@ -1240,41 +1912,62 @@
           const hudPos = new THREE.Vector3();
           let rideWant = 0, rideT = 0, rideIdx = 0;
           let orbA = CRAFT[0].phase;
+          // Aim is absolute in the sky frame, not an offset from nadir — the camera
+          // is a telescope that can point anywhere, and holds its pointing while the
+          // craft moves under it.
           let aimYaw = 0, aimPitch = 0, tAimYaw = 0, tAimPitch = 0;
           let lensFov = 38, tLensFov = 38;
+          let track = "Earth";                    // "Earth", a target name, or null
           const ridePos = new THREE.Vector3();
           const rideQ = new THREE.Quaternion();
+          const aimDir = new THREE.Vector3(1, 0, 0);
           // Matrix4.lookAt uses the camera convention (-Z toward the target).
           // Object3D.lookAt does not — it aims +Z — so building the orientation
-          // through a dummy object would point the camera away from Earth.
+          // through a dummy object would point the camera away from the target.
           const lookM = new THREE.Matrix4();
           const UP = new THREE.Vector3(0, 1, 0);
-          const AX_X = new THREE.Vector3(1, 0, 0);
-          const AX_Y = new THREE.Vector3(0, 1, 0);
-          const qSwing = new THREE.Quaternion();
           const nadir = new THREE.Vector3();
+          const tmpV = new THREE.Vector3();
           let telAlt = 0, telVel = 0, telLat = 0, telLon = 0;
+          let telRA = 0, telDec = 0, telTarget = "—", onEarth = false;
 
-          // Deep field, so a photograph has something behind the limb.
-          const skyGeo = new THREE.BufferGeometry();
-          {
-            const N = 1600, arr = new Float32Array(N * 3);
-            for (let i = 0; i < N; i++) {
-              // Even spread over the sphere: uniform in cos(phi), not in phi.
-              const u = Math.random() * 2 - 1, a = Math.random() * Math.PI * 2;
-              const s2 = Math.sqrt(1 - u * u), R = 60;
-              arr[i * 3] = Math.cos(a) * s2 * R;
-              arr[i * 3 + 1] = u * R;
-              arr[i * 3 + 2] = Math.sin(a) * s2 * R;
-            }
-            skyGeo.setAttribute("position", new THREE.BufferAttribute(arr, 3));
+          const sky = buildSky();
+          const bootReal = Date.now();
+          function simDate() {
+            return new Date(bootReal + (Date.now() - bootReal) * TIMEWARP);
           }
-          const skyField = new THREE.Points(skyGeo, new THREE.PointsMaterial({
-            color: 0xdfe9ff, size: 0.19, sizeAttenuation: true,
-            transparent: true, opacity: 0, depthWrite: false
-          }));
-          skyField.visible = false;
-          scene.add(skyField);
+
+          function dirFromAim(yaw, pitch, out) {
+            const cp = Math.cos(pitch);
+            return out.set(cp * Math.cos(yaw), Math.sin(pitch), -cp * Math.sin(yaw));
+          }
+          function aimAt(v) {
+            tAimYaw = Math.atan2(-v.z, v.x);
+            tAimPitch = Math.asin(THREE.MathUtils.clamp(v.y, -1, 1));
+          }
+          // Yaw wraps, so always ease along the short way round.
+          function easeAngle(cur, want, k) {
+            let d = want - cur;
+            while (d > Math.PI) d -= Math.PI * 2;
+            while (d < -Math.PI) d += Math.PI * 2;
+            return cur + d * k;
+          }
+
+          // Earth's axis really does point at the celestial pole, and the face
+          // turned toward you follows Greenwich sidereal time — so the ground
+          // coordinates, the terminator and the sky all agree.
+          const NCP = (function () { const v = eqToWorld(0, 90); return new THREE.Vector3(v[0], v[1], v[2]); })();
+          const mBasis = new THREE.Matrix4();
+          const vPrime = new THREE.Vector3(), vCross = new THREE.Vector3();
+          function orientEarth(date) {
+            const a = eqToWorld(gmstDeg(julianDay(date)) / 15, 0);
+            vPrime.set(a[0], a[1], a[2]);
+            vCross.crossVectors(vPrime, NCP);
+            mBasis.makeBasis(vPrime, NCP, vCross);
+            tiltedAxis.quaternion.setFromRotationMatrix(mBasis);
+          }
+          const decoSun = new THREE.Vector3(-3.4, 2.2, 4.4).normalize();
+          const sunVec = new THREE.Vector3();
 
           // A little of the spacecraft in shot — the wing and boom you'd see out
           // of the window. Parented to the camera so it rides along, and lit by
@@ -1413,8 +2106,11 @@
           function resize(targetX, targetY, sceneSize, isWide) {
             const width = cnv.clientWidth || window.innerWidth;
             const height = cnv.clientHeight || window.innerHeight;
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            renderer.setPixelRatio(dpr);
             renderer.setSize(width, height, false);
+            // Point sizes are in device pixels, so the sky needs to know the ratio.
+            sky.setDpr(dpr);
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             // Measured against the resting camera, never the live one — in ride
@@ -1432,7 +2128,8 @@
             if (!alive) return;
             const dt = Math.min(50, now - last) || 16.7;
             last = now;
-            tiltedAxis.rotation.y += dt * 0.00012;
+            const nowDate = simDate();
+            orientEarth(nowDate);
             clouds.rotation.y += dt * 0.000045;
 
             // Ease between the pinned layout view and the onboard view.
@@ -1448,17 +2145,23 @@
             const ox = Math.cos(orbA) * r, oz = Math.sin(orbA) * r;
             ridePos.set(ox, -oz * si, oz * ci);
 
-            aimYaw += (tAimYaw - aimYaw) * Math.min(1, dt * 0.012);
-            aimPitch += (tAimPitch - aimPitch) * Math.min(1, dt * 0.012);
-            lensFov += (tLensFov - lensFov) * Math.min(1, dt * 0.009);
+            // Whatever is being tracked stays centred; nothing tracked means the
+            // camera holds its pointing and the sky sits still while you orbit.
+            if (track === "Earth") {
+              aimAt(tmpV.copy(ridePos).negate().normalize());
+            } else if (track && sky.byName[track]) {
+              aimAt(sky.byName[track].dir);
+            }
+            const kAim = Math.min(1, dt * 0.009);
+            aimYaw = easeAngle(aimYaw, tAimYaw, kAim);
+            aimPitch += (tAimPitch - aimPitch) * kAim;
+            aimPitch = THREE.MathUtils.clamp(aimPitch, -1.5533, 1.5533);
+            // Zoom eases in log space so a step feels the same at 60° and at 1′.
+            lensFov *= Math.pow(tLensFov / lensFov, Math.min(1, dt * 0.008));
+            dirFromAim(aimYaw, aimPitch, aimDir);
 
-            // Point at the Earth's centre, then let the aim offsets swing the
-            // camera off nadir the way a gimballed instrument would. Post-
-            // multiplying keeps those swings in the camera's own frame.
-            lookM.lookAt(ridePos, ORIGIN, UP);
+            lookM.lookAt(ridePos, tmpV.copy(ridePos).add(aimDir), UP);
             rideQ.setFromRotationMatrix(lookM);
-            rideQ.multiply(qSwing.setFromAxisAngle(AX_Y, aimYaw));
-            rideQ.multiply(qSwing.setFromAxisAngle(AX_X, aimPitch));
 
             const e = rideT < 0.5 ? 4 * rideT * rideT * rideT : 1 - Math.pow(-2 * rideT + 2, 3) / 2;
             earthRig.scale.setScalar(hudScale + (1 - hudScale) * e);
@@ -1480,12 +2183,28 @@
             // Lifted to keep the night side readable rather than crushed black,
             // which is also closer to how an orbital frame actually exposes.
             ambient.intensity = 0.9 + 0.5 * e;
+            // The decorative key light gives way to the real Sun as the ride takes
+            // over, so the terminator lands where it actually is.
+            sunVec.copy(decoSun).lerp(sky.sunDir, e).normalize();
+            sun.position.copy(sunVec).multiplyScalar(50);
 
             const showRig = rideT > 0.02;
-            skyField.visible = showRig;
-            skyField.material.opacity = e;
             craftRig.visible = showRig;
 
+            const h = renderer.domElement.height || 900;
+            renderer.clear();
+            if (showRig) {
+              sky.update(nowDate, camera.fov, h);
+              sky.setFade(e);
+              sky.camera.fov = camera.fov;
+              sky.camera.aspect = camera.aspect;
+              sky.camera.updateProjectionMatrix();
+              sky.camera.quaternion.copy(camera.quaternion);
+              renderer.render(sky.scene, sky.camera);
+              // Sky first, then wipe depth so the Earth and the craft draw over it
+              // without ever sharing a depth range with objects 1000 units out.
+              renderer.clearDepth();
+            }
             renderer.render(scene, camera);
 
             if (showRig) {
@@ -1500,8 +2219,58 @@
               telAlt = C.alt * EARTH_KM;
               // Circular orbit speed, scaled off the 7.9 km/s surface value.
               telVel = 7.905 / Math.sqrt(r);
+              const eq = worldToEq(aimDir);
+              telRA = eq.ra; telDec = eq.dec;
+              identify();
             }
             requestAnimationFrame(frame);
+          }
+
+          // Name whatever the crosshair is on. Earth wins whenever it's actually
+          // in the way, since from this close it covers a large piece of sky.
+          function label(t) { return t.sub ? t.name + " (" + t.sub + ")" : t.name; }
+
+          function identify() {
+            tmpV.copy(ridePos).negate().normalize();
+            const earthAng = Math.asin(Math.min(1, 1 / ridePos.length()));
+            const behindEarth = aimDir.angleTo(tmpV) < earthAng;
+            // Holding a slewed target: keep naming it even when the planet swings
+            // in front, which is a real thing that happens from low orbit.
+            if (track && track !== "Earth" && sky.byName[track]) {
+              onEarth = false;
+              telTarget = label(sky.byName[track]) + (behindEarth ? "  · occulted" : "");
+              return;
+            }
+            onEarth = behindEarth;
+            if (behindEarth) { telTarget = "Earth"; return; }
+            let best = null, bestAng = Infinity;
+            // Only claim what is genuinely inside the frame.
+            const reach = lensFov * DEG * 0.5;
+            for (let i = 0; i < sky.targets.length; i++) {
+              const t = sky.targets[i];
+              const ang = aimDir.angleTo(t.dir);
+              // A big nebula counts as hit anywhere across its face.
+              const own = (t.arcmin / 60) * DEG * 0.5;
+              if (ang < Math.max(reach, own) && ang < bestAng) { bestAng = ang; best = t; }
+            }
+            telTarget = best ? label(best) : "—";
+          }
+
+          function fmtFov(deg) {
+            if (deg >= 1) return deg.toFixed(deg < 10 ? 2 : 1) + "°";
+            const m = deg * 60;
+            if (m >= 1) return m.toFixed(m < 10 ? 2 : 1) + "′";
+            return (m * 60).toFixed(1) + "″";
+          }
+          function fmtRA(h) {
+            const hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
+            const ss = Math.round((((h - hh) * 60) - mm) * 60);
+            return hh + "h " + String(mm).padStart(2, "0") + "m " + String(ss).padStart(2, "0") + "s";
+          }
+          function fmtDec(d) {
+            const s = d < 0 ? "−" : "+", a = Math.abs(d);
+            const dd = Math.floor(a), mm = Math.round((a - dd) * 60);
+            return s + dd + "° " + String(mm).padStart(2, "0") + "′";
           }
 
           // Copy the live frame into a photograph, stamped the way a real orbital
@@ -1522,10 +2291,15 @@
             o.shadowColor = "rgba(0,0,0,0.85)";
             o.shadowBlur = fs * 0.7;
             o.fillStyle = "rgba(232,240,255,0.86)";
-            o.fillText(CRAFT[rideIdx].call + "  ·  " + fmtLat() + "  " + fmtLon(), pad, out.height - pad - fs * 1.5);
+            const subject = onEarth
+              ? "EARTH  ·  " + fmtLat() + "  " + fmtLon()
+              : (telTarget === "—" ? "FIELD" : telTarget.toUpperCase());
+            o.fillText(CRAFT[rideIdx].call + "  ·  " + subject, pad, out.height - pad - fs * 1.5);
             o.fillStyle = "rgba(232,240,255,0.6)";
-            o.fillText(new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC  ·  ALT " +
-              Math.round(telAlt).toLocaleString() + " KM", pad, out.height - pad);
+            o.fillText("R.A. " + fmtRA(telRA) + "   DEC " + fmtDec(telDec) +
+              "   FIELD " + fmtFov(lensFov) + "   " +
+              simDate().toISOString().replace("T", " ").slice(0, 19) + " UTC",
+              pad, out.height - pad);
             o.shadowBlur = 0;
             try { return out.toDataURL("image/png"); }
             catch (err) { return null; }
@@ -1548,7 +2322,7 @@
                   rideIdx = ((i % CRAFT.length) + CRAFT.length) % CRAFT.length;
                   orbA = CRAFT[rideIdx].phase;
                 }
-                tAimYaw = tAimPitch = 0;
+                track = "Earth";
                 tLensFov = lensFov = 38;
                 rideWant = 1;
                 return rideIdx;
@@ -1556,28 +2330,58 @@
               hop: (dir) => {
                 rideIdx = ((rideIdx + dir) % CRAFT.length + CRAFT.length) % CRAFT.length;
                 orbA = CRAFT[rideIdx].phase;
-                tAimYaw = tAimPitch = 0;
                 return rideIdx;
               },
               leave: () => { rideWant = 0; },
-              aim: (dx, dy) => {
-                tAimYaw = THREE.MathUtils.clamp(tAimYaw - dx * 0.0022, -0.75, 0.75);
-                tAimPitch = THREE.MathUtils.clamp(tAimPitch - dy * 0.0022, -0.6, 0.6);
+              // Drag maps one pixel to one pixel's worth of sky, so aiming stays
+              // usable whether the field is 60° or 20 arcseconds.
+              aim: (dx, dy, heightPx) => {
+                track = null;
+                const perPx = (lensFov * DEG) / Math.max(1, heightPx || 900);
+                tAimYaw += dx * perPx;
+                tAimPitch = THREE.MathUtils.clamp(tAimPitch + dy * perPx, -1.5533, 1.5533);
               },
-              // Wide enough at the top end to frame the whole disc from any craft.
-              zoom: (d) => { tLensFov = THREE.MathUtils.clamp(tLensFov + d, 14, 78); },
+              // Multiplicative, spanning naked-eye to deep magnification.
+              zoom: (steps) => {
+                tLensFov = THREE.MathUtils.clamp(tLensFov * Math.exp(steps * 0.2), 0.005, 70);
+              },
+              // Slew to a catalogued object and frame it about three times its own
+              // width — the same thing you'd do at an eyepiece.
+              slew: (name) => {
+                const t = sky.byName[name];
+                if (!t) return null;
+                track = name;
+                const want = (t.arcmin / 60) * (t.spread || 1) * 2.4;
+                tLensFov = THREE.MathUtils.clamp(want, 0.012, 70);
+                return t;
+              },
+              lookAtEarth: () => { track = "Earth"; tLensFov = 38; },
+              targets: () => sky.targets.map((t) => ({
+                name: t.name, sub: t.sub, group: t.group, kind: t.kind, arcmin: t.arcmin
+              })),
+              hasTarget: (n) => !!sky.byName[n],
               shoot: capture,
               telemetry: () => ({
                 call: CRAFT[rideIdx].call,
                 alt: telAlt, vel: telVel,
-                lat: fmtLat(), lon: fmtLon(),
-                fov: lensFov
+                lat: fmtLat(), lon: fmtLon(), onEarth: onEarth,
+                target: telTarget,
+                ra: fmtRA(telRA), dec: fmtDec(telDec),
+                fov: fmtFov(lensFov),
+                utc: simDate().toISOString().replace("T", " ").slice(0, 19),
+                period: CRAFT[rideIdx].periodS
               })
             },
             stop: () => {
               alive = false;
-              skyGeo.dispose();
-              skyField.material.dispose();
+              sky.scene.traverse((o) => {
+                if (o.geometry) o.geometry.dispose();
+                if (o.material) {
+                  if (o.material.map) o.material.map.dispose();
+                  if (o.material.uniforms && o.material.uniforms.map) o.material.uniforms.map.value.dispose();
+                  o.material.dispose();
+                }
+              });
               craftRig.traverse((o) => {
                 if (o.geometry) o.geometry.dispose();
                 if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); }
@@ -2942,10 +3746,15 @@
         const ctCallsign = document.getElementById("ct-callsign");
         const telEl = {
           alt: document.getElementById("ct-t-alt"), vel: document.getElementById("ct-t-vel"),
-          lat: document.getElementById("ct-t-lat"), lon: document.getElementById("ct-t-lon"),
-          fov: document.getElementById("ct-t-fov")
+          target: document.getElementById("ct-t-target"), ra: document.getElementById("ct-t-ra"),
+          dec: document.getElementById("ct-t-dec"), fov: document.getElementById("ct-t-fov"),
+          ground: document.getElementById("ct-t-ground"), groundRow: document.getElementById("ct-ground-row"),
+          utc: document.getElementById("ct-utc")
         };
-        let riding = false, hudRaf = 0, settleTimer = 0, shots = 0;
+        const catBody = document.getElementById("ct-cat-body");
+        const catPanel = document.getElementById("ct-catalog");
+        let riding = false, hudRaf = 0, settleTimer = 0, shots = 0, catBuilt = false;
+        let catMeta = [], hudN = 0;
 
         function ride() { return uplink && uplink.ride; }
 
@@ -2954,13 +3763,72 @@
           if (r) {
             const d = r.telemetry();
             if (ctCallsign) ctCallsign.textContent = d.call;
+            if (telEl.utc) telEl.utc.textContent = d.utc + " UTC";
+            if (telEl.target) telEl.target.textContent = d.target;
+            if (telEl.ra) telEl.ra.textContent = d.ra;
+            if (telEl.dec) telEl.dec.textContent = d.dec;
+            if (telEl.fov) telEl.fov.textContent = d.fov;
             if (telEl.alt) telEl.alt.textContent = Math.round(d.alt).toLocaleString() + " km";
             if (telEl.vel) telEl.vel.textContent = d.vel.toFixed(2) + " km/s";
-            if (telEl.lat) telEl.lat.textContent = d.lat;
-            if (telEl.lon) telEl.lon.textContent = d.lon;
-            if (telEl.fov) telEl.fov.textContent = Math.round(1200 / d.fov) + " mm";
+            // Ground coordinates only mean something while Earth is in the frame.
+            if (telEl.groundRow) telEl.groundRow.style.display = d.onEarth ? "" : "none";
+            if (d.onEarth && telEl.ground) telEl.ground.textContent = d.lat + " " + d.lon;
+            if (catMeta.length && (hudN++ % 45) === 0) {
+              const sizes = {};
+              r.targets().forEach((t) => (sizes[t.name] = t.arcmin));
+              catMeta.forEach((m) => {
+                const a = sizes[m.name];
+                if (a == null) return;
+                m.el.textContent = a >= 1 ? a.toFixed(a < 10 ? 1 : 0) + "′" : (a * 60).toFixed(1) + "″";
+              });
+            }
           }
           hudRaf = requestAnimationFrame(hudTick);
+        }
+
+        // The observing list is the only practical way to find a 40-arcsecond
+        // planet by hand, so it doubles as the tour of what's up there.
+        function buildCatalog() {
+          const r = ride();
+          if (!r || catBuilt || !catBody) return;
+          catBuilt = true;
+          catMeta = [];
+          const all = r.targets();
+          const groups = {};
+          all.forEach((t) => { (groups[t.group] = groups[t.group] || []).push(t); });
+          const frag = document.createDocumentFragment();
+          const earthBtn = document.createElement("button");
+          earthBtn.type = "button";
+          earthBtn.className = "ct-cat-item ct-cat-item--earth";
+          earthBtn.innerHTML = '<span class="ct-cat-name">Earth</span><span class="ct-cat-meta">nadir</span>';
+          earthBtn.addEventListener("click", () => { r.lookAtEarth(); });
+          const h0 = document.createElement("div");
+          h0.className = "ct-cat-group";
+          h0.textContent = "Home";
+          frag.appendChild(h0);
+          frag.appendChild(earthBtn);
+          ["Solar system", "Deep sky", "Stars"].forEach((g) => {
+            if (!groups[g]) return;
+            const h = document.createElement("div");
+            h.className = "ct-cat-group";
+            h.textContent = g;
+            frag.appendChild(h);
+            groups[g].forEach((t) => {
+              const b = document.createElement("button");
+              b.type = "button";
+              b.className = "ct-cat-item";
+              b.innerHTML = '<span class="ct-cat-name">' + t.name +
+                (t.sub ? ' <i>' + t.sub + '</i>' : '') + '</span>' +
+                '<span class="ct-cat-meta"></span>';
+              b.addEventListener("click", () => { r.slew(t.name); });
+              // Solar-system sizes aren't known until the first ephemeris pass, and
+              // they drift over weeks, so the labels are refreshed rather than baked.
+              if (t.kind !== "star") catMeta.push({ name: t.name, el: b.querySelector(".ct-cat-meta") });
+              frag.appendChild(b);
+            });
+          });
+          catBody.innerHTML = "";
+          catBody.appendChild(frag);
         }
 
         function boardRide() {
@@ -2974,6 +3842,7 @@
           // controls are live immediately and the region is announced.
           if (ctBoard.blur) ctBoard.blur();
           if (ctView && ctView.focus) ctView.focus({ preventScroll: true });
+          buildCatalog();
           cancelAnimationFrame(hudRaf);
           hudTick();
           // Let the craft fly out under the old backdrop before parking it.
@@ -3050,7 +3919,7 @@
           ctView.addEventListener("pointermove", (e) => {
             if (!dragging) return;
             const r = ride();
-            if (r) r.aim(e.clientX - lx, e.clientY - ly);
+            if (r) r.aim(e.clientX - lx, e.clientY - ly, ctView.clientHeight);
             lx = e.clientX; ly = e.clientY;
           });
           const endDrag = () => { dragging = false; ctView.classList.remove("is-aiming"); };
@@ -3060,7 +3929,7 @@
             if (!riding) return;
             e.preventDefault();
             const r = ride();
-            if (r) r.zoom(Math.sign(e.deltaY) * 2.2);
+            if (r) r.zoom(Math.sign(e.deltaY));
           }, { passive: false });
         }
 
@@ -3075,7 +3944,22 @@
           }
           else if (e.key === "ArrowLeft") { e.preventDefault(); hopCraft(-1); }
           else if (e.key === "ArrowRight") { e.preventDefault(); hopCraft(1); }
+          else if (e.key === "e" || e.key === "E") {
+            const r = ride();
+            if (r) r.lookAtEarth();
+          } else if (e.key === "+" || e.key === "=") {
+            const r = ride();
+            if (r) r.zoom(-1);
+          } else if (e.key === "-" || e.key === "_") {
+            const r = ride();
+            if (r) r.zoom(1);
+          }
         });
+
+        const catToggle = document.getElementById("ct-cat-toggle");
+        const catOpen = document.getElementById("ct-cat-open");
+        if (catToggle) catToggle.addEventListener("click", () => ctStage.classList.add("cat-hidden"));
+        if (catOpen) catOpen.addEventListener("click", () => ctStage.classList.remove("cat-hidden"));
 
         document.querySelectorAll(".orbit-node").forEach((node) => {
           node.addEventListener("click", (e) => {
