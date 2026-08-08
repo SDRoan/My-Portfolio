@@ -3795,3 +3795,261 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 @media (max-width: 760px) {
   .df-label { font-size: 10px; }
 }
+
+/* ═══ About: the universe, from the inside ═══ */
+.cosmos-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  background: #02030a;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.cosmos-stage.is-open { opacity: 1; visibility: visible; }
+.cosmos-stage > canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.cos-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 20%, transparent 62%, rgba(0, 0, 0, 0.82) 100%);
+}
+.cosmos-stage .proj-eyebrow { z-index: 4; }
+.cosmos-stage .projects-close { z-index: 5; }
+
+/* Bio panel */
+.cos-bio {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 268px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(6, 9, 20, 0.66);
+  backdrop-filter: blur(9px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.cosmos-stage.bio-hidden .cos-bio {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(-16px);
+}
+.cos-bio-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.cos-bio-head strong { display: block; font-size: 14px; color: #eaf1ff; letter-spacing: 0.01em; }
+.cos-bio-head span {
+  display: block;
+  margin-top: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(150, 172, 205, 0.62);
+}
+.cos-bio p {
+  margin: 11px 0 0;
+  font-size: 12.5px;
+  line-height: 1.62;
+  color: rgba(214, 226, 245, 0.78);
+}
+.cos-bio p strong { color: #fff; font-weight: 600; }
+.cos-bio-note {
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(150, 172, 205, 0.68) !important;
+  font-size: 11.5px !important;
+}
+.cos-bio-open {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 14, 28, 0.6);
+  color: rgba(214, 228, 250, 0.7);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.cosmos-stage.bio-hidden .cos-bio-open { opacity: 1; pointer-events: auto; }
+.cos-bio-open:hover { border-color: rgba(190, 214, 255, 0.6); color: #fff; }
+
+/* Narration */
+/* The bright epochs would otherwise swallow the narration whole. */
+.cos-readout::before {
+  content: "";
+  position: absolute;
+  inset: -26px -30px -26px -60px;
+  z-index: -1;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 70% 50%, rgba(2, 4, 12, 0.82) 0%, rgba(2, 4, 12, 0.62) 45%, transparent 78%);
+}
+.cos-readout {
+  position: absolute;
+  isolation: isolate;
+  right: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: min(330px, 34vw);
+  text-align: right;
+  pointer-events: none;
+}
+.cos-clock {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(150, 178, 220, 0.72);
+}
+.cos-title {
+  margin: 8px 0 10px;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 600;
+  line-height: 1.1;
+  color: #f2f7ff;
+}
+.cos-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.66;
+  color: rgba(214, 226, 245, 0.86);
+}
+.cos-clock, .cos-title, .cos-text { text-shadow: 0 1px 14px rgba(2, 4, 12, 0.95); }
+.cos-readout.is-in .cos-clock { animation: cos-rise 0.5s ease both; }
+.cos-readout.is-in .cos-title { animation: cos-rise 0.5s ease 0.05s both; }
+.cos-readout.is-in .cos-text { animation: cos-rise 0.5s ease 0.1s both; }
+@keyframes cos-rise { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+
+/* Timeline */
+.cos-deck {
+  position: absolute;
+  left: 50%;
+  bottom: 46px;
+  transform: translateX(-50%);
+  z-index: 4;
+  width: min(760px, 78vw);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cos-play, .cos-replay {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(8, 14, 28, 0.55);
+  color: rgba(220, 232, 252, 0.82);
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.cos-play svg, .cos-replay svg { width: 16px; height: 16px; }
+.cos-play:hover, .cos-replay:hover { border-color: rgba(190, 214, 255, 0.65); color: #fff; background: rgba(20, 32, 58, 0.7); }
+.cos-ico-play { display: none; }
+.cosmos-stage.is-paused .cos-ico-play { display: block; }
+.cosmos-stage.is-paused .cos-ico-pause { display: none; }
+
+.cos-track {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  cursor: pointer;
+  touch-action: none;
+}
+.cos-track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.cos-track-fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(150, 120, 255, 0.9), rgba(255, 176, 102, 0.95), rgba(150, 200, 255, 0.95));
+  pointer-events: none;
+}
+.cos-ticks { position: absolute; inset: 0; }
+.cos-tick {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(10, 14, 26, 0.9);
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+.cos-tick:hover { transform: scale(1.35); border-color: #fff; }
+.cos-tick.is-on { background: rgba(190, 214, 255, 0.9); border-color: rgba(220, 235, 255, 0.95); }
+.cos-head {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 14px rgba(180, 205, 255, 0.9);
+  pointer-events: none;
+}
+.cos-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 4;
+  pointer-events: none;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: rgba(180, 196, 220, 0.42);
+}
+
+@media (max-width: 859px) {
+  .cos-bio { left: 14px; right: 14px; width: auto; top: 88px; transform: none; }
+  .cosmos-stage.bio-hidden .cos-bio { transform: translateX(-14px); }
+  .cos-bio-open { left: 14px; top: 88px; transform: none; }
+  .cos-readout {
+    right: 14px;
+    left: 14px;
+    width: auto;
+    top: auto;
+    bottom: 118px;
+    transform: none;
+    text-align: left;
+  }
+  .cos-deck { width: calc(100vw - 28px); bottom: 52px; gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cos-readout.is-in .cos-clock,
+  .cos-readout.is-in .cos-title,
+  .cos-readout.is-in .cos-text { animation: none; }
+}

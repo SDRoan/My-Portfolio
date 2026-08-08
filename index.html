@@ -275,6 +275,50 @@
       <span class="sk-hint">Six constellations · every star is a skill</span>
     </div>
 
+    <!-- About: you stand inside the universe and watch it happen around you. -->
+    <div class="cosmos-stage" id="cosmos-stage" aria-hidden="true">
+      <canvas id="cosmos-canvas"></canvas>
+      <div class="cos-vignette" aria-hidden="true"></div>
+      <span class="proj-eyebrow">About</span>
+      <button type="button" class="projects-close" id="cosmos-close" aria-label="Close about">×</button>
+
+      <div class="cos-bio" id="cos-bio">
+        <div class="cos-bio-head">
+          <div>
+            <strong>Saibyasachi Ruhan</strong>
+            <span>Queens College · CS · New York</span>
+          </div>
+          <button type="button" class="ct-cat-toggle" id="cos-bio-toggle" aria-label="Hide bio">−</button>
+        </div>
+        <p>I'm a CS student who learns best by <strong>building real things</strong> — and then carefully measuring whether they actually helped.</p>
+        <p>Full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+        <p class="cos-bio-note">This is one of those things. Everything around you is generated in the browser — no video, no textures. Scrub the timeline and watch 13.8 billion years go by.</p>
+      </div>
+      <button type="button" class="cos-bio-open" id="cos-bio-open">☰ About me</button>
+
+      <div class="cos-readout" id="cos-readout">
+        <span class="cos-clock" id="cos-clock">t = 0</span>
+        <h3 class="cos-title" id="cos-title">Before time</h3>
+        <p class="cos-text" id="cos-text"></p>
+      </div>
+
+      <div class="cos-deck">
+        <button type="button" class="cos-play" id="cos-play" aria-label="Play or pause">
+          <svg class="cos-ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="cos-ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </button>
+        <div class="cos-track" id="cos-track">
+          <div class="cos-track-fill" id="cos-track-fill"></div>
+          <div class="cos-ticks" id="cos-ticks"></div>
+          <div class="cos-head" id="cos-head"></div>
+        </div>
+        <button type="button" class="cos-replay" id="cos-replay" aria-label="Restart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        </button>
+      </div>
+      <span class="cos-hint">Drag to look around · scrub the timeline</span>
+    </div>
+
     <template id="modal-about">
       <div class="modal-hero modal-hero--about">
         <div class="modal-hero-text">
@@ -552,6 +596,7 @@
       let journeyActive = false;
       let uplink = null;
       let contactActive = false;
+      let aboutActive = false;
       let chartStop = null;
       let chartActive = false;
 
@@ -1713,6 +1758,335 @@
             fadeables.forEach((m) => (m.opacity = f));
           },
           update: update
+        };
+      }
+
+      // ══ The universe, from before it started ═══════════════════════════════
+      // Told from the inside: the camera sits at the origin of a sphere and the
+      // epochs happen around you rather than in front of you. Every frame of it
+      // is generated — the foam, the fireball, the microwave background, the
+      // cosmic web are all noise fields evaluated per pixel, and the matter is
+      // one particle system that expands and clumps as structure forms.
+      const EPOCHS = [
+        { key: "pre", label: "Before time", clock: "t < 0",
+          text: "No space, no time — only the vacuum, seething with virtual particles that borrow energy and hand it straight back." },
+        { key: "planck", label: "Planck epoch", clock: "10⁻⁴³ seconds",
+          text: "The universe is 10⁻³⁵ metres across at 10³² degrees. Gravity has not yet separated from the other forces, and known physics stops here." },
+        { key: "inflation", label: "Inflation", clock: "10⁻³⁶ seconds",
+          text: "Space expands by a factor of 10²⁶ in less than a trillionth of a trillionth of a second. Nothing moves through space faster than light — it is space itself that stretches." },
+        { key: "quark", label: "Quark–gluon plasma", clock: "10⁻¹² seconds",
+          text: "Far too hot for protons to hold together. Free quarks and gluons flood a fireball at a quadrillion degrees." },
+        { key: "hadron", label: "Matter wins", clock: "10⁻⁶ seconds",
+          text: "Quarks bind into protons and neutrons. Matter outnumbers antimatter by one part in a billion — and that leftover billionth is everything you have ever touched." },
+        { key: "bbn", label: "The first nuclei", clock: "3 minutes",
+          text: "Hydrogen, helium and a trace of lithium form in about twenty minutes. The universe sets its chemistry and then leaves it alone for 380,000 years." },
+        { key: "cmb", label: "The fog clears", clock: "380,000 years",
+          text: "Electrons finally bind to nuclei and light travels freely for the first time. That light is still arriving — it is the microwave background around you now." },
+        { key: "dark", label: "The dark ages", clock: "10 million years",
+          text: "No stars yet. Neutral hydrogen drifts, cools, and quietly falls together in the dark for a hundred million years." },
+        { key: "stars", label: "First light", clock: "200 million years",
+          text: "The first stars ignite — hundreds of solar masses, burning blue, dying fast, and forging in their cores every element heavier than helium." },
+        { key: "galaxy", label: "Galaxies assemble", clock: "1 billion years",
+          text: "Gravity pulls matter along the filaments of the cosmic web. Galaxies form at the nodes, then collide and merge." },
+        { key: "sun", label: "The Sun ignites", clock: "9.2 billion years",
+          text: "In one unremarkable arm of one ordinary spiral, a cloud collapses. The Earth forms from what was left over." },
+        { key: "now", label: "Now", clock: "13.8 billion years",
+          text: "You are here, on that leftover rock, reading this — assembled from atoms cooked inside stars that died before the Sun existed." }
+      ];
+
+      function initCosmos(cnv) {
+        let renderer;
+        try {
+          renderer = new THREE.WebGLRenderer({ canvas: cnv, antialias: true, alpha: false });
+        } catch (err) {
+          cnv.style.display = "none";
+          return null;
+        }
+        renderer.setClearColor(0x02030a, 1);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        renderer.setPixelRatio(dpr);
+
+        const scene = new THREE.Scene();
+        // Wide, so the view wraps past the edge of vision the way a dome does.
+        const camera = new THREE.PerspectiveCamera(78, 1, 0.5, 4000);
+
+        const NOISE = [
+          "float h31(vec3 p){ p = fract(p * 0.3183099 + vec3(0.71,0.113,0.419)); p *= 17.0;",
+          "  return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }",
+          "float n31(vec3 x){ vec3 i = floor(x), f = fract(x); f = f*f*(3.0-2.0*f);",
+          "  return mix(mix(mix(h31(i+vec3(0,0,0)), h31(i+vec3(1,0,0)), f.x),",
+          "                 mix(h31(i+vec3(0,1,0)), h31(i+vec3(1,1,0)), f.x), f.y),",
+          "             mix(mix(h31(i+vec3(0,0,1)), h31(i+vec3(1,0,1)), f.x),",
+          "                 mix(h31(i+vec3(0,1,1)), h31(i+vec3(1,1,1)), f.x), f.y), f.z); }",
+          "float fbm3(vec3 p, int oct){ float a = 0.5, s = 0.0;",
+          "  for (int i = 0; i < 6; i++){ if (i >= oct) break; s += a * n31(p); p *= 2.03; a *= 0.5; }",
+          "  return s; }"
+        ].join("\n");
+
+        const skyUni = {
+          uTime: { value: 0 }, uFoam: { value: 1 }, uPlasma: { value: 0 },
+          uCmb: { value: 0 }, uWeb: { value: 0 }, uFlash: { value: 0 },
+          uDim: { value: 1 }, uPlasmaCol: { value: new THREE.Color(1, 1, 1) }
+        };
+        const sky = new THREE.Mesh(
+          new THREE.SphereGeometry(1400, 64, 48),
+          new THREE.ShaderMaterial({
+            side: THREE.BackSide, depthWrite: false, uniforms: skyUni,
+            vertexShader: [
+              "varying vec3 vDir;",
+              "void main(){ vDir = normalize(position);",
+              "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }"
+            ].join("\n"),
+            fragmentShader: [
+              "precision highp float;",
+              "varying vec3 vDir;",
+              "uniform float uTime, uFoam, uPlasma, uCmb, uWeb, uFlash, uDim;",
+              "uniform vec3 uPlasmaCol;",
+              NOISE,
+              "void main(){",
+              "  vec3 d = normalize(vDir);",
+              "  vec3 col = vec3(0.0);",
+              "  if (uFoam > 0.002) {",
+              // Vacuum fluctuation: two scales beating against each other, so it
+              // never settles into a pattern you can read.
+              "    float a = fbm3(d * 8.0 + vec3(0.0, uTime * 0.22, 0.0), 4);",
+              "    float b = fbm3(d * 26.0 - vec3(uTime * 0.45, 0.0, uTime * 0.3), 3);",
+              "    col += uFoam * (vec3(0.13,0.07,0.30) * pow(a, 2.2) * 2.6",
+              "                  + vec3(0.55,0.38,1.00) * pow(b, 7.0) * 2.2);",
+              "  }",
+              "  if (uPlasma > 0.002) {",
+              "    float a = fbm3(d * 4.0 + vec3(uTime * 0.55), 4);",
+              "    float b = fbm3(d * 12.0 - vec3(uTime * 0.85), 3);",
+              // Subtracting a floor before the curve is what gives the fireball
+              // dark lanes; without it the mean sits above 1.0 and every pixel
+              // clips to white.
+              "    float v = pow(clamp(a * 1.15 + b * 0.5 - 0.34, 0.0, 1.0), 2.1);",
+              "    col += uPlasma * uPlasmaCol * v * 2.3;",
+              "  }",
+              "  if (uCmb > 0.002) {",
+              // The anisotropy is really one part in 100,000; shown at scale it is
+              // the familiar mottling, hot and cold to a tenth of a degree.
+              "    float n = fbm3(d * 6.0 + 31.7, 5) - 0.5;",
+              "    vec3 cold = vec3(0.10,0.24,0.92), hot = vec3(0.98,0.30,0.12);",
+              "    col += uCmb * mix(cold, hot, smoothstep(-0.14, 0.14, n)) * (0.42 + abs(n) * 2.1);",
+              "  }",
+              "  if (uWeb > 0.002) {",
+              // Ridged noise: the filaments are where the ridges of the field are.
+              "    float n = fbm3(d * 2.6 + 11.3, 5);",
+              "    float fil = pow(1.0 - abs(n * 2.0 - 1.0), 7.0);",
+              "    col += uWeb * vec3(0.26,0.34,0.66) * fil * 1.9;",
+              "  }",
+              "  col = col * uDim + uFlash;",
+              "  gl_FragColor = vec4(col, 1.0); }"
+            ].join("\n")
+          })
+        );
+        scene.add(sky);
+
+        // ── matter ──
+        const N = 24000;
+        const aDir = new Float32Array(N * 3);
+        const aRad = new Float32Array(N);
+        const aSeed = new Float32Array(N);
+        const aClump = new Float32Array(N * 3);
+        // Cluster seeds double as the nodes of the web the particles fall into.
+        const NODES = 90;
+        const nodes = [];
+        for (let i = 0; i < NODES; i++) {
+          const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
+          const s = Math.sqrt(1 - u * u), r = 120 + Math.pow(Math.random(), 0.6) * 700;
+          nodes.push([Math.cos(th) * s * r, u * r, Math.sin(th) * s * r]);
+        }
+        for (let i = 0; i < N; i++) {
+          const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
+          const s = Math.sqrt(1 - u * u);
+          aDir[i * 3] = Math.cos(th) * s; aDir[i * 3 + 1] = u; aDir[i * 3 + 2] = Math.sin(th) * s;
+          aRad[i] = 90 + Math.pow(Math.random(), 0.55) * 720;
+          aSeed[i] = Math.random();
+          // Most matter falls onto a node; the rest strings out between them.
+          const nd = nodes[(Math.random() * NODES) | 0];
+          const spread = Math.random() < 0.62 ? 42 : 190;
+          const g = () => (Math.random() + Math.random() + Math.random() - 1.5) * spread;
+          aClump[i * 3] = nd[0] + g();
+          aClump[i * 3 + 1] = nd[1] + g();
+          aClump[i * 3 + 2] = nd[2] + g();
+        }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(N * 3), 3));
+        pGeo.setAttribute("aDir", new THREE.BufferAttribute(aDir, 3));
+        pGeo.setAttribute("aRad", new THREE.BufferAttribute(aRad, 1));
+        pGeo.setAttribute("aSeed", new THREE.BufferAttribute(aSeed, 1));
+        pGeo.setAttribute("aClump", new THREE.BufferAttribute(aClump, 3));
+        pGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 3000);
+
+        const pUni = {
+          uTime: { value: 0 }, uStructure: { value: 0 }, uExpand: { value: 0.2 },
+          uSize: { value: 2.2 }, uJitter: { value: 0 }, uBright: { value: 0 },
+          uDpr: { value: dpr },
+          uColA: { value: new THREE.Color(1, 1, 1) }, uColB: { value: new THREE.Color(1, 0.7, 0.4) }
+        };
+        const matter = new THREE.Points(pGeo, new THREE.ShaderMaterial({
+          uniforms: pUni, transparent: true, depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          vertexShader: [
+            "attribute vec3 aDir; attribute float aRad; attribute float aSeed; attribute vec3 aClump;",
+            "uniform float uTime, uStructure, uExpand, uSize, uJitter, uDpr;",
+            "varying float vSeed;",
+            "void main(){",
+            "  vSeed = aSeed;",
+            "  vec3 homo = aDir * aRad;",
+            "  vec3 p = mix(homo, aClump, uStructure) * uExpand;",
+            // Thermal motion while it is still a plasma.
+            "  p += uJitter * vec3(sin(uTime*3.1 + aSeed*41.0), cos(uTime*2.7 + aSeed*27.0), sin(uTime*3.9 + aSeed*13.0));",
+            "  vec4 mv = modelViewMatrix * vec4(p, 1.0);",
+            "  gl_Position = projectionMatrix * mv;",
+            "  float dist = max(1.0, -mv.z);",
+            "  gl_PointSize = uSize * uDpr * (300.0 / dist); }"
+          ].join("\n"),
+          fragmentShader: [
+            "precision highp float;",
+            "uniform vec3 uColA, uColB; uniform float uBright;",
+            "varying float vSeed;",
+            "void main(){",
+            "  float r = length(gl_PointCoord - vec2(0.5)) * 2.0;",
+            "  if (r > 1.0) discard;",
+            "  float a = pow(1.0 - r, 2.2);",
+            "  gl_FragColor = vec4(mix(uColA, uColB, fract(vSeed * 7.31)), a * uBright); }"
+          ].join("\n")
+        }));
+        scene.add(matter);
+
+        // ── look controls: you turn your head, you do not move ──
+        let yaw = 0, pitch = 0, tYaw = 0, tPitch = 0, drift = 0;
+        let dragging = false, lx = 0, ly = 0, idle = 0;
+        function onDown(e) { dragging = true; lx = e.clientX; ly = e.clientY; idle = 0; cnv.style.cursor = "grabbing"; }
+        function onMove(e) {
+          if (!dragging) return;
+          tYaw -= (e.clientX - lx) * 0.0028;
+          tPitch = THREE.MathUtils.clamp(tPitch - (e.clientY - ly) * 0.0028, -1.35, 1.35);
+          lx = e.clientX; ly = e.clientY; idle = 0;
+        }
+        function onUp() { dragging = false; cnv.style.cursor = "grab"; }
+        cnv.addEventListener("pointerdown", onDown);
+        window.addEventListener("pointermove", onMove);
+        window.addEventListener("pointerup", onUp);
+        cnv.style.touchAction = "none";
+        cnv.style.cursor = "grab";
+
+        // ── timeline ──
+        const LAST = EPOCHS.length - 1;
+        let prog = 0;              // 0..1 across the whole story
+        let playing = true;
+        let onEpoch = null;
+        let lastEpoch = -1;
+
+        const S = (x, a, b) => THREE.MathUtils.smoothstep(x, a, b);
+        const band = (x, a, b, c, d) => S(x, a, b) * (1 - S(x, c, d));
+
+        // Blue-white while it is a fireball, gold as it cools, blue again for the
+        // first stars — which really were hot, massive and short-lived — then a
+        // warm mix once galaxies hold stars of every age.
+        const cWhite = new THREE.Color(0xdfeaff), cGold = new THREE.Color(0xffb066);
+        const cBlue = new THREE.Color(0x8fb8ff), cWarm = new THREE.Color(0xffcf96);
+        const cPure = new THREE.Color(0xf4f8ff);
+        const tmpA = new THREE.Color(), tmpB = new THREE.Color();
+
+        function apply(f, t) {
+          skyUni.uTime.value = t;
+          pUni.uTime.value = t;
+
+          skyUni.uFoam.value = 1 - S(f, 0.35, 1.3);
+          // The bang sits between "before" and the Planck epoch, so it happens in
+          // transit. Peaked on an epoch it would leave that stop a blank white
+          // screen for anyone who clicked straight to it.
+          skyUni.uFlash.value = Math.exp(-Math.pow((f - 0.72) / 0.16, 2)) * 2.6;
+          skyUni.uPlasma.value = band(f, 0.8, 1.35, 5.5, 6.1);
+          skyUni.uCmb.value = band(f, 5.45, 5.95, 6.4, 7.35);
+          skyUni.uWeb.value = S(f, 8.6, 10.2) * 0.9;
+          // Full dark right on the dark-ages stop, not on the way past it.
+          skyUni.uDim.value = 1 - band(f, 6.4, 6.95, 7.25, 7.85) * 0.86;
+          // White-hot early, cooling toward orange as it drops through a
+          // billion degrees on the way to recombination.
+          skyUni.uPlasmaCol.value.copy(cWhite).lerp(cGold, S(f, 2.6, 5.6));
+
+          pUni.uStructure.value = S(f, 7.1, 10.3);
+          // Monotonic: the inflation step, then steady expansion afterwards.
+          pUni.uExpand.value = 0.16 + 0.62 * S(f, 1.8, 2.4) + 1.05 * S(f, 2.5, 11);
+          pUni.uJitter.value = band(f, 1.0, 1.8, 5.3, 6.0) * 26;
+          const hot = band(f, 1.0, 1.9, 5.5, 6.2);
+          const lit = S(f, 7.3, 8.2);
+          const gal = S(f, 8.8, 10.6);
+          pUni.uBright.value = Math.max(hot * 0.85, lit * 1.3);
+          pUni.uSize.value = 1.6 + lit * 2.6;
+          tmpA.copy(cWhite).lerp(cBlue, lit);
+          tmpB.copy(cGold).lerp(cPure, lit).lerp(cWarm, gal);
+          pUni.uColA.value.copy(tmpA);
+          pUni.uColB.value.copy(tmpB);
+        }
+
+        function report(f) {
+          const i = Math.max(0, Math.min(LAST, Math.round(f)));
+          if (i !== lastEpoch) { lastEpoch = i; if (onEpoch) onEpoch(i, EPOCHS[i]); }
+        }
+
+        let w = 1, h = 1, raf = 0, alive = true, last = performance.now();
+        function resize() {
+          w = cnv.clientWidth || window.innerWidth;
+          h = cnv.clientHeight || window.innerHeight;
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        function frame(now) {
+          if (!alive) return;
+          const dt = Math.min(60, now - last) || 16.7;
+          last = now;
+          const t = now * 0.001;
+
+          if (playing) {
+            // Slow through the early epochs, quicker across the long quiet
+            // stretches — otherwise the first instant is over before you see it.
+            prog = Math.min(1, prog + dt * 0.0000185);
+            if (prog >= 1) playing = false;
+          }
+          const f = prog * LAST;
+          apply(f, t);
+          report(f);
+
+          idle += dt;
+          if (!dragging && idle > 2600) drift += dt * 0.000035;   // a slow look around
+          yaw += (tYaw + drift - yaw) * Math.min(1, dt * 0.006);
+          pitch += (tPitch - pitch) * Math.min(1, dt * 0.006);
+          camera.rotation.set(0, 0, 0);
+          camera.rotateY(yaw);
+          camera.rotateX(pitch);
+
+          renderer.render(scene, camera);
+          raf = requestAnimationFrame(frame);
+        }
+        raf = requestAnimationFrame(frame);
+
+        return {
+          epochs: EPOCHS,
+          progress: () => prog,
+          setProgress: (v) => { prog = THREE.MathUtils.clamp(v, 0, 1); },
+          playing: () => playing,
+          setPlaying: (v) => { playing = !!v; if (v && prog >= 1) prog = 0; },
+          onEpoch: (fn) => { onEpoch = fn; lastEpoch = -1; },
+          stop: () => {
+            alive = false;
+            cancelAnimationFrame(raf);
+            window.removeEventListener("resize", resize);
+            cnv.removeEventListener("pointerdown", onDown);
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+            sky.geometry.dispose(); sky.material.dispose();
+            pGeo.dispose(); matter.material.dispose();
+            renderer.dispose();
+          }
         };
       }
 
@@ -3760,6 +4134,124 @@
         }
         bindCloseButton(ctClose, closeContact);
 
+        // About opens the universe, told from the inside.
+        const cosStage = document.getElementById("cosmos-stage");
+        const cosClose = document.getElementById("cosmos-close");
+        const cosTrack = document.getElementById("cos-track");
+        const cosFill = document.getElementById("cos-track-fill");
+        const cosHead = document.getElementById("cos-head");
+        const cosTicks = document.getElementById("cos-ticks");
+        const cosPlay = document.getElementById("cos-play");
+        const cosClock = document.getElementById("cos-clock");
+        const cosTitle = document.getElementById("cos-title");
+        const cosText = document.getElementById("cos-text");
+        const cosReadout = document.getElementById("cos-readout");
+        let cosmos = null, cosRaf = 0, ticksBuilt = false;
+
+        function cosSyncBar() {
+          if (!cosmos) return;
+          const p = cosmos.progress();
+          cosFill.style.width = (p * 100).toFixed(2) + "%";
+          cosHead.style.left = (p * 100).toFixed(2) + "%";
+          cosStage.classList.toggle("is-paused", !cosmos.playing());
+          cosRaf = requestAnimationFrame(cosSyncBar);
+        }
+
+        function cosBuildTicks() {
+          if (ticksBuilt || !cosmos) return;
+          ticksBuilt = true;
+          const eps = cosmos.epochs, last = eps.length - 1;
+          eps.forEach((ep, i) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "cos-tick";
+            b.style.left = ((i / last) * 100).toFixed(3) + "%";
+            b.title = ep.label + " · " + ep.clock;
+            b.setAttribute("aria-label", "Jump to " + ep.label);
+            b.addEventListener("click", (e) => {
+              e.stopPropagation();
+              cosmos.setProgress(i / last);
+              cosmos.setPlaying(false);
+            });
+            cosTicks.appendChild(b);
+          });
+        }
+
+        function cosShow(i, ep) {
+          if (cosClock) cosClock.textContent = ep.clock;
+          if (cosTitle) cosTitle.textContent = ep.label;
+          if (cosText) cosText.textContent = ep.text;
+          if (cosReadout) {
+            cosReadout.classList.remove("is-in");
+            void cosReadout.offsetWidth;
+            cosReadout.classList.add("is-in");
+          }
+          Array.from(cosTicks.children).forEach((el, k) => el.classList.toggle("is-on", k <= i));
+        }
+
+        function openAbout() {
+          aboutActive = true;
+          bodyEl.classList.add("projects-mode");
+          cosStage.classList.add("is-open");
+          cosStage.setAttribute("aria-hidden", "false");
+          const cv = cosStage.querySelector("#cosmos-canvas");
+          if (cv) requestAnimationFrame(() => {
+            if (cosmos) cosmos.stop();
+            cosmos = initCosmos(cv);
+            if (!cosmos) return;
+            ticksBuilt = false;
+            cosTicks.innerHTML = "";
+            cosBuildTicks();
+            cosmos.onEpoch(cosShow);
+            cosmos.setProgress(0);
+            cosmos.setPlaying(true);
+            cancelAnimationFrame(cosRaf);
+            cosSyncBar();
+          });
+        }
+        function closeAbout() {
+          aboutActive = false;
+          bodyEl.classList.remove("projects-mode");
+          cosStage.classList.remove("is-open");
+          cosStage.setAttribute("aria-hidden", "true");
+          cancelAnimationFrame(cosRaf);
+          if (cosmos) { cosmos.stop(); cosmos = null; }
+        }
+        bindCloseButton(cosClose, closeAbout);
+
+        if (cosPlay) cosPlay.addEventListener("click", () => {
+          if (cosmos) cosmos.setPlaying(!cosmos.playing());
+        });
+        const cosReplay = document.getElementById("cos-replay");
+        if (cosReplay) cosReplay.addEventListener("click", () => {
+          if (cosmos) { cosmos.setProgress(0); cosmos.setPlaying(true); }
+        });
+
+        if (cosTrack) {
+          let scrub = false;
+          const seek = (clientX) => {
+            if (!cosmos) return;
+            const r = cosTrack.getBoundingClientRect();
+            cosmos.setProgress((clientX - r.left) / Math.max(1, r.width));
+          };
+          cosTrack.addEventListener("pointerdown", (e) => {
+            if (e.target.classList.contains("cos-tick")) return;
+            scrub = true;
+            cosTrack.setPointerCapture(e.pointerId);
+            if (cosmos) cosmos.setPlaying(false);
+            seek(e.clientX);
+          });
+          cosTrack.addEventListener("pointermove", (e) => { if (scrub) seek(e.clientX); });
+          const endScrub = () => { scrub = false; };
+          cosTrack.addEventListener("pointerup", endScrub);
+          cosTrack.addEventListener("pointercancel", endScrub);
+        }
+
+        const cosBioToggle = document.getElementById("cos-bio-toggle");
+        const cosBioOpen = document.getElementById("cos-bio-open");
+        if (cosBioToggle) cosBioToggle.addEventListener("click", () => cosStage.classList.add("bio-hidden"));
+        if (cosBioOpen) cosBioOpen.addEventListener("click", () => cosStage.classList.remove("bio-hidden"));
+
         // Skills opens the star chart.
         const skStage = document.getElementById("skills-stage");
         const skClose = document.getElementById("skills-close");
@@ -4043,7 +4535,8 @@
           node.addEventListener("click", (e) => {
             e.preventDefault();
             const name = node.getAttribute("data-modal");
-            if (name === "projects") openProjects();
+            if (name === "about") openAbout();
+            else if (name === "projects") openProjects();
             else if (name === "experience") openJourney();
             else if (name === "contact") openContact();
             else if (name === "skills") openSkills();
@@ -4071,7 +4564,7 @@
           if (e.key === "Escape") {
             // Riding? Esc gets you back to orbit view first, not out of contact.
             if (riding) { leaveRide(); return; }
-            closeModal(); closeProjects(); closeJourney(); closeContact(); closeSkills();
+            closeModal(); closeProjects(); closeJourney(); closeContact(); closeSkills(); closeAbout();
           }
         });
       }
