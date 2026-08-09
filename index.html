@@ -1770,8 +1770,8 @@
       const EPOCHS = [
         { key: "pre", label: "Before time", clock: "t < 0",
           text: "No space, no time — only the vacuum, seething with virtual particles that borrow energy and hand it straight back." },
-        { key: "planck", label: "Planck epoch", clock: "10⁻⁴³ seconds",
-          text: "The universe is 10⁻³⁵ metres across at 10³² degrees. Gravity has not yet separated from the other forces, and known physics stops here." },
+        { key: "bang", label: "The Big Bang", clock: "0 seconds",
+          text: "Everything begins at once, and everywhere. There is no centre to point at — the expansion happens at every point in space, including the one you are standing on." },
         { key: "inflation", label: "Inflation", clock: "10⁻³⁶ seconds",
           text: "Space expands by a factor of 10²⁶ in less than a trillionth of a trillionth of a second. Nothing moves through space faster than light — it is space itself that stretches." },
         { key: "quark", label: "Quark–gluon plasma", clock: "10⁻¹² seconds",
@@ -1786,13 +1786,351 @@
           text: "No stars yet. Neutral hydrogen drifts, cools, and quietly falls together in the dark for a hundred million years." },
         { key: "stars", label: "First light", clock: "200 million years",
           text: "The first stars ignite — hundreds of solar masses, burning blue, dying fast, and forging in their cores every element heavier than helium." },
-        { key: "galaxy", label: "Galaxies assemble", clock: "1 billion years",
-          text: "Gravity pulls matter along the filaments of the cosmic web. Galaxies form at the nodes, then collide and merge." },
-        { key: "sun", label: "The Sun ignites", clock: "9.2 billion years",
-          text: "In one unremarkable arm of one ordinary spiral, a cloud collapses. The Earth forms from what was left over." },
+        { key: "galaxy", label: "Galaxies take shape", clock: "1 billion years",
+          text: "Gravity draws matter along the filaments of the cosmic web. At the nodes it spins up into discs, and the spiral arms wind out of the rotation itself." },
+        { key: "sun", label: "The Sun and its planets", clock: "9.2 billion years",
+          text: "In one unremarkable arm, a cloud collapses into a new star. The leftover dust flattens into a disc, and within a few million years the disc clumps into planets." },
+        { key: "earth", label: "Earth, and life", clock: "4.5 billion years ago",
+          text: "The third clump cools, oceans condense, and something in them starts copying itself. For most of the four billion years that follow, that is the only thing here worth mentioning." },
+        { key: "space", label: "The space age", clock: "1957",
+          text: "Sputnik. Fifty-four years after the first powered flight, atoms forged inside dead stars assemble into machines and throw them back out at the sky." },
         { key: "now", label: "Now", clock: "13.8 billion years",
           text: "You are here, on that leftover rock, reading this — assembled from atoms cooked inside stars that died before the Sun existed." }
       ];
+
+      // Things that actually happen, as opposed to atmosphere: a star lighting up,
+      // a galaxy winding out of its own rotation, a disc of debris clumping into
+      // planets, and finally machines leaving the third clump. Each one is parked
+      // in a different direction so the camera has somewhere to turn.
+      function buildCosmicActors(dpr) {
+        const root = new THREE.Group();
+        const parts = [];
+
+        function glowTexture() {
+          const N = 128, c = document.createElement("canvas");
+          c.width = c.height = N;
+          const g = c.getContext("2d");
+          const rg = g.createRadialGradient(N / 2, N / 2, 0, N / 2, N / 2, N / 2);
+          rg.addColorStop(0, "rgba(255,255,255,1)");
+          rg.addColorStop(0.12, "rgba(255,246,224,0.75)");
+          rg.addColorStop(0.4, "rgba(255,196,120,0.16)");
+          rg.addColorStop(1, "rgba(255,170,80,0)");
+          g.fillStyle = rg; g.fillRect(0, 0, N, N);
+          return new THREE.CanvasTexture(c);
+        }
+        const GLOW = glowTexture();
+
+        function makeGlow(size, color) {
+          const s = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: GLOW, color: color, transparent: true, opacity: 0,
+            blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false
+          }));
+          s.scale.setScalar(size);
+          return s;
+        }
+
+        // One material serves every particle actor; each instance gets its own
+        // uniforms so they can collapse, spin and fade independently.
+        function cloudMat(size) {
+          return new THREE.ShaderMaterial({
+            transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+            uniforms: {
+              uOpacity: { value: 0 }, uSize: { value: size }, uShrink: { value: 1 },
+              uSpin: { value: 0 }, uDpr: { value: dpr },
+              uColA: { value: new THREE.Color(0xdfeaff) }, uColB: { value: new THREE.Color(0xffc07a) }
+            },
+            vertexShader: [
+              "attribute float aSeed;",
+              "uniform float uShrink, uSpin, uSize, uDpr;",
+              "varying float vS;",
+              "void main(){ vS = aSeed;",
+              "  vec3 p = position * uShrink;",
+              "  float c = cos(uSpin), s = sin(uSpin);",
+              "  p = vec3(p.x * c - p.z * s, p.y, p.x * s + p.z * c);",
+              "  vec4 mv = modelViewMatrix * vec4(p, 1.0);",
+              "  gl_Position = projectionMatrix * mv;",
+              "  gl_PointSize = uSize * uDpr * (300.0 / max(1.0, -mv.z)); }"
+            ].join("\n"),
+            fragmentShader: [
+              "precision highp float;",
+              "uniform vec3 uColA, uColB; uniform float uOpacity;",
+              "varying float vS;",
+              "void main(){",
+              "  float r = length(gl_PointCoord - vec2(0.5)) * 2.0;",
+              "  if (r > 1.0) discard;",
+              "  float a = pow(1.0 - r, 2.2);",
+              "  gl_FragColor = vec4(mix(uColA, uColB, fract(vS * 7.31)), a * uOpacity); }"
+            ].join("\n")
+          });
+        }
+
+        function cloud(n, gen, size) {
+          const pos = new Float32Array(n * 3), seed = new Float32Array(n);
+          for (let i = 0; i < n; i++) {
+            const p = gen(i);
+            pos[i * 3] = p[0]; pos[i * 3 + 1] = p[1]; pos[i * 3 + 2] = p[2];
+            seed[i] = Math.random();
+          }
+          const g = new THREE.BufferGeometry();
+          g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+          g.setAttribute("aSeed", new THREE.BufferAttribute(seed, 1));
+          g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 4000);
+          const m = cloudMat(size);
+          const pts = new THREE.Points(g, m);
+          parts.push(g, m);
+          return pts;
+        }
+
+        // ── a star being born: a cloud that falls in and lights up ──
+        const forge = new THREE.Group();
+        forge.position.set(0, 26, -300);
+        const forgeCloud = cloud(2600, () => {
+          const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
+          const s = Math.sqrt(1 - u * u), r = 12 + Math.pow(Math.random(), 0.45) * 72;
+          return [Math.cos(th) * s * r, u * r * 0.7, Math.sin(th) * s * r];
+        }, 2.4);
+        // Population III stars were hot and blue; the cloud they condense from
+        // is the warmer part of the picture.
+        forgeCloud.material.uniforms.uColA.value.set(0xcfe0ff);
+        forgeCloud.material.uniforms.uColB.value.set(0xffb884);
+        const forgeCore = makeGlow(84, 0xdfe9ff);
+        forge.add(forgeCloud, forgeCore);
+        root.add(forge);
+
+        // ── a spiral galaxy: arms are a log spiral, not drawn by hand ──
+        const galaxy = new THREE.Group();
+        galaxy.position.set(300, 88, 262);
+        // Aim the disc's face back at the origin, then tip it for a 3/4 view —
+        // edge-on, a spiral is just a smear.
+        galaxy.lookAt(0, 0, 0);
+        galaxy.rotateX(Math.PI / 2 - 0.55);
+        const galaxyDisc = cloud(9000, (i) => {
+          if (i % 9 === 0) {                       // central bulge
+            const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
+            const s = Math.sqrt(1 - u * u), r = Math.pow(Math.random(), 1.7) * 26;
+            return [Math.cos(th) * s * r, u * r, Math.sin(th) * s * r];
+          }
+          const arm = i % 2;
+          const t = Math.pow(Math.random(), 0.62);
+          const r = 16 + t * 148;
+          // Winding the angle with radius is what makes the arms; the scatter
+          // widens near the middle so they blur into the bulge.
+          const th = arm * Math.PI + t * 3.6 + (Math.random() - 0.5) * (0.9 / (0.22 + t));
+          return [Math.cos(th) * r, (Math.random() - 0.5) * 13 * (1 - t * 0.66), Math.sin(th) * r];
+        }, 2.4);
+        galaxyDisc.material.uniforms.uColA.value.set(0xbcd4ff);
+        galaxyDisc.material.uniforms.uColB.value.set(0xffd0a0);
+        const galaxyCore = makeGlow(64, 0xffe6bc);
+        galaxy.add(galaxyDisc, galaxyCore);
+        root.add(galaxy);
+
+        // ── the Sun and its disc, condensing into planets ──
+        const solar = new THREE.Group();
+        solar.position.set(-158, -26, -140);
+        solar.lookAt(0, 0, 0);
+        solar.rotateX(Math.PI / 2 - 0.6);      // same trick: disc toward the viewer
+        const disc = cloud(4200, () => {
+          const th = Math.random() * Math.PI * 2;
+          const r = 26 + Math.pow(Math.random(), 0.8) * 74;
+          return [Math.cos(th) * r, (Math.random() - 0.5) * 5.5 * (1 - r / 130), Math.sin(th) * r];
+        }, 1.7);
+        disc.material.uniforms.uColA.value.set(0xffd9a8);
+        disc.material.uniforms.uColB.value.set(0xff9a5c);
+        const sunGlow = makeGlow(58, 0xfff2d2);
+        solar.add(disc, sunGlow);
+        const PLANETS = [
+          { r: 34, sp: 0.62, size: 1.5, col: 0xc9b8a4 },
+          { r: 46, sp: 0.47, size: 2.3, col: 0xe8c08a },
+          { r: 60, sp: 0.36, size: 2.5, col: 0x6fa8dc },
+          { r: 74, sp: 0.28, size: 1.9, col: 0xd07a4a },
+          { r: 96, sp: 0.19, size: 4.2, col: 0xd9b98a }
+        ];
+        const planets = PLANETS.map((p) => {
+          const m = new THREE.Mesh(
+            new THREE.SphereGeometry(p.size, 18, 12),
+            new THREE.MeshBasicMaterial({ color: p.col, transparent: true, opacity: 0 })
+          );
+          parts.push(m.geometry, m.material);
+          solar.add(m);
+          return { mesh: m, def: p };
+        });
+        root.add(solar);
+
+        // ── the third clump, and what eventually left it ──
+        const home = new THREE.Group();
+        home.position.set(74, -12, -98);
+        const earthTex = (function () {
+          const W = 128, H = 64, c = document.createElement("canvas");
+          c.width = W; c.height = H;
+          const g = c.getContext("2d");
+          g.fillStyle = "#12406f"; g.fillRect(0, 0, W, H);
+          g.fillStyle = "#2f7a4d";
+          for (let i = 0; i < 26; i++) {
+            const x = Math.random() * W, y = 8 + Math.random() * (H - 16);
+            g.beginPath();
+            g.ellipse(x, y, 4 + Math.random() * 13, 3 + Math.random() * 8, Math.random() * 3, 0, Math.PI * 2);
+            g.fill();
+          }
+          g.fillStyle = "rgba(240,248,255,0.9)";
+          g.fillRect(0, 0, W, 4); g.fillRect(0, H - 4, W, 4);
+          const t = new THREE.CanvasTexture(c);
+          if ("colorSpace" in t) t.colorSpace = THREE.SRGBColorSpace;
+          return t;
+        })();
+        const earthBall = new THREE.Mesh(
+          new THREE.SphereGeometry(18, 40, 28),
+          new THREE.MeshBasicMaterial({ map: earthTex, transparent: true, opacity: 0 })
+        );
+        parts.push(earthBall.geometry, earthBall.material, earthTex);
+        home.add(earthBall);
+        const halo = makeGlow(62, 0x8ec5ff);
+        home.add(halo);
+
+        // Satellites on inclined circular orbits, plus the trail of something
+        // still climbing out of the well.
+        const SATS = [
+          { r: 27, sp: 0.9, inc: 0.35, ph: 0 },
+          { r: 33, sp: 0.72, inc: -0.7, ph: 2.1 },
+          { r: 40, sp: 0.58, inc: 1.15, ph: 4.0 },
+          { r: 24, sp: 1.05, inc: -0.2, ph: 5.2 }
+        ];
+        const satMat = new THREE.MeshBasicMaterial({ color: 0xdfeaff, transparent: true, opacity: 0 });
+        const satGeo = new THREE.BoxGeometry(3.2, 0.9, 0.9);
+        parts.push(satGeo, satMat);
+        const sats = SATS.map((s) => {
+          const m = new THREE.Mesh(satGeo, satMat);
+          home.add(m);
+          return { mesh: m, def: s };
+        });
+        // Faint orbit rings, so the paths read even when a satellite is small.
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: 0x7fb2ff, transparent: true, opacity: 0, side: THREE.DoubleSide
+        });
+        parts.push(ringMat);
+        SATS.forEach((s) => {
+          const rg = new THREE.RingGeometry(s.r - 0.18, s.r + 0.18, 96);
+          parts.push(rg);
+          const ring = new THREE.Mesh(rg, ringMat);
+          ring.rotation.x = Math.PI / 2 + s.inc;
+          home.add(ring);
+        });
+
+        const TRAIL = 46;
+        const trailPos = new Float32Array(TRAIL * 3);
+        const trailSeed = new Float32Array(TRAIL);
+        for (let i = 0; i < TRAIL; i++) trailSeed[i] = i / TRAIL;
+        const trailGeo = new THREE.BufferGeometry();
+        trailGeo.setAttribute("position", new THREE.BufferAttribute(trailPos, 3));
+        trailGeo.setAttribute("aSeed", new THREE.BufferAttribute(trailSeed, 1));
+        trailGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 400);
+        const trailMat = cloudMat(5.2);
+        trailMat.uniforms.uColA.value.set(0xfff0d8);
+        trailMat.uniforms.uColB.value.set(0xff8a3c);
+        const trail = new THREE.Points(trailGeo, trailMat);
+        parts.push(trailGeo, trailMat);
+        home.add(trail);
+        const rocket = makeGlow(13, 0xfff4e0);
+        home.add(rocket);
+        root.add(home);
+
+        // Where the camera should be looking during each act.
+        const LOOK = {
+          forge: forge.position.clone().normalize(),
+          galaxy: galaxy.position.clone().normalize(),
+          solar: solar.position.clone().normalize(),
+          home: home.position.clone().normalize()
+        };
+
+        // Indexed to match EPOCHS: nothing to look at until the first star.
+        const FOCUS = [
+          null, null, null, null, null, null, null, null,
+          LOOK.forge,    // 8  first light
+          LOOK.galaxy,   // 9  galaxies take shape
+          LOOK.solar,    // 10 the Sun and its planets
+          LOOK.home,     // 11 Earth, and life
+          LOOK.home,     // 12 the space age
+          LOOK.home      // 13 now
+        ];
+
+        const S = (x, a, b) => THREE.MathUtils.smoothstep(x, a, b);
+        const band = (x, a, b, c, d) => S(x, a, b) * (1 - S(x, c, d));
+
+        function update(f, t) {
+          // Star birth: the cloud falls in, then the core lights.
+          const fw = band(f, 7.3, 8.0, 9.2, 9.9);
+          const collapse = S(f, 7.2, 8.0);
+          forgeCloud.material.uniforms.uOpacity.value = fw * 0.85;
+          forgeCloud.material.uniforms.uShrink.value = 1 - collapse * 0.76;
+          forgeCloud.material.uniforms.uSpin.value = t * 0.09;
+          forgeCore.material.opacity = fw * Math.pow(collapse, 2.0);
+
+          // Galaxy: winds up, then drops back as the story moves inside it.
+          const gw = S(f, 8.1, 8.95);
+          const gFar = 1 - S(f, 10.4, 11.6) * 0.62;
+          galaxyDisc.material.uniforms.uOpacity.value = gw * gFar;
+          galaxyDisc.material.uniforms.uSpin.value = t * 0.035;
+          galaxyCore.material.opacity = gw * gFar * 0.3;
+
+          // Solar system: the disc thins as the planets condense out of it.
+          const sw = band(f, 9.5, 10.2, 12.4, 13.2);
+          const cond = S(f, 10.1, 11.0);
+          disc.material.uniforms.uOpacity.value = sw * (1 - cond * 0.82) * 0.8;
+          disc.material.uniforms.uSpin.value = t * 0.16;
+          sunGlow.material.opacity = sw * 0.9;
+          planets.forEach((p, i) => {
+            p.mesh.material.opacity = sw * S(f, 10.15 + i * 0.045, 10.9 + i * 0.045);
+            const a = t * p.def.sp + i * 1.7;
+            p.mesh.position.set(Math.cos(a) * p.def.r, 0, Math.sin(a) * p.def.r);
+          });
+
+          // Home: Earth arrives, then things start leaving it.
+          const hw = S(f, 10.7, 11.5);
+          const age = S(f, 11.6, 12.3);
+          earthBall.material.opacity = hw;
+          halo.material.opacity = hw * 0.55;
+          earthBall.rotation.y = t * 0.12;
+          satMat.opacity = age;
+          ringMat.opacity = age * 0.3;
+          sats.forEach((s) => {
+            const a = t * s.def.sp + s.def.ph;
+            const x = Math.cos(a) * s.def.r, z = Math.sin(a) * s.def.r;
+            s.mesh.position.set(x, Math.sin(a) * Math.sin(s.def.inc) * s.def.r * 0.42, z * Math.cos(s.def.inc));
+            s.mesh.lookAt(0, 0, 0);
+          });
+
+          // One launch on a loop: straight up off the limb, then pitching over
+          // into orbit the way a real ascent does.
+          trailMat.uniforms.uOpacity.value = age * 0.95;
+          rocket.material.opacity = age;
+          const cycle = (t * 0.17) % 1;
+          for (let i = 0; i < TRAIL; i++) {
+            const u = Math.max(0, cycle - i * 0.0075);
+            const climb = Math.pow(u, 0.62);
+            const r = 18 + climb * 21;
+            const ang = -1.15 + u * u * 2.5;             // pitch-over
+            trailPos[i * 3] = Math.cos(ang) * r * 0.72;
+            trailPos[i * 3 + 1] = Math.sin(ang) * r + 3;
+            trailPos[i * 3 + 2] = Math.sin(u * 1.4) * 5;
+          }
+          trailGeo.attributes.position.needsUpdate = true;
+          rocket.position.set(trailPos[0], trailPos[1], trailPos[2]);
+
+          // Which act owns the camera, stated per epoch rather than inferred from
+          // whichever happens to be brightest — three of these are on screen at
+          // once by the end, and comparing their weights just produced ties that
+          // pointed the camera at the wrong thing.
+          return FOCUS[Math.max(0, Math.min(FOCUS.length - 1, Math.round(f)))] || null;
+        }
+
+        return {
+          root: root,
+          update: update,
+          dispose: () => {
+            parts.forEach((p) => p.dispose && p.dispose());
+            GLOW.dispose();
+          }
+        };
+      }
 
       function initCosmos(cnv) {
         let renderer;
@@ -1956,6 +2294,9 @@
         }));
         scene.add(matter);
 
+        const actors = buildCosmicActors(dpr);
+        scene.add(actors.root);
+
         // ── look controls: you turn your head, you do not move ──
         let yaw = 0, pitch = 0, tYaw = 0, tPitch = 0, drift = 0;
         let dragging = false, lx = 0, ly = 0, idle = 0;
@@ -1995,14 +2336,14 @@
           skyUni.uTime.value = t;
           pUni.uTime.value = t;
 
-          skyUni.uFoam.value = 1 - S(f, 0.35, 1.3);
-          // The bang sits between "before" and the Planck epoch, so it happens in
-          // transit. Peaked on an epoch it would leave that stop a blank white
-          // screen for anyone who clicked straight to it.
-          skyUni.uFlash.value = Math.exp(-Math.pow((f - 0.72) / 0.16, 2)) * 2.6;
-          skyUni.uPlasma.value = band(f, 0.8, 1.35, 5.5, 6.1);
+          skyUni.uFoam.value = 1 - S(f, 0.3, 1.15);
+          // The white-out belongs to the transition into the bang; by the time
+          // you land on that stop it has gone and you are looking at the fireball
+          // itself, which has structure. Peaked on the stop it was a blank screen.
+          skyUni.uFlash.value = Math.exp(-Math.pow((f - 0.78) / 0.1, 2)) * 2.8;
+          skyUni.uPlasma.value = band(f, 0.72, 1.1, 5.5, 6.1);
           skyUni.uCmb.value = band(f, 5.45, 5.95, 6.4, 7.35);
-          skyUni.uWeb.value = S(f, 8.6, 10.2) * 0.9;
+          skyUni.uWeb.value = S(f, 8.6, 10.2) * (1 - S(f, 10.2, 11.8) * 0.6) * 0.6;
           // Full dark right on the dark-ages stop, not on the way past it.
           skyUni.uDim.value = 1 - band(f, 6.4, 6.95, 7.25, 7.85) * 0.86;
           // White-hot early, cooling toward orange as it drops through a
@@ -2011,12 +2352,12 @@
 
           pUni.uStructure.value = S(f, 7.1, 10.3);
           // Monotonic: the inflation step, then steady expansion afterwards.
-          pUni.uExpand.value = 0.16 + 0.62 * S(f, 1.8, 2.4) + 1.05 * S(f, 2.5, 11);
+          pUni.uExpand.value = 0.16 + 0.62 * S(f, 1.8, 2.4) + 1.05 * S(f, 2.5, 13);
           pUni.uJitter.value = band(f, 1.0, 1.8, 5.3, 6.0) * 26;
           const hot = band(f, 1.0, 1.9, 5.5, 6.2);
           const lit = S(f, 7.3, 8.2);
           const gal = S(f, 8.8, 10.6);
-          pUni.uBright.value = Math.max(hot * 0.85, lit * 1.3);
+          pUni.uBright.value = Math.max(hot * 0.85, lit * 1.3) * (1 - S(f, 10.4, 12.0) * 0.55);
           pUni.uSize.value = 1.6 + lit * 2.6;
           tmpA.copy(cWhite).lerp(cBlue, lit);
           tmpB.copy(cGold).lerp(cPure, lit).lerp(cWarm, gal);
@@ -2056,8 +2397,23 @@
           apply(f, t);
           report(f);
 
+          // Whatever is happening steers the view toward itself, so the star
+          // lighting up or the first satellite is not behind your head. Touching
+          // the mouse takes the camera back off it.
+          const look = actors.update(f, t);
           idle += dt;
-          if (!dragging && idle > 2600) drift += dt * 0.000035;   // a slow look around
+          if (look && !dragging && idle > 1400) {
+            const wantYaw = Math.atan2(-look.x, -look.z);
+            const wantPitch = Math.asin(THREE.MathUtils.clamp(look.y, -1, 1));
+            let d = wantYaw - tYaw;
+            while (d > Math.PI) d -= Math.PI * 2;
+            while (d < -Math.PI) d += Math.PI * 2;
+            const k = Math.min(1, dt * 0.0024);
+            tYaw += d * k;
+            tPitch += (wantPitch - tPitch) * k;
+          } else if (!dragging && idle > 1400) {
+            drift += dt * 0.000035;                               // a slow look around
+          }
           yaw += (tYaw + drift - yaw) * Math.min(1, dt * 0.006);
           pitch += (tPitch - pitch) * Math.min(1, dt * 0.006);
           camera.rotation.set(0, 0, 0);
@@ -2072,7 +2428,19 @@
         return {
           epochs: EPOCHS,
           progress: () => prog,
-          setProgress: (v) => { prog = THREE.MathUtils.clamp(v, 0, 1); },
+          // Jumping on the timeline cuts straight to whatever that epoch is
+          // about — waiting several seconds for the camera to swing round to the
+          // thing you just asked for would be its own kind of broken.
+          setProgress: (v, snap) => {
+            prog = THREE.MathUtils.clamp(v, 0, 1);
+            if (!snap) return;
+            const look = actors.update(prog * LAST, performance.now() * 0.001);
+            if (!look) return;
+            tYaw = yaw = Math.atan2(-look.x, -look.z);
+            tPitch = pitch = Math.asin(THREE.MathUtils.clamp(look.y, -1, 1));
+            drift = 0;
+            idle = 0;
+          },
           playing: () => playing,
           setPlaying: (v) => { playing = !!v; if (v && prog >= 1) prog = 0; },
           onEpoch: (fn) => { onEpoch = fn; lastEpoch = -1; },
@@ -4170,7 +4538,7 @@
             b.setAttribute("aria-label", "Jump to " + ep.label);
             b.addEventListener("click", (e) => {
               e.stopPropagation();
-              cosmos.setProgress(i / last);
+              cosmos.setProgress(i / last, true);
               cosmos.setPlaying(false);
             });
             cosTicks.appendChild(b);
@@ -4203,7 +4571,7 @@
             cosTicks.innerHTML = "";
             cosBuildTicks();
             cosmos.onEpoch(cosShow);
-            cosmos.setProgress(0);
+            cosmos.setProgress(0, true);
             cosmos.setPlaying(true);
             cancelAnimationFrame(cosRaf);
             cosSyncBar();
@@ -4224,7 +4592,7 @@
         });
         const cosReplay = document.getElementById("cos-replay");
         if (cosReplay) cosReplay.addEventListener("click", () => {
-          if (cosmos) { cosmos.setProgress(0); cosmos.setPlaying(true); }
+          if (cosmos) { cosmos.setProgress(0, true); cosmos.setPlaying(true); }
         });
 
         if (cosTrack) {
@@ -4232,7 +4600,7 @@
           const seek = (clientX) => {
             if (!cosmos) return;
             const r = cosTrack.getBoundingClientRect();
-            cosmos.setProgress((clientX - r.left) / Math.max(1, r.width));
+            cosmos.setProgress((clientX - r.left) / Math.max(1, r.width), true);
           };
           cosTrack.addEventListener("pointerdown", (e) => {
             if (e.target.classList.contains("cos-tick")) return;
