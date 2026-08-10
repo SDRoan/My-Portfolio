@@ -289,6 +289,37 @@
       <div class="modal-divider"></div>
       <p class="modal-lead">I'm a CS student who learns best by <strong>building real things</strong> — and then carefully measuring whether they actually helped.</p>
       <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+
+      <div class="modal-divider"></div>
+
+      <!-- Every number below is read off the running page, not written down. -->
+      <section class="bench" aria-label="Live measurements of this page">
+        <header class="bench-head">
+          <span class="bench-eyebrow">Under the hood</span>
+          <span class="bench-live"><i></i>measured in this tab, right now</span>
+        </header>
+
+        <div class="bench-grid">
+          <div class="bench-cell bench-cell--wide">
+            <span class="bench-k">Frame time</span>
+            <b class="bench-v" id="bm-frame">—</b>
+            <canvas class="bench-spark" id="bm-spark" width="240" height="26" aria-hidden="true"></canvas>
+          </div>
+          <div class="bench-cell"><span class="bench-k">Renderer</span><b class="bench-v bench-v--sm" id="bm-gpu">—</b></div>
+          <div class="bench-cell"><span class="bench-k">Session</span><b class="bench-v" id="bm-up">—</b></div>
+          <div class="bench-cell"><span class="bench-k">Shipped</span><b class="bench-v" id="bm-bytes">—</b></div>
+          <div class="bench-cell"><span class="bench-k">Requests</span><b class="bench-v" id="bm-req">—</b></div>
+          <div class="bench-cell"><span class="bench-k">Live canvases</span><b class="bench-v" id="bm-canv">—</b></div>
+          <div class="bench-cell"><span class="bench-k">DOM nodes</span><b class="bench-v" id="bm-dom">—</b></div>
+        </div>
+
+        <ul class="bench-list">
+          <li>Earth's day–night line is placed from the <strong>real solar position</strong>. The clock on the Contact stage is true UTC.</li>
+          <li>Planets sit where <strong>Keplerian orbital elements</strong> put them — Venus shows a crescent because that is genuinely where it is.</li>
+          <li>Which face of Earth you're looking at follows <strong>Greenwich sidereal time</strong>.</li>
+          <li>The quasar, the star chart and every planet surface are <strong>generated in the browser</strong>. Only Earth uses photography.</li>
+        </ul>
+      </section>
     </template>
 
     <template id="modal-skills">
@@ -3655,6 +3686,96 @@
         const body = document.getElementById("orbit-modal-body");
         const closeBtn = document.getElementById("orbit-modal-close");
 
+        // The About panel reports on the page it is sitting in. Everything it
+        // shows is read from the live document or the Performance API — nothing
+        // is a figure typed into the markup, which is the whole point of it.
+        let benchRaf = 0;
+        function stopBench() { cancelAnimationFrame(benchRaf); benchRaf = 0; }
+
+        function startBench() {
+          const el = (id) => document.getElementById(id);
+          const frameEl = el("bm-frame"), spark = el("bm-spark");
+          if (!frameEl) return;
+
+          const gpuEl = el("bm-gpu");
+          if (gpuEl) {
+            let name = "unavailable";
+            try {
+              const c = document.createElement("canvas");
+              const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
+              if (gl) {
+                const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+                name = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+                // These come back as things like "ANGLE (Apple, Apple M2, ...)";
+                // the middle field is the part anyone cares about.
+                const m = /ANGLE \(([^,]+), ([^,)]+)/.exec(name);
+                if (m) name = m[2].trim();
+                name = String(name).replace(/\s*\(.*$/, "").trim().slice(0, 30);
+              }
+            } catch (e) { /* masked by the browser; leave it unavailable */ }
+            gpuEl.textContent = name;
+          }
+
+          const res = performance.getEntriesByType ? performance.getEntriesByType("resource") : [];
+          const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+          let bytes = nav && nav.transferSize ? nav.transferSize : 0;
+          res.forEach((r) => { bytes += r.transferSize || 0; });
+          const bEl = el("bm-bytes");
+          if (bEl) bEl.textContent = bytes > 0 ? (bytes / 1024).toFixed(0) + " KB" : "cached";
+          const rEl = el("bm-req");
+          if (rEl) rEl.textContent = String(res.length + 1);
+
+          const ctx = spark ? spark.getContext("2d") : null;
+          const hist = [];
+          let last = performance.now(), acc = 0, n = 0, shown = 0;
+
+          function tick(now) {
+            const dt = now - last;
+            last = now;
+            if (dt > 0 && dt < 500) { acc += dt; n++; hist.push(dt); }
+            if (hist.length > 120) hist.shift();
+
+            if (n >= 12) {
+              shown = acc / n; acc = 0; n = 0;
+              frameEl.textContent = shown.toFixed(1) + " ms  ·  " + Math.round(1000 / shown) + " fps";
+            }
+
+            if (ctx) {
+              const w = spark.width, h = spark.height;
+              ctx.clearRect(0, 0, w, h);
+              // Scaled against a 60fps budget so the line means something.
+              const cap = 33.4;
+              ctx.beginPath();
+              hist.forEach((v, i) => {
+                const x = (i / Math.max(1, hist.length - 1)) * w;
+                const y = h - Math.min(1, v / cap) * (h - 2) - 1;
+                if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+              });
+              ctx.strokeStyle = shown > 22 ? "rgba(255,150,110,0.9)" : "rgba(140,200,255,0.9)";
+              ctx.lineWidth = 1.4;
+              ctx.stroke();
+              ctx.strokeStyle = "rgba(255,255,255,0.13)";
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              const mid = h - (16.7 / cap) * (h - 2) - 1;   // the 60fps line
+              ctx.moveTo(0, mid); ctx.lineTo(w, mid); ctx.stroke();
+            }
+
+            const up = el("bm-up");
+            if (up) {
+              const s = Math.floor(performance.now() / 1000);
+              up.textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+            }
+            const cEl = el("bm-canv");
+            if (cEl) cEl.textContent = String(document.getElementsByTagName("canvas").length);
+            const dEl = el("bm-dom");
+            if (dEl) dEl.textContent = document.getElementsByTagName("*").length.toLocaleString();
+
+            benchRaf = requestAnimationFrame(tick);
+          }
+          benchRaf = requestAnimationFrame(tick);
+        }
+
         function openModal(name) {
           if (quasarStop) { quasarStop(); quasarStop = null; }
           if (projSkyStop) { projSkyStop(); projSkyStop = null; }
@@ -3669,8 +3790,11 @@
           bodyEl.classList.add("modal-active");
           overlay.classList.add("is-open");
           overlay.setAttribute("aria-hidden", "false");
+          stopBench();
+          if (name === "about") startBench();
         }
         function closeModal() {
+          stopBench();
           bodyEl.classList.remove("modal-active");
           overlay.classList.remove("is-open");
           overlay.setAttribute("aria-hidden", "true");

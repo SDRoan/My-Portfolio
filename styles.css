@@ -3795,3 +3795,114 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 @media (max-width: 760px) {
   .df-label { font-size: 10px; }
 }
+
+/* ═══ About: the page measuring itself ═══ */
+.bench { margin-top: 4px; }
+.bench-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+.bench-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(160, 182, 214, 0.72);
+}
+.bench-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: rgba(150, 170, 200, 0.5);
+}
+.bench-live i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #5ee08a;
+  box-shadow: 0 0 8px rgba(94, 224, 138, 0.9);
+  animation: bench-pulse 2s ease-in-out infinite;
+}
+@keyframes bench-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+.bench-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.bench-cell {
+  padding: 10px 12px 11px;
+  background: #12141a;
+  min-width: 0;
+}
+.bench-cell--wide { grid-column: 1 / -1; }
+.bench-k {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(148, 166, 196, 0.6);
+}
+.bench-v {
+  display: block;
+  margin-top: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e9f1ff;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bench-v--sm { font-size: 11.5px; font-weight: 500; color: rgba(214, 228, 250, 0.86); }
+.bench-spark {
+  display: block;
+  width: 100%;
+  height: 26px;
+  margin-top: 8px;
+  opacity: 0.95;
+}
+
+.bench-list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.bench-list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(206, 218, 238, 0.7);
+}
+.bench-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: rgba(127, 178, 255, 0.75);
+  transform: rotate(45deg);
+}
+.bench-list strong { color: #eaf1ff; font-weight: 600; }
+
+@media (max-width: 560px) {
+  .bench-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bench-live i { animation: none; }
+}
