@@ -1997,6 +1997,48 @@ img {
   width: min(620px, 100%);
 }
 
+/* About hands the panel over to the embedded particle simulator, so it gets
+   more room and drops the inner scroll — the iframe scrolls on its own. */
+.orbit-modal-card[data-section="about"] {
+  width: min(880px, 100%);
+  overflow-y: visible;
+}
+
+.about-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: min(60vh, 560px);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #05070c;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.about-embed-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.about-embed-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: rgba(236, 239, 245, 0.62);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.about-embed-link:hover {
+  color: #fff;
+}
+
 .orbit-modal-overlay.is-open .orbit-modal-card {
   transform: translateX(0) scale(1);
 }
@@ -2581,6 +2623,7 @@ img {
 @media (max-width: 480px) {
   .orbit-modal-card { padding: 22px 20px; }
   .modal-hero .orbit-modal-title { font-size: 1.4rem; }
+  .about-embed { aspect-ratio: 3 / 4; max-height: 62vh; }
   .project-mini-grid { grid-template-columns: 1fr; }
   .contact-social-grid { grid-template-columns: 1fr; }
 }
@@ -3795,3 +3838,41 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 @media (max-width: 760px) {
   .df-label { font-size: 10px; }
 }
+
+/* ═══ About: embedded particle simulator ═══ */
+.about-embed {
+  position: relative;
+  margin: 0 -30px;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background: #05070d;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.about-embed-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.pe-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: rgba(160, 182, 214, 0.55);
+  transition: opacity 0.5s ease;
+}
+.pe-credit {
+  margin: 12px 0 0 !important;
+  font-size: 10.5px !important;
+  line-height: 1.55;
+  color: rgba(150, 170, 200, 0.5) !important;
+}
+.pe-credit a { color: rgba(190, 214, 255, 0.78); text-decoration: none; border-bottom: 1px solid rgba(190, 214, 255, 0.22); }
+.pe-credit a:hover { color: #fff; }

@@ -280,15 +280,32 @@
         <div class="modal-hero-text">
           <span class="modal-eyebrow">About me</span>
           <h2 class="orbit-modal-title" id="orbit-modal-title">Saibyasachi Ruhan</h2>
-          <div class="modal-pill-row">
-            <span class="modal-pill"><span class="pill-dot pill-dot--green"></span>Queens College · CS</span>
-            <span class="modal-pill"><span class="pill-dot pill-dot--blue"></span>New York, NY</span>
-          </div>
         </div>
       </div>
       <div class="modal-divider"></div>
-      <p class="modal-lead">I'm a CS student who learns best by <strong>building real things</strong> — and then carefully measuring whether they actually helped.</p>
-      <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+      <!-- A third-party page, so it is framed rather than copied, and sandboxed.
+           The src is attached on open and stripped on close: openModal() clones
+           this template but closeModal() leaves the body in place, so without
+           that the simulator would keep running behind a shut modal.
+           The URL is the plain one on purpose — the link it arrived on carried
+           an access token, which has no business in a public repo. -->
+      <div class="about-embed">
+        <iframe
+          class="about-embed-frame"
+          id="pe-frame"
+          title="AI Particle Simulator by Casberry India"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          allow="fullscreen; xr-spatial-tracking"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-downloads allow-popups allow-popups-to-escape-sandbox"
+        ></iframe>
+        <div class="pe-fallback" id="pe-fallback">Loading the simulator…</div>
+      </div>
+      <p class="pe-credit">
+        <a href="https://particles.casberry.in/" target="_blank" rel="noopener noreferrer">AI Particle Simulator</a>
+        by Casberry India — embedded, not affiliated ·
+        <a href="https://particles.casberry.in/" target="_blank" rel="noopener noreferrer">open full screen ↗</a>
+      </p>
     </template>
 
     <template id="modal-skills">
@@ -3655,6 +3672,21 @@
         const body = document.getElementById("orbit-modal-body");
         const closeBtn = document.getElementById("orbit-modal-close");
 
+        // The About card carries a framed third-party page; it is mounted on open
+        // and torn down on close so it never renders behind a closed modal.
+        const PARTICLES_URL = "https://particles.casberry.in/";
+        function mountParticles() {
+          const f = document.getElementById("pe-frame");
+          if (!f || f.src) return;
+          const fb = document.getElementById("pe-fallback");
+          f.addEventListener("load", () => { if (fb) fb.style.opacity = "0"; }, { once: true });
+          f.src = PARTICLES_URL;
+        }
+        function unmountParticles() {
+          const f = document.getElementById("pe-frame");
+          if (f) f.removeAttribute("src");
+        }
+
         function openModal(name) {
           if (quasarStop) { quasarStop(); quasarStop = null; }
           if (projSkyStop) { projSkyStop(); projSkyStop = null; }
@@ -3669,8 +3701,10 @@
           bodyEl.classList.add("modal-active");
           overlay.classList.add("is-open");
           overlay.setAttribute("aria-hidden", "false");
+          if (name === "about") mountParticles();
         }
         function closeModal() {
+          unmountParticles();
           bodyEl.classList.remove("modal-active");
           overlay.classList.remove("is-open");
           overlay.setAttribute("aria-hidden", "true");
