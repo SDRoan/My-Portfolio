@@ -275,6 +275,41 @@
       <span class="sk-hint">Six constellations · every star is a skill</span>
     </div>
 
+    <!-- About: a universe you fly through. -->
+    <div class="uni-stage" id="uni-stage" aria-hidden="true">
+      <canvas id="uni-canvas" tabindex="-1"></canvas>
+      <button type="button" class="projects-close" id="uni-close" aria-label="Close about">×</button>
+
+      <div class="uni-cross" aria-hidden="true"><i></i><i></i></div>
+
+      <div class="uni-hud uni-hud--tl">
+        <span class="uni-eyebrow">About · free flight</span>
+        <h3 class="uni-target" id="uni-target">—</h3>
+        <span class="uni-kind" id="uni-kind"></span>
+      </div>
+
+      <div class="uni-hud uni-hud--tr">
+        <div class="uni-row"><span>DISTANCE</span><b id="uni-dist">—</b></div>
+        <div class="uni-row"><span>SPEED</span><b id="uni-speed">—</b></div>
+        <div class="uni-row"><span>RADIUS</span><b id="uni-radius">—</b></div>
+        <div class="uni-row"><span>SCALE</span><b id="uni-scale">—</b></div>
+      </div>
+
+      <div class="uni-nav" id="uni-nav">
+        <div class="uni-nav-head"><span>Destinations</span>
+          <button type="button" class="uni-nav-x" id="uni-nav-x" aria-label="Hide list">−</button></div>
+        <div class="uni-nav-body" id="uni-nav-body"></div>
+      </div>
+      <button type="button" class="uni-nav-open" id="uni-nav-open">☰ Go to</button>
+
+      <div class="uni-throttle" aria-hidden="true">
+        <div class="uni-throttle-bar"><i id="uni-throttle-fill"></i></div>
+        <span>THROTTLE</span>
+      </div>
+
+      <span class="uni-hint" id="uni-hint">Drag to look · <kbd>W</kbd>/<kbd>S</kbd> or scroll to throttle · <kbd>F</kbd> to fly to target · <kbd>Shift</kbd> boost</span>
+    </div>
+
     <template id="modal-about">
       <div class="modal-hero modal-hero--about">
         <div class="modal-hero-text">
@@ -552,6 +587,8 @@
       let journeyActive = false;
       let uplink = null;
       let contactActive = false;
+      let aboutActive = false;
+      let universe = null;
       let chartStop = null;
       let chartActive = false;
 
@@ -1713,6 +1750,500 @@
             fadeables.forEach((m) => (m.opacity = f));
           },
           update: update
+        };
+      }
+
+      // ══ About: a universe you can fly through ══════════════════════════════
+      // Positions live in metres as plain JS numbers, which are doubles and so
+      // hold metre precision out to Neptune and still work at 10^22 m. The GPU
+      // cannot, so the camera never moves — the universe is translated around a
+      // camera fixed at the origin, and rendering happens in two passes:
+      //   sky   — anything so far away only its direction matters. Parallax is
+      //           real, computed in double precision as you travel.
+      //   local — the system you are in, as geometry at true scale.
+      const AU = 1.495978707e11;          // metres
+      const LYR = 9.4607304725808e15;
+      const PC = 3.0856775814913673e16;
+      const SOL_R = 6.957e8;
+
+      // Real bodies, real radii (m) and real orbits.
+      const SOL = [
+        { name: "Mercury", r: 2.4397e6, a: 0.38709927, e: 0.20563593, per: 87.969, ph: 0.1, kind: "rock", col: [110, 106, 100] },
+        { name: "Venus", r: 6.0518e6, a: 0.72333566, e: 0.00677672, per: 224.701, ph: 2.2, kind: "venus", col: [196, 166, 108] },
+        { name: "Earth", r: 6.371e6, a: 1.00000261, e: 0.01671123, per: 365.256, ph: 4.1, kind: "earth", col: [70, 120, 180] },
+        { name: "Mars", r: 3.3895e6, a: 1.52371034, e: 0.09339410, per: 686.980, ph: 0.9, kind: "mars", col: [160, 90, 60] },
+        { name: "Jupiter", r: 6.9911e7, a: 5.20288700, e: 0.04838624, per: 4332.589, ph: 3.3, kind: "jupiter", col: [190, 160, 125] },
+        { name: "Saturn", r: 5.8232e7, a: 9.53667594, e: 0.05386179, per: 10759.22, ph: 5.5, kind: "saturn", col: [205, 185, 140], ring: [1.24, 2.27] },
+        { name: "Uranus", r: 2.5362e7, a: 19.18916464, e: 0.04725744, per: 30685.4, ph: 1.7, kind: "uranus", col: [150, 200, 208] },
+        { name: "Neptune", r: 2.4622e7, a: 30.06992276, e: 0.00859048, per: 60189.0, ph: 4.8, kind: "neptune", col: [70, 100, 190] }
+      ];
+
+      // Bright stars with measured distances (parsecs) — enough to travel by.
+      const STARS3D = [
+        ["Sirius", 6.7525, -16.7161, -1.46, 2.64, 0xa8c4ff], ["Canopus", 6.3992, -52.6957, -0.74, 95, 0xf6f2e8],
+        ["Rigil Kentaurus", 14.6600, -60.8339, -0.27, 1.34, 0xfff2d8], ["Arcturus", 14.2610, 19.1825, -0.05, 11.3, 0xffc98a],
+        ["Vega", 18.6156, 38.7837, 0.03, 7.68, 0xcadcff], ["Capella", 5.2782, 45.9980, 0.08, 13.2, 0xffe9b0],
+        ["Rigel", 5.2423, -8.2017, 0.13, 264, 0xb8d0ff], ["Procyon", 7.6550, 5.2250, 0.34, 3.51, 0xfff4de],
+        ["Betelgeuse", 5.9195, 7.4071, 0.50, 168, 0xff9b6a], ["Achernar", 1.6286, -57.2367, 0.46, 42, 0xb4ccff],
+        ["Hadar", 14.0637, -60.3730, 0.61, 120, 0xb0c8ff], ["Altair", 19.8464, 8.8683, 0.77, 5.13, 0xeaf2ff],
+        ["Acrux", 12.4433, -63.0991, 0.77, 99, 0xb0c8ff], ["Aldebaran", 4.5987, 16.5093, 0.85, 20.0, 0xffb072],
+        ["Antares", 16.4901, -26.4319, 1.09, 170, 0xff8f5e], ["Spica", 13.4199, -11.1613, 0.98, 77, 0xaec6ff],
+        ["Pollux", 7.7553, 28.0262, 1.14, 10.3, 0xffcc8e], ["Fomalhaut", 22.9608, -29.6222, 1.16, 7.7, 0xdfeaff],
+        ["Deneb", 20.6905, 45.2803, 1.25, 802, 0xe6efff], ["Regulus", 10.1395, 11.9672, 1.35, 24, 0xc8daff],
+        ["Castor", 7.5766, 31.8883, 1.57, 15.6, 0xdfeaff], ["Bellatrix", 5.4185, 6.3497, 1.64, 77, 0xbcd4ff],
+        ["Elnath", 5.4382, 28.6075, 1.65, 40, 0xe4ecff], ["Alnilam", 5.6036, -1.2019, 1.69, 600, 0xb0c8ff],
+        ["Alnitak", 5.6793, -1.9426, 1.77, 387, 0xb0c8ff], ["Alioth", 12.9005, 55.9598, 1.76, 25, 0xe8f0ff],
+        ["Dubhe", 11.0621, 61.7510, 1.79, 37, 0xffd39a], ["Mirfak", 3.4054, 49.8612, 1.79, 155, 0xfff0cc],
+        ["Polaris", 2.5302, 89.2641, 1.98, 133, 0xfff2d8], ["Hamal", 2.1195, 23.4624, 2.00, 20, 0xffc98a],
+        ["Alphard", 9.4597, -8.6586, 1.98, 54, 0xffb884], ["Mintaka", 5.5334, -0.2991, 2.23, 380, 0xb0c8ff],
+        ["Algol", 3.1361, 40.9556, 2.12, 28, 0xdfeaff], ["Alderamin", 21.3097, 62.5856, 2.45, 15.0, 0xeaf2ff],
+        ["Tau Ceti", 1.7346, -15.9375, 3.50, 3.65, 0xffe2b0], ["Altair B", 19.9, 8.9, 4.2, 5.13, 0xeaf2ff],
+        ["Barnard's Star", 17.9634, 4.6933, 9.5, 1.83, 0xff8a52], ["Wolf 359", 10.9563, 7.0144, 13.5, 2.41, 0xff7a44],
+        ["Lalande 21185", 11.0553, 35.9700, 7.5, 2.55, 0xffa060], ["Luyten 726-8", 1.6394, -17.9503, 12.5, 2.68, 0xff8048],
+        ["Ross 154", 18.8283, -23.8364, 10.4, 2.98, 0xff8a52], ["Epsilon Eridani", 3.5483, -9.4583, 3.73, 3.22, 0xffbe80],
+        ["61 Cygni", 21.1069, 38.7492, 5.2, 3.50, 0xffa868], ["Epsilon Indi", 22.0575, -56.7856, 4.69, 3.62, 0xffb47a],
+        ["Groombridge 34", 0.3253, 44.0231, 8.1, 3.57, 0xff9458], ["Sigma Draconis", 19.5822, 69.6611, 4.68, 5.76, 0xffd9a0]
+      ];
+
+      function initUniverse(cnv, hud) {
+        let renderer;
+        try {
+          renderer = new THREE.WebGLRenderer({ canvas: cnv, antialias: true, alpha: false, logarithmicDepthBuffer: true });
+        } catch (err) { cnv.style.display = "none"; return null; }
+        renderer.setClearColor(0x000104, 1);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        renderer.setPixelRatio(dpr);
+        renderer.autoClear = false;
+        if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+        const junk = [];
+        const keep = (o) => { junk.push(o); return o; };
+
+        // ── camera: fixed at the origin, orientation is all that changes ──
+        const camera = new THREE.PerspectiveCamera(58, 1, 0.02, 6e9);
+        const skyCam = new THREE.PerspectiveCamera(58, 1, 0.5, 4e4);
+        const sky = new THREE.Scene();
+        const local = new THREE.Scene();
+
+        // Where the observer actually is, in metres. Doubles all the way.
+        const camPos = { x: 0, y: 0, z: -3 * AU };
+        const q = new THREE.Quaternion();
+        let yaw = 0, pitch = 0;
+
+        // Render units for the local pass: 1 unit = 1000 km keeps Neptune's
+        // orbit inside the far plane while Earth is still 6.4 units across.
+        const UNIT = 1e6;
+
+        function eqDir(raH, decDeg) {
+          const a = raH * 15 * Math.PI / 180, d = decDeg * Math.PI / 180;
+          return [Math.cos(d) * Math.cos(a), Math.sin(d), -Math.cos(d) * Math.sin(a)];
+        }
+
+        // ── sky: stars carried at their true 3D positions ──
+        const SKY_R = 9000;
+        const starList = STARS3D.map((s) => {
+          const dir = eqDir(s[1], s[2]);
+          const dm = s[4] * PC;
+          return {
+            name: s[0], mag: s[3], col: s[5], distPc: s[4],
+            x: dir[0] * dm, y: dir[1] * dm, z: dir[2] * dm,
+            // Absolute magnitude, so brightness changes correctly as you approach.
+            absMag: s[3] - 5 * (Math.log10(s[4]) - 1)
+          };
+        });
+        // Procedural filler so the sky is not just the catalogue.
+        const FILL = 3000;
+        const fill = [];
+        let seed = 12345;
+        const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+        for (let i = 0; i < FILL; i++) {
+          const u = rnd() * 2 - 1, a = rnd() * Math.PI * 2, s2 = Math.sqrt(1 - u * u);
+          const d = (60 + Math.pow(rnd(), 0.4) * 2200) * PC;
+          fill.push({ x: Math.cos(a) * s2 * d, y: u * d, z: Math.sin(a) * s2 * d,
+                      absMag: -2 + rnd() * 8, col: rnd() > 0.85 ? 0xffd0a0 : (rnd() > 0.5 ? 0xdfeaff : 0xffffff) });
+        }
+
+        const TOT = starList.length + FILL;
+        const sPos = new Float32Array(TOT * 3);
+        const sCol = new Float32Array(TOT * 3);
+        const sSize = new Float32Array(TOT);
+        const sGeo = keep(new THREE.BufferGeometry());
+        sGeo.setAttribute("position", new THREE.BufferAttribute(sPos, 3));
+        sGeo.setAttribute("color", new THREE.BufferAttribute(sCol, 3));
+        sGeo.setAttribute("aSize", new THREE.BufferAttribute(sSize, 1));
+        sGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), SKY_R * 2);
+        const sMat = keep(new THREE.ShaderMaterial({
+          transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+          uniforms: { uDpr: { value: dpr } },
+          vertexShader: [
+            "attribute float aSize; varying vec3 vC; uniform float uDpr;",
+            "void main(){ vC = color;",
+            "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);",
+            "  gl_PointSize = aSize * uDpr; }"
+          ].join("\n"),
+          fragmentShader: [
+            "precision highp float; varying vec3 vC;",
+            "void main(){ vec2 p = gl_PointCoord - vec2(0.5); float r = length(p)*2.0;",
+            "  if (r > 1.0) discard;",
+            "  float core = pow(1.0 - r, 3.0);",
+            "  float spike = pow(max(0.0, 1.0 - abs(p.x)*14.0), 3.0) + pow(max(0.0, 1.0 - abs(p.y)*14.0), 3.0);",
+            "  gl_FragColor = vec4(vC, min(1.0, core + spike * 0.30 * (1.0-r))); }"
+          ].join("\n"),
+          vertexColors: true
+        }));
+        sky.add(new THREE.Points(sGeo, sMat));
+
+        // The Milky Way, as a band of light that thickens toward the centre.
+        const mwTex = (function () {
+          const W = 1024, H = 512, c = document.createElement("canvas");
+          c.width = W; c.height = H;
+          const g = c.getContext("2d");
+          const img = g.createImageData(W, H), D = img.data;
+          const h2 = (x, y, s) => { let n = Math.imul(x | 0, 1619) ^ Math.imul(y | 0, 31337) ^ Math.imul(s, 6971); n = Math.imul(n ^ (n >>> 13), 2246822519); return ((n ^ (n >>> 16)) >>> 0) / 4294967295; };
+          const sm = (x, y, s) => { const xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi; const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy); return (h2(xi, yi, s) * (1 - u) + h2(xi + 1, yi, s) * u) * (1 - v) + (h2(xi, yi + 1, s) * (1 - u) + h2(xi + 1, yi + 1, s) * u) * v; };
+          const fb = (x, y, s) => { let a = 0.5, f = 1, o = 0; for (let i = 0; i < 5; i++) { o += a * sm(x * f, y * f, s + i); f *= 2; a *= 0.5; } return o; };
+          for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+            const lat = (y / H - 0.5) * 2;
+            const bulge = Math.exp(-Math.pow((x / W - 0.5) * 3.2, 2));
+            const band = Math.exp(-Math.pow(lat * (17.0 - bulge * 7.0), 2));
+            const n = fb(x * 0.055, y * 0.055, 3);
+            const dust = Math.pow(fb(x * 0.075 + 40, y * 0.13, 9), 2.0);
+            let v = band * (0.35 + 0.9 * n) * (0.35 + 0.9 * bulge);
+            v *= 1 - dust * 0.85 * band;
+            const i4 = (y * W + x) * 4;
+            D[i4] = Math.min(255, v * 235); D[i4 + 1] = Math.min(255, v * 220); D[i4 + 2] = Math.min(255, v * 205);
+            D[i4 + 3] = Math.min(255, v * 210);
+          }
+          g.putImageData(img, 0, 0);
+          const t = keep(new THREE.CanvasTexture(c));
+          if ("colorSpace" in t) t.colorSpace = THREE.SRGBColorSpace;
+          return t;
+        })();
+        const milky = new THREE.Mesh(keep(new THREE.SphereGeometry(SKY_R * 1.4, 48, 32)),
+          keep(new THREE.MeshBasicMaterial({ map: mwTex, side: THREE.BackSide, transparent: true,
+            blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, opacity: 0.26 })));
+        milky.rotation.set(-1.05, 0.4, 0.72);       // the galactic plane, tilted off the equator
+        sky.add(milky);
+
+        // ── local: the Sun and its planets, at true scale ──
+        function surfaceTex(kind, col) {
+          const W = 256, H = 128, c = document.createElement("canvas");
+          c.width = W; c.height = H;
+          const g = c.getContext("2d");
+          const img = g.createImageData(W, H), D = img.data;
+          const h2 = (x, y, s) => { let n = Math.imul(x | 0, 1619) ^ Math.imul(y | 0, 31337) ^ Math.imul(s, 6971); n = Math.imul(n ^ (n >>> 13), 2246822519); return ((n ^ (n >>> 16)) >>> 0) / 4294967295; };
+          const sm = (x, y, s) => { const xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi; const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy); return (h2(xi, yi, s) * (1 - u) + h2(xi + 1, yi, s) * u) * (1 - v) + (h2(xi, yi + 1, s) * (1 - u) + h2(xi + 1, yi + 1, s) * u) * v; };
+          const fb = (x, y, s, o) => { let a = 0.5, f = 1, r = 0; for (let i = 0; i < (o || 4); i++) { r += a * sm(x * f, y * f, s + i); f *= 2; a *= 0.5; } return r; };
+          const gassy = /jupiter|saturn|uranus|neptune|venus/.test(kind);
+          for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+            let t;
+            if (gassy) {
+              const lat = (y / H) * 2 - 1;
+              const freq = kind === "jupiter" ? 14 : kind === "saturn" ? 10 : 4;
+              t = 0.5 + 0.5 * Math.sin(lat * freq + fb(x * 0.05, y * 0.28, 11, 2) * 2.4);
+              t = t * 0.72 + fb(x * 0.03, y * 0.13, 3, 2) * 0.28;
+            } else {
+              t = fb(x * 0.06, y * 0.06, 7, 4);
+              if (kind === "earth") t = t > 0.52 ? 0.85 : 0.15;      // land / sea
+            }
+            const i4 = (y * W + x) * 4;
+            let r = col[0], gg = col[1], b = col[2];
+            if (kind === "earth") {
+              if (t > 0.5) { r = 62 + fb(x * 0.2, y * 0.2, 21, 2) * 70; gg = 110 + fb(x * 0.2, y * 0.2, 5, 2) * 60; b = 58; }
+              else { r = 16; gg = 52 + t * 60; b = 105 + t * 70; }
+              const ice = Math.pow(Math.abs(y / H - 0.5) * 2, 5) * 1.5;
+              r += ice * 220; gg += ice * 228; b += ice * 240;
+            } else {
+              r = col[0] * (0.66 + t * 0.62); gg = col[1] * (0.66 + t * 0.62); b = col[2] * (0.66 + t * 0.62);
+            }
+            D[i4] = Math.min(255, r); D[i4 + 1] = Math.min(255, gg); D[i4 + 2] = Math.min(255, b); D[i4 + 3] = 255;
+          }
+          g.putImageData(img, 0, 0);
+          if (kind === "jupiter") {
+            g.fillStyle = "rgba(196,96,62,0.85)";
+            g.beginPath(); g.ellipse(W * 0.63, H * 0.62, 17, 8, 0, 0, Math.PI * 2); g.fill();
+          }
+          const t2 = keep(new THREE.CanvasTexture(c));
+          if ("colorSpace" in t2) t2.colorSpace = THREE.SRGBColorSpace;
+          t2.anisotropy = 4;
+          return t2;
+        }
+
+        const sunMesh = new THREE.Mesh(keep(new THREE.SphereGeometry(1, 48, 32)),
+          keep(new THREE.MeshBasicMaterial({ color: 0xfff2d2 })));
+        local.add(sunMesh);
+        const sunGlow = (function () {
+          const N = 128, c = document.createElement("canvas");
+          c.width = c.height = N;
+          const g = c.getContext("2d");
+          const rg = g.createRadialGradient(N / 2, N / 2, 0, N / 2, N / 2, N / 2);
+          rg.addColorStop(0, "rgba(255,250,235,0.95)"); rg.addColorStop(0.13, "rgba(255,232,175,0.5)");
+          rg.addColorStop(0.42, "rgba(255,190,110,0.12)"); rg.addColorStop(1, "rgba(255,170,80,0)");
+          g.fillStyle = rg; g.fillRect(0, 0, N, N);
+          const s = new THREE.Sprite(keep(new THREE.SpriteMaterial({ map: keep(new THREE.CanvasTexture(c)),
+            transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false })));
+          local.add(s); return s;
+        })();
+
+        const bodies = SOL.map((p) => {
+          const mesh = new THREE.Mesh(keep(new THREE.SphereGeometry(1, 48, 32)),
+            keep(new THREE.MeshLambertMaterial({ map: surfaceTex(p.kind, p.col) })));
+          local.add(mesh);
+          let ring = null;
+          if (p.ring) {
+            const rg = keep(new THREE.RingGeometry(p.ring[0], p.ring[1], 96));
+            ring = new THREE.Mesh(rg, keep(new THREE.MeshBasicMaterial({
+              color: 0xd9c79c, transparent: true, opacity: 0.55, side: THREE.DoubleSide })));
+            ring.rotation.x = Math.PI / 2 - 0.47;
+            mesh.add(ring);
+          }
+          return { def: p, mesh: mesh, ring: ring, pos: { x: 0, y: 0, z: 0 } };
+        });
+        local.add(new THREE.AmbientLight(0x223047, 0.5));
+        const sunLight = new THREE.PointLight(0xfff0d8, 3.4, 0, 0);
+        local.add(sunLight);
+
+        // ── where everything is, right now ──
+        let simDays = 0;
+        function updateBodies() {
+          for (const b of bodies) {
+            const p = b.def;
+            const M = p.ph + (simDays / p.per) * Math.PI * 2;
+            let E = M;
+            for (let i = 0; i < 5; i++) E -= (E - p.e * Math.sin(E) - M) / (1 - p.e * Math.cos(E));
+            const xv = p.a * AU * (Math.cos(E) - p.e);
+            const zv = p.a * AU * Math.sqrt(1 - p.e * p.e) * Math.sin(E);
+            b.pos.x = xv; b.pos.y = 0; b.pos.z = zv;
+          }
+        }
+        updateBodies();
+
+        // ── targets you can ask to fly to ──
+        const targets = [{ name: "The Sun", kind: "G2V star · 696,000 km", get: () => ({ x: 0, y: 0, z: 0, r: SOL_R }) }]
+          .concat(bodies.map((b) => ({
+            name: b.def.name, kind: "planet · " + (b.def.r * 2 / 1000).toLocaleString(undefined, { maximumFractionDigits: 0 }) + " km across",
+            get: () => ({ x: b.pos.x, y: b.pos.y, z: b.pos.z, r: b.def.r })
+          })))
+          .concat(starList.slice(0, 22).map((s) => ({
+            name: s.name, kind: "star · " + s.distPc.toFixed(2) + " pc · mag " + s.mag.toFixed(2),
+            get: () => ({ x: s.x, y: s.y, z: s.z, r: SOL_R * 1.4 })
+          })));
+
+        // ── flight ──
+        let speed = 0, throttle = 0, boosting = false;
+        let flyTo = null, flyT = 0;
+        const keys = Object.create(null);
+        let dragging = false, lx = 0, ly = 0;
+
+        function onDown(e) { dragging = true; lx = e.clientX; ly = e.clientY; cnv.focus(); cnv.style.cursor = "grabbing"; }
+        function onMove(e) {
+          if (!dragging) return;
+          yaw -= (e.clientX - lx) * 0.0022;
+          pitch = THREE.MathUtils.clamp(pitch - (e.clientY - ly) * 0.0022, -1.553, 1.553);
+          lx = e.clientX; ly = e.clientY;
+          flyTo = null;
+        }
+        function onUp() { dragging = false; cnv.style.cursor = "grab"; }
+        function onWheel(e) { e.preventDefault(); throttle = THREE.MathUtils.clamp(throttle - Math.sign(e.deltaY) * 0.08, 0, 1); }
+        function onKey(e) {
+          const k = e.key.toLowerCase();
+          if (["w", "a", "s", "d", "f", "shift", " "].indexOf(k) === -1) return;
+          if (e.type === "keydown" && k === "f" && hud.selected) { flyTo = hud.selected; flyT = 0; }
+          keys[k] = e.type === "keydown";
+          boosting = !!keys["shift"];
+          if (k !== "f") e.preventDefault();
+        }
+        cnv.addEventListener("pointerdown", onDown);
+        window.addEventListener("pointermove", onMove);
+        window.addEventListener("pointerup", onUp);
+        cnv.addEventListener("wheel", onWheel, { passive: false });
+        window.addEventListener("keydown", onKey);
+        window.addEventListener("keyup", onKey);
+        cnv.style.touchAction = "none";
+        cnv.style.cursor = "grab";
+
+        // Nearest thing, so the HUD and the throttle both know where we are.
+        const probe = { name: "deep space", kind: "", dist: Infinity, radius: 0 };
+        function nearest() {
+          let best = null, bd = Infinity;
+          const test = (name, kind, x, y, z, r) => {
+            const dx = x - camPos.x, dy = y - camPos.y, dz = z - camPos.z;
+            const d = Math.sqrt(dx * dx + dy * dy + dz * dz) - r;
+            if (d < bd) { bd = d; best = { name: name, kind: kind, dist: d, radius: r }; }
+          };
+          test("The Sun", "G2V star", 0, 0, 0, SOL_R);
+          for (const b of bodies) test(b.def.name, "planet", b.pos.x, b.pos.y, b.pos.z, b.def.r);
+          for (const s of starList) test(s.name, "star", s.x, s.y, s.z, SOL_R * 1.4);
+          if (best) { probe.name = best.name; probe.kind = best.kind; probe.dist = best.dist; probe.radius = best.radius; }
+        }
+
+        function fmtDist(m) {
+          if (m < 1e3) return m.toFixed(0) + " m";
+          if (m < 0.1 * AU) return (m / 1e3).toLocaleString(undefined, { maximumFractionDigits: 0 }) + " km";
+          if (m < 0.2 * LYR) return (m / AU).toFixed(m / AU < 10 ? 3 : 1) + " AU";
+          if (m < 1e3 * LYR) return (m / LYR).toFixed(2) + " ly";
+          return (m / LYR / 1e3).toFixed(2) + " kly";
+        }
+        function fmtSpeed(v) {
+          const c = 299792458;
+          if (v < 1e3) return v.toFixed(0) + " m/s";
+          if (v < 0.01 * c) return (v / 1e3).toFixed(0) + " km/s";
+          if (v < 300 * c) return (v / c).toFixed(2) + " c";
+          return (v / c).toExponential(1) + " c";
+        }
+
+        const fwd = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), right = new THREE.Vector3();
+        const eul = new THREE.Euler(0, 0, 0, "YXZ");
+        const tmp = new THREE.Vector3();
+
+        let w = 1, h = 1, raf = 0, alive = true, last = performance.now();
+        function resize() {
+          w = cnv.clientWidth || window.innerWidth; h = cnv.clientHeight || window.innerHeight;
+          renderer.setSize(w, h, false);
+          camera.aspect = skyCam.aspect = w / h;
+          camera.updateProjectionMatrix(); skyCam.updateProjectionMatrix();
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        function frame(now) {
+          if (!alive) return;
+          const dt = Math.min(80, now - last) || 16.7;
+          last = now;
+          const secs = dt / 1000;
+
+          simDays += secs * 0.6;
+          updateBodies();
+          nearest();
+
+          // Throttle from keys, and speed scaled to how much room there is —
+          // metres per second next to a planet, light years per second between
+          // stars, without ever needing to be told which.
+          if (keys["w"]) throttle = Math.min(1, throttle + secs * 0.9);
+          if (keys["s"]) throttle = Math.max(0, throttle - secs * 1.4);
+          const room = Math.max(probe.radius * 0.5, Math.min(probe.dist, 4e3 * LYR));
+          const vMax = room * (boosting ? 3.2 : 0.9);
+          const want = flyTo ? vMax : vMax * throttle * throttle;
+          speed += (want - speed) * Math.min(1, secs * 1.6);
+
+          if (flyTo) {
+            // Point at the destination and ease to a stop just outside it.
+            const t = flyTo.get();
+            const dx = t.x - camPos.x, dy = t.y - camPos.y, dz = t.z - camPos.z;
+            const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            const hold = t.r * 4.2;
+            const wantYaw = Math.atan2(-dx, -dz);
+            const wantPitch = Math.asin(THREE.MathUtils.clamp(dy / (d || 1), -1, 1));
+            let dyaw = wantYaw - yaw;
+            while (dyaw > Math.PI) dyaw -= Math.PI * 2;
+            while (dyaw < -Math.PI) dyaw += Math.PI * 2;
+            yaw += dyaw * Math.min(1, secs * 3.2);
+            pitch += (wantPitch - pitch) * Math.min(1, secs * 3.2);
+            const step = Math.min(speed * secs, Math.max(0, d - hold));
+            if (d - hold < 1) { flyTo = null; throttle = 0; speed = 0; }
+            else if (d > 0) { camPos.x += dx / d * step; camPos.y += dy / d * step; camPos.z += dz / d * step; }
+          }
+
+          eul.set(pitch, yaw, 0);
+          q.setFromEuler(eul);
+          camera.quaternion.copy(q); skyCam.quaternion.copy(q);
+          fwd.set(0, 0, -1).applyQuaternion(q);
+          right.set(1, 0, 0).applyQuaternion(q);
+
+          if (!flyTo) {
+            const step = speed * secs;
+            camPos.x += fwd.x * step; camPos.y += fwd.y * step; camPos.z += fwd.z * step;
+            if (keys["a"]) { camPos.x -= right.x * step * 0.4; camPos.y -= right.y * step * 0.4; camPos.z -= right.z * step * 0.4; }
+            if (keys["d"]) { camPos.x += right.x * step * 0.4; camPos.y += right.y * step * 0.4; camPos.z += right.z * step * 0.4; }
+          }
+
+          // ── sky pass: direction plus real parallax ──
+          const all = starList.length + fill.length;
+          for (let i = 0; i < all; i++) {
+            const s = i < starList.length ? starList[i] : fill[i - starList.length];
+            const dx = s.x - camPos.x, dy = s.y - camPos.y, dz = s.z - camPos.z;
+            const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+            const k = SKY_R / d;
+            sPos[i * 3] = dx * k; sPos[i * 3 + 1] = dy * k; sPos[i * 3 + 2] = dz * k;
+            // Apparent magnitude from the distance we are actually at.
+            const pc = d / PC;
+            const m = s.absMag + 5 * (Math.log10(Math.max(1e-6, pc)) - 1);
+            const px = Math.max(0, Math.min(26, 7.6 - m * 1.25));
+            sSize[i] = px;
+            const c = s.col;
+            const b = Math.min(1, Math.max(0.05, (px / 7)));
+            sCol[i * 3] = (((c >> 16) & 255) / 255) * b;
+            sCol[i * 3 + 1] = (((c >> 8) & 255) / 255) * b;
+            sCol[i * 3 + 2] = ((c & 255) / 255) * b;
+          }
+          sGeo.attributes.position.needsUpdate = true;
+          sGeo.attributes.color.needsUpdate = true;
+          sGeo.attributes.aSize.needsUpdate = true;
+
+          // ── local pass: real geometry, in 1000 km units ──
+          let anyLocal = false;
+          const place = (mesh, x, y, z, radius) => {
+            const rx = (x - camPos.x) / UNIT, ry = (y - camPos.y) / UNIT, rz = (z - camPos.z) / UNIT;
+            const d = Math.sqrt(rx * rx + ry * ry + rz * rz);
+            const rr = radius / UNIT;
+            // Anything whose disc is under a pixel is left to the sky pass.
+            const px = (rr / Math.max(d, 1e-6)) * (h / (2 * Math.tan(camera.fov * Math.PI / 360)));
+            if (px < 0.4 || d > 3e9) { mesh.visible = false; return; }
+            mesh.visible = true; anyLocal = true;
+            mesh.position.set(rx, ry, rz);
+            mesh.scale.setScalar(rr);
+            return d;
+          };
+          place(sunMesh, 0, 0, 0, SOL_R);
+          sunGlow.position.copy(sunMesh.position);
+          {
+            const dSun = Math.sqrt(camPos.x * camPos.x + camPos.y * camPos.y + camPos.z * camPos.z) / UNIT;
+            const s = Math.max(SOL_R / UNIT * 6, dSun * 0.05);
+            sunGlow.scale.setScalar(s);
+            sunGlow.visible = dSun < 3e8;
+            sunLight.position.copy(sunMesh.position);
+            sunLight.intensity = 3.4;
+          }
+          for (const b of bodies) {
+            place(b.mesh, b.pos.x, b.pos.y, b.pos.z, b.def.r);
+            b.mesh.rotation.y += secs * 0.09;
+          }
+
+          renderer.clear();
+          renderer.render(sky, skyCam);
+          renderer.clearDepth();
+          if (anyLocal) renderer.render(local, camera);
+
+          hud.update({
+            target: probe.name,
+            kind: probe.kind,
+            dist: fmtDist(Math.max(0, probe.dist)),
+            speed: fmtSpeed(speed),
+            radius: probe.radius > 0 ? fmtDist(probe.radius * 2) + " across" : "—",
+            scale: fmtDist(Math.sqrt(camPos.x * camPos.x + camPos.y * camPos.y + camPos.z * camPos.z)) + " from Sol",
+            throttle: flyTo ? 1 : throttle
+          });
+
+          raf = requestAnimationFrame(frame);
+        }
+        raf = requestAnimationFrame(frame);
+
+        return {
+          targets: targets,
+          goTo: (t) => { flyTo = t; flyT = 0; },
+          stop: () => {
+            alive = false;
+            cancelAnimationFrame(raf);
+            window.removeEventListener("resize", resize);
+            cnv.removeEventListener("pointerdown", onDown);
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+            cnv.removeEventListener("wheel", onWheel);
+            window.removeEventListener("keydown", onKey);
+            window.removeEventListener("keyup", onKey);
+            junk.forEach((o) => o.dispose && o.dispose());
+            renderer.dispose();
+          }
         };
       }
 
@@ -3760,6 +4291,72 @@
         }
         bindCloseButton(ctClose, closeContact);
 
+        // About opens the universe.
+        const uniStage = document.getElementById("uni-stage");
+        const uniEl = {
+          target: document.getElementById("uni-target"), kind: document.getElementById("uni-kind"),
+          dist: document.getElementById("uni-dist"), speed: document.getElementById("uni-speed"),
+          radius: document.getElementById("uni-radius"), scale: document.getElementById("uni-scale"),
+          fill: document.getElementById("uni-throttle-fill"), body: document.getElementById("uni-nav-body")
+        };
+        const uniHud = {
+          selected: null,
+          update: (d) => {
+            if (uniEl.target) uniEl.target.textContent = d.target;
+            if (uniEl.kind) uniEl.kind.textContent = d.kind;
+            if (uniEl.dist) uniEl.dist.textContent = d.dist;
+            if (uniEl.speed) uniEl.speed.textContent = d.speed;
+            if (uniEl.radius) uniEl.radius.textContent = d.radius;
+            if (uniEl.scale) uniEl.scale.textContent = d.scale;
+            if (uniEl.fill) uniEl.fill.style.width = (d.throttle * 100).toFixed(1) + "%";
+          }
+        };
+        function buildUniNav() {
+          if (!universe || !uniEl.body) return;
+          uniEl.body.innerHTML = "";
+          const frag = document.createDocumentFragment();
+          universe.targets.forEach((t) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "uni-dest";
+            b.innerHTML = '<span>' + t.name + '</span><i>' + t.kind + '</i>';
+            b.addEventListener("click", () => {
+              uniHud.selected = t;
+              universe.goTo(t);
+              Array.from(uniEl.body.children).forEach((c) => c.classList.remove("is-on"));
+              b.classList.add("is-on");
+            });
+            frag.appendChild(b);
+          });
+          uniEl.body.appendChild(frag);
+        }
+        function openAbout() {
+          aboutActive = true;
+          bodyEl.classList.add("projects-mode");
+          uniStage.classList.add("is-open");
+          uniStage.setAttribute("aria-hidden", "false");
+          const cv = uniStage.querySelector("#uni-canvas");
+          if (cv) requestAnimationFrame(() => {
+            if (universe) universe.stop();
+            universe = initUniverse(cv, uniHud);
+            buildUniNav();
+            cv.focus({ preventScroll: true });
+          });
+        }
+        function closeAbout() {
+          aboutActive = false;
+          bodyEl.classList.remove("projects-mode");
+          uniStage.classList.remove("is-open");
+          uniStage.setAttribute("aria-hidden", "true");
+          if (universe) { universe.stop(); universe = null; }
+          uniHud.selected = null;
+        }
+        bindCloseButton(document.getElementById("uni-close"), closeAbout);
+        const uniNavX = document.getElementById("uni-nav-x");
+        const uniNavOpen = document.getElementById("uni-nav-open");
+        if (uniNavX) uniNavX.addEventListener("click", () => uniStage.classList.add("nav-hidden"));
+        if (uniNavOpen) uniNavOpen.addEventListener("click", () => uniStage.classList.remove("nav-hidden"));
+
         // Skills opens the star chart.
         const skStage = document.getElementById("skills-stage");
         const skClose = document.getElementById("skills-close");
@@ -4043,7 +4640,8 @@
           node.addEventListener("click", (e) => {
             e.preventDefault();
             const name = node.getAttribute("data-modal");
-            if (name === "projects") openProjects();
+            if (name === "about") openAbout();
+            else if (name === "projects") openProjects();
             else if (name === "experience") openJourney();
             else if (name === "contact") openContact();
             else if (name === "skills") openSkills();
@@ -4071,7 +4669,7 @@
           if (e.key === "Escape") {
             // Riding? Esc gets you back to orbit view first, not out of contact.
             if (riding) { leaveRide(); return; }
-            closeModal(); closeProjects(); closeJourney(); closeContact(); closeSkills();
+            closeModal(); closeProjects(); closeJourney(); closeContact(); closeSkills(); closeAbout();
           }
         });
       }
