@@ -255,7 +255,6 @@
           <button type="button" class="ct-hop" id="ct-prev" aria-label="Previous satellite">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
-          <button type="button" class="ct-shutter" id="ct-shutter" aria-label="Take a photograph"><i></i></button>
           <button type="button" class="ct-hop" id="ct-next" aria-label="Next satellite">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
@@ -3980,8 +3979,6 @@
 
         if (ctBoard) ctBoard.addEventListener("click", boardRide);
         bindCloseButton(document.getElementById("ct-eject"), leaveRide);
-        const shutterBtn = document.getElementById("ct-shutter");
-        if (shutterBtn) shutterBtn.addEventListener("click", shoot);
         const prevBtn = document.getElementById("ct-prev");
         const nextBtn = document.getElementById("ct-next");
         if (prevBtn) prevBtn.addEventListener("click", () => hopCraft(-1));
