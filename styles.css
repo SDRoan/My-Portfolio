@@ -3922,3 +3922,60 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   .neo-hud--br { right: 12px; bottom: 78px; min-width: 190px; }
   .neo-legend { gap: 12px; font-size: 8px; }
 }
+
+/* Operator introduction — the point of the section */
+.neo-bio {
+  position: absolute;
+  right: 44px;
+  top: 96px;
+  z-index: 4;
+  width: 306px;
+  padding: 12px 14px 14px;
+  border: 1px solid rgba(54, 247, 168, 0.28);
+  background: rgba(3, 14, 11, 0.74);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.neo-stage.bio-hidden .neo-bio { opacity: 0; pointer-events: none; transform: translateX(14px); }
+.neo-bio-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 8px; margin-bottom: 9px;
+  border-bottom: 1px solid rgba(54, 247, 168, 0.2);
+}
+.neo-bio-tag { font-size: 9px; letter-spacing: 0.18em; color: rgba(255, 182, 72, 0.9); }
+.neo-bio-name {
+  display: block;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 17px; font-weight: 600; color: #eaffff;
+  text-shadow: 0 0 14px rgba(54, 247, 168, 0.45);
+}
+.neo-bio-sub {
+  display: block; margin-top: 3px;
+  font-size: 8.5px; letter-spacing: 0.16em; color: rgba(54, 247, 168, 0.5);
+}
+.neo-bio p {
+  margin: 10px 0 0;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 12px; line-height: 1.6;
+  color: rgba(196, 255, 228, 0.78);
+}
+.neo-bio p b { color: #eaffff; font-weight: 600; }
+.neo-bio-open {
+  position: absolute; right: 44px; top: 96px; z-index: 4;
+  padding: 7px 12px; border: 1px solid rgba(54, 247, 168, 0.3);
+  background: rgba(3, 14, 11, 0.7); color: rgba(255, 182, 72, 0.9);
+  font-family: inherit; font-size: 10px; letter-spacing: 0.14em; cursor: pointer;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+}
+.neo-stage.bio-hidden .neo-bio-open { opacity: 1; pointer-events: auto; }
+
+@media (max-width: 1100px) {
+  .neo-bio { width: 250px; right: 16px; top: 88px; }
+  .neo-bio-open { right: 16px; top: 88px; }
+}
+@media (max-width: 900px) {
+  .neo-bio { left: 12px; right: 12px; width: auto; top: auto; bottom: 96px; }
+  .neo-stage.bio-hidden .neo-bio { transform: translateY(14px); }
+  .neo-bio-open { right: 12px; top: 68px; }
+  .neo-hud--br { display: none; }
+}

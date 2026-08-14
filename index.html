@@ -297,6 +297,20 @@
       </div>
       <button type="button" class="neo-panel-open" id="neo-panel-open">☰ TRACK LIST</button>
 
+      <!-- The introduction stays the point of the section; the scope is the
+           backdrop it is read against, not a replacement for it. -->
+      <div class="neo-bio" id="neo-bio">
+        <div class="neo-bio-head">
+          <span class="neo-bio-tag">◈ STATION OPERATOR</span>
+          <button type="button" class="neo-panel-x" id="neo-bio-x" aria-label="Hide introduction">−</button>
+        </div>
+        <strong class="neo-bio-name">Saibyasachi Ruhan</strong>
+        <span class="neo-bio-sub">QUEENS COLLEGE · CS &nbsp;·&nbsp; NEW YORK, NY</span>
+        <p>I'm a CS student who learns best by <b>building real things</b> — and then carefully measuring whether they actually helped.</p>
+        <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+      </div>
+      <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
+
       <div class="neo-hud neo-hud--br" id="neo-detail">
         <div class="neo-d-name" id="neo-d-name">—</div>
         <div class="neo-d-row"><span>CLOSE APPROACH</span><b id="neo-d-when">—</b></div>
@@ -4121,6 +4135,10 @@
         const neoOpen = document.getElementById("neo-panel-open");
         if (neoX) neoX.addEventListener("click", () => neoStage.classList.add("list-hidden"));
         if (neoOpen) neoOpen.addEventListener("click", () => neoStage.classList.remove("list-hidden"));
+        const neoBioX = document.getElementById("neo-bio-x");
+        const neoBioOpen = document.getElementById("neo-bio-open");
+        if (neoBioX) neoBioX.addEventListener("click", () => neoStage.classList.add("bio-hidden"));
+        if (neoBioOpen) neoBioOpen.addEventListener("click", () => neoStage.classList.remove("bio-hidden"));
 
         // Skills opens the star chart.
         const skStage = document.getElementById("skills-stage");
