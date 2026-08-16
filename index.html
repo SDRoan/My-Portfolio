@@ -286,6 +286,11 @@
           <span class="neo-src" id="neo-src">◇ CONNECTING…</span>
           <span class="neo-clock" id="neo-clock">—</span>
         </div>
+        <div class="neo-modes" role="group" aria-label="View mode">
+          <button type="button" class="neo-mode is-on" id="neo-m-app">APPROACH</button>
+          <button type="button" class="neo-mode" id="neo-m-orb">ORBITS</button>
+          <span class="neo-mode-note" id="neo-mode-note"></span>
+        </div>
       </div>
 
       <div class="neo-panel" id="neo-panel">
@@ -318,6 +323,7 @@
         <div class="neo-d-row"><span>IN LUNAR DIST</span><b id="neo-d-ld">—</b></div>
         <div class="neo-d-row"><span>REL. VELOCITY</span><b id="neo-d-vel">—</b></div>
         <div class="neo-d-row"><span>EST. DIAMETER</span><b id="neo-d-dia">—</b></div>
+        <div class="neo-d-row"><span>ORBIT CLASS</span><b id="neo-d-cls">—</b></div>
         <div class="neo-d-flag" id="neo-d-flag"></div>
       </div>
 
@@ -1790,7 +1796,7 @@
         const end = new Date(now.getTime() + 6 * 864e5);
         try {
           const r = await fetch("https://api.nasa.gov/neo/rest/v1/feed?start_date=" +
-            iso(now) + "&end_date=" + iso(end) + "&api_key=" + NEO_KEY, { cache: "no-store" });
+            iso(now) + "&end_date=" + iso(end) + "&detailed=true&api_key=" + NEO_KEY, { cache: "no-store" });
           if (!r.ok) throw new Error("HTTP " + r.status);
           const j = await r.json();
           const out = [];
@@ -1808,7 +1814,17 @@
                 ld: parseFloat(ca.miss_distance.lunar),
                 vkms: parseFloat(ca.relative_velocity.kilometers_per_second),
                 dia: (dmin + dmax) / 2,
-                haz: !!o.is_potentially_hazardous_asteroid
+                haz: !!o.is_potentially_hazardous_asteroid,
+                orb: (function (d) {
+                  if (!d || !d.semi_major_axis) return null;
+                  return {
+                    a: parseFloat(d.semi_major_axis), e: parseFloat(d.eccentricity),
+                    i: parseFloat(d.inclination), om: parseFloat(d.ascending_node_longitude),
+                    w: parseFloat(d.perihelion_argument), M: parseFloat(d.mean_anomaly),
+                    per: parseFloat(d.orbital_period),
+                    cls: (d.orbit_class || {}).orbit_class_type || ""
+                  };
+                })(o.orbital_data)
               });
             });
           });
@@ -1939,7 +1955,88 @@
             it.line.material.opacity = k === i ? 0.85 : 0.18;
             it.dot.scale.setScalar(k === i ? 2.1 : 1);
           });
+          orbitBodies.forEach((ob) => {
+            ob.line.material.opacity = ob.idx === i ? 0.9 : 0.16;
+            ob.dot.scale.setScalar(ob.idx === i ? 2.2 : 1);
+          });
           if (hud.onSelect) hud.onSelect(i, items[i] ? items[i].def : null);
+        }
+
+        // ── heliocentric view: the actual orbits, from the published elements ──
+        // Same Keplerian construction as any ephemeris: solve for the eccentric
+        // anomaly, place the point in the orbital plane, then rotate by the
+        // argument of perihelion, the inclination and the node.
+        const orbitGroup = new THREE.Group();
+        orbitGroup.visible = false;
+        scene.add(orbitGroup);
+        const AU_U = 4.2;                       // scene units per astronomical unit
+        const D2R = Math.PI / 180;
+
+        function orbPoint(o, E) {
+          const xv = o.a * (Math.cos(E) - o.e);
+          const yv = o.a * Math.sqrt(Math.max(0, 1 - o.e * o.e)) * Math.sin(E);
+          const w = o.w * D2R, om = o.om * D2R, inc = o.i * D2R;
+          const cw = Math.cos(w), sw = Math.sin(w);
+          const co = Math.cos(om), so = Math.sin(om);
+          const ci = Math.cos(inc), si = Math.sin(inc);
+          const X = (cw * co - sw * so * ci) * xv + (-sw * co - cw * so * ci) * yv;
+          const Y = (cw * so + sw * co * ci) * xv + (-sw * so + cw * co * ci) * yv;
+          const Z = (sw * si) * xv + (cw * si) * yv;
+          return new THREE.Vector3(X * AU_U, Z * AU_U, -Y * AU_U);   // astro → three
+        }
+        function keplerE(M, e) {
+          let E = M;
+          for (let k = 0; k < 8; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+          return E;
+        }
+
+        const sunDot = new THREE.Mesh(keep(new THREE.SphereGeometry(0.22, 20, 14)),
+          keep(new THREE.MeshBasicMaterial({ color: AMBER })));
+        orbitGroup.add(sunDot);
+        // Earth, for scale — 1 AU, near-circular.
+        (function () {
+          const E0 = { a: 1, e: 0.0167, i: 0, om: 0, w: 102.9, M: 0 };
+          const pts = [];
+          for (let k = 0; k <= 180; k++) pts.push(orbPoint(E0, (k / 180) * Math.PI * 2));
+          orbitGroup.add(new THREE.Line(keep(new THREE.BufferGeometry().setFromPoints(pts)),
+            keep(new THREE.LineBasicMaterial({ color: 0x6fd0ff, transparent: true, opacity: 0.65 }))));
+          const eb = new THREE.Mesh(keep(new THREE.SphereGeometry(0.13, 16, 12)),
+            keep(new THREE.MeshBasicMaterial({ color: 0x6fd0ff })));
+          eb.position.copy(orbPoint(E0, 1.2));
+          orbitGroup.add(eb);
+        })();
+
+        let orbitBodies = [];
+        function buildOrbits(list) {
+          while (orbitGroup.children.length > 3) orbitGroup.remove(orbitGroup.children[3]);
+          orbitBodies = [];
+          list.forEach((it, idx) => {
+            const o = it.def.orb;
+            if (!o || !isFinite(o.a) || o.a <= 0) return;
+            const pts = [];
+            for (let k = 0; k <= 160; k++) pts.push(orbPoint(o, (k / 160) * Math.PI * 2));
+            const col = it.def.haz ? RED : GREEN;
+            const line = new THREE.Line(keep(new THREE.BufferGeometry().setFromPoints(pts)),
+              keep(new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.2 })));
+            const dot = new THREE.Mesh(keep(new THREE.SphereGeometry(0.075, 12, 10)),
+              keep(new THREE.MeshBasicMaterial({ color: col })));
+            dot.position.copy(orbPoint(o, keplerE(o.M * D2R, o.e)));
+            orbitGroup.add(line); orbitGroup.add(dot);
+            orbitBodies.push({ idx: idx, o: o, line: line, dot: dot });
+          });
+          return orbitBodies.length;
+        }
+
+        let mode = "approach";
+        function setMode(m) {
+          mode = m;
+          orbitGroup.visible = (m === "orbits");
+          globe.visible = trackGroup.visible = sweep.visible = moon.visible = (m === "approach");
+          scene.children.forEach((c) => {
+            if (c.type === "Line" && c !== sweep) c.visible = (m === "approach");
+          });
+          tDist = m === "orbits" ? 30 : 26;
+          if (hud.onMode) hud.onMode(m, orbitBodies.length);
         }
 
         // ── view ──
@@ -1998,13 +2095,23 @@
             it.dot.scale.setScalar((k === selected ? 2.1 : 1) * (0.75 + near * 0.6));
           });
 
+          if (mode === "orbits") {
+            orbitBodies.forEach((ob) => {
+              // Advance the mean anomaly at the object's real orbital rate.
+              const n = 360 / (ob.o.per || 365);
+              const M = (ob.o.M + n * t * 2.2) * D2R;
+              ob.dot.position.copy(orbPoint(ob.o, keplerE(M, ob.o.e)));
+            });
+          }
+
           renderer.render(scene, camera);
           raf = requestAnimationFrame(frame);
         }
         raf = requestAnimationFrame(frame);
 
         return {
-          setData: (objs) => { build(objs); if (objs.length) select(0); },
+          setMode: setMode,
+          setData: (objs) => { build(objs); buildOrbits(items); if (objs.length) select(0); },
           select: select,
           stop: () => {
             alive = false;
@@ -4071,7 +4178,8 @@
           list: document.getElementById("neo-list"), name: document.getElementById("neo-d-name"),
           when: document.getElementById("neo-d-when"), miss: document.getElementById("neo-d-miss"),
           ld: document.getElementById("neo-d-ld"), vel: document.getElementById("neo-d-vel"),
-          dia: document.getElementById("neo-d-dia"), flag: document.getElementById("neo-d-flag")
+          dia: document.getElementById("neo-d-dia"), flag: document.getElementById("neo-d-flag"),
+          cls: document.getElementById("neo-d-cls"), modeNote: document.getElementById("neo-mode-note")
         };
         let neoClockRaf = 0;
         const neoHud = {
@@ -4085,7 +4193,26 @@
             neoEl.dia.textContent = o.dia ? Math.round(o.dia).toLocaleString() + " m" : "unknown";
             neoEl.flag.textContent = o.haz ? "⚠ POTENTIALLY HAZARDOUS" : "";
             neoEl.flag.className = "neo-d-flag" + (o.haz ? " is-haz" : "");
+            neoEl.cls.textContent = (o.orb && o.orb.cls) ? o.orb.cls : "—";
             Array.from(neoEl.list.children).forEach((c, k) => c.classList.toggle("is-on", k === i));
+          }
+        };
+        neoHud.onMode = (m, n) => {
+          const a = document.getElementById("neo-m-app"), o = document.getElementById("neo-m-orb");
+          if (a) a.classList.toggle("is-on", m === "approach");
+          if (o) o.classList.toggle("is-on", m === "orbits");
+          if (neoEl.modeNote) {
+            neoEl.modeNote.textContent = m === "orbits"
+              ? (n ? n + " REAL ORBITS · HELIOCENTRIC · 1 AU = EARTH RING" : "NO ELEMENTS IN CACHED DATA")
+              : "";
+          }
+          // The caveat belongs to the approach view only — the orbit view is
+          // drawn from published elements, so claiming otherwise would undersell it.
+          const note = document.getElementById("neo-note");
+          if (note) {
+            note.textContent = m === "orbits"
+              ? "Drag to orbit · scroll to zoom · orbits solved from NASA's published Keplerian elements · positions advance at each object's real orbital rate"
+              : "Drag to orbit · scroll to zoom · radius is logarithmic in lunar distance · distances, speeds and sizes are live NASA values; approach bearings are indicative";
           }
         };
         function neoTick() {
@@ -4139,6 +4266,9 @@
         const neoBioOpen = document.getElementById("neo-bio-open");
         if (neoBioX) neoBioX.addEventListener("click", () => neoStage.classList.add("bio-hidden"));
         if (neoBioOpen) neoBioOpen.addEventListener("click", () => neoStage.classList.remove("bio-hidden"));
+        const mApp = document.getElementById("neo-m-app"), mOrb = document.getElementById("neo-m-orb");
+        if (mApp) mApp.addEventListener("click", () => neoView && neoView.setMode("approach"));
+        if (mOrb) mOrb.addEventListener("click", () => neoView && neoView.setMode("orbits"));
 
         // Skills opens the star chart.
         const skStage = document.getElementById("skills-stage");

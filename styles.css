@@ -3979,3 +3979,22 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   .neo-bio-open { right: 12px; top: 68px; }
   .neo-hud--br { display: none; }
 }
+
+/* View-mode toggle */
+.neo-modes { margin-top: 9px; display: flex; align-items: center; gap: 7px; pointer-events: auto; }
+.neo-mode {
+  padding: 4px 11px;
+  border: 1px solid rgba(54, 247, 168, 0.3);
+  background: transparent;
+  color: rgba(110, 255, 192, 0.6);
+  font-family: inherit; font-size: 9px; letter-spacing: 0.16em; cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.neo-mode:hover { border-color: rgba(54, 247, 168, 0.7); color: #eaffff; }
+.neo-mode.is-on {
+  background: rgba(54, 247, 168, 0.16);
+  border-color: rgba(54, 247, 168, 0.8);
+  color: #eaffff;
+  box-shadow: 0 0 12px rgba(54, 247, 168, 0.22);
+}
+.neo-mode-note { margin-left: 6px; font-size: 8.5px; letter-spacing: 0.12em; color: rgba(255, 182, 72, 0.75); }
