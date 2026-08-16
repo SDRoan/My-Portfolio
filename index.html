@@ -277,7 +277,6 @@
     <!-- About: near-Earth encounter tracking, on live NASA data. -->
     <div class="neo-stage" id="neo-stage" aria-hidden="true">
       <canvas id="neo-canvas"></canvas>
-      <div class="neo-crt" aria-hidden="true"></div>
       <button type="button" class="projects-close" id="neo-close" aria-label="Close about">×</button>
 
       <div class="neo-hud neo-hud--tl">
@@ -1854,7 +1853,7 @@
         try {
           renderer = new THREE.WebGLRenderer({ canvas: cnv, antialias: true, alpha: false });
         } catch (err) { cnv.style.display = "none"; return null; }
-        renderer.setClearColor(0x03060a, 1);
+        renderer.setClearColor(0x02040a, 1);
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         renderer.setPixelRatio(dpr);
 
@@ -1862,23 +1861,104 @@
         const camera = new THREE.PerspectiveCamera(46, 2, 0.1, 4000);
         const junk = [];
         const keep = (o) => { junk.push(o); return o; };
-        const GREEN = 0x36f7a8, AMBER = 0xffb648, RED = 0xff5d5d, DIM = 0x1c6b57;
+        const GREEN = 0x9fd0ff, AMBER = 0xffc478, RED = 0xff6b6b, DIM = 0x2b4a70;
 
         // Scene units: 1 unit = one lunar distance. Earth is therefore tiny,
         // which is the honest proportion and the whole point of the display.
         const EARTH_R = 6371 / LD_KM;
 
-        // ── wireframe Earth ──
+        // ── Earth, the same one the Contact stage flies around ──
+        // Real NASA imagery, a real terminator, clouds and an atmosphere rim.
+        // The globe is drawn larger than scale on purpose: at true proportion
+        // against a 100-lunar-distance field it would be a single pixel.
         const globe = new THREE.Group();
         scene.add(globe);
-        const wire = new THREE.LineSegments(
-          keep(new THREE.WireframeGeometry(new THREE.SphereGeometry(EARTH_R * 26, 20, 14))),
-          keep(new THREE.LineBasicMaterial({ color: GREEN, transparent: true, opacity: 0.5 })));
-        globe.add(wire);
-        const shell = new THREE.Mesh(
-          keep(new THREE.SphereGeometry(EARTH_R * 26, 32, 22)),
-          keep(new THREE.MeshBasicMaterial({ color: 0x061b16, transparent: true, opacity: 0.85 })));
-        globe.add(shell);
+        const R_E = EARTH_R * 52;   // exaggerated ~29x; at true scale it is a pixel
+        const tilt = new THREE.Group();
+        tilt.rotation.z = -23.44 * Math.PI / 180;
+        globe.add(tilt);
+
+        const earthMat = keep(new THREE.MeshPhongMaterial({
+          color: 0x8899aa, specular: new THREE.Color(0x24455c), shininess: 240, bumpScale: 0.006
+        }));
+        const earth = new THREE.Mesh(keep(new THREE.SphereGeometry(R_E, 96, 64)), earthMat);
+        tilt.add(earth);
+
+        // Atmosphere: a back-facing shell that brightens toward the limb.
+        const air = new THREE.Mesh(keep(new THREE.SphereGeometry(R_E * 1.09, 64, 44)),
+          keep(new THREE.ShaderMaterial({
+            transparent: true, side: THREE.BackSide, depthWrite: false, blending: THREE.AdditiveBlending,
+            uniforms: {},
+            vertexShader: [
+              "varying vec3 vN; varying vec3 vP;",
+              "void main(){ vN = normalize(normalMatrix * normal);",
+              "  vec4 mv = modelViewMatrix * vec4(position,1.0); vP = mv.xyz;",
+              "  gl_Position = projectionMatrix * mv; }"
+            ].join("\n"),
+            fragmentShader: [
+              "precision highp float; varying vec3 vN; varying vec3 vP;",
+              "void main(){ float rim = 1.0 - abs(dot(normalize(vN), normalize(-vP)));",
+              "  gl_FragColor = vec4(0.35, 0.62, 1.0, pow(rim, 3.0) * 0.85); }"
+            ].join("\n")
+          })));
+        tilt.add(air);
+
+        const texLoader = new THREE.TextureLoader();
+        texLoader.setCrossOrigin("anonymous");
+        const EARTH_TEX = {
+          day: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
+          bump: "https://unpkg.com/three-globe/example/img/earth-topology.png",
+          water: "https://unpkg.com/three-globe/example/img/earth-water.png"
+        };
+        texLoader.load(EARTH_TEX.day, (t) => {
+          t.anisotropy = 8;
+          if ("colorSpace" in t) t.colorSpace = THREE.SRGBColorSpace;
+          earthMat.map = t; earthMat.color.set(0xffffff); earthMat.needsUpdate = true;
+        }, undefined, () => {});
+        texLoader.load(EARTH_TEX.bump, (t) => { earthMat.bumpMap = t; earthMat.needsUpdate = true; }, undefined, () => {});
+        texLoader.load(EARTH_TEX.water, (t) => { earthMat.specularMap = t; earthMat.needsUpdate = true; }, undefined, () => {});
+
+        // Sunlight from a fixed direction, so there is a real day side.
+        const sunLight = new THREE.DirectionalLight(0xfff4e2, 2.6);
+        sunLight.position.set(-4, 1.4, 3.2);
+        scene.add(sunLight);
+        scene.add(new THREE.AmbientLight(0x1b2740, 0.75));
+
+        // ── star field, so it reads as space rather than a screen ──
+        (function () {
+          const N = 2600, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), sz = new Float32Array(N);
+          for (let i = 0; i < N; i++) {
+            const u = Math.random() * 2 - 1, a = Math.random() * Math.PI * 2, s2 = Math.sqrt(1 - u * u), r = 900;
+            pos[i * 3] = Math.cos(a) * s2 * r; pos[i * 3 + 1] = u * r; pos[i * 3 + 2] = Math.sin(a) * s2 * r;
+            const w = 0.72 + Math.random() * 0.28, warm = Math.random() > 0.88;
+            col[i * 3] = warm ? 1 : w; col[i * 3 + 1] = w * (warm ? 0.86 : 0.97); col[i * 3 + 2] = warm ? 0.82 : 1;
+            sz[i] = 0.9 + Math.pow(Math.random(), 3.2) * 2.6;
+          }
+          const g = keep(new THREE.BufferGeometry());
+          g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+          g.setAttribute("color", new THREE.BufferAttribute(col, 3));
+          g.setAttribute("aSize", new THREE.BufferAttribute(sz, 1));
+          g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1800);
+          const m = keep(new THREE.ShaderMaterial({
+            transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, vertexColors: true,
+            uniforms: { uDpr: { value: dpr } },
+            vertexShader: [
+              "attribute float aSize; varying vec3 vC; uniform float uDpr;",
+              "void main(){ vC = color;",
+              "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);",
+              "  gl_PointSize = aSize * uDpr; }"
+            ].join("\n"),
+            fragmentShader: [
+              "precision highp float; varying vec3 vC;",
+              "void main(){ float r = length(gl_PointCoord - vec2(0.5)) * 2.0;",
+              "  if (r > 1.0) discard;",
+              "  gl_FragColor = vec4(vC, pow(1.0 - r, 2.2)); }"
+            ].join("\n")
+          }));
+          const stars = new THREE.Points(g, m);
+          stars.frustumCulled = false;
+          scene.add(stars);
+        })();
 
         function ring(radius, color, opacity, segs) {
           const pts = [];
@@ -1892,7 +1972,7 @@
         // Radius is logarithmic in lunar distance: the feed spans 0.3 LD to
         // ~200 LD, which a linear scale collapses onto the outer ring.
         const ldToR = (ld) => Math.max(1.1, 3 + 6 * Math.log10(Math.max(0.05, ld)));
-        [1, 10, 100].forEach((ld) => scene.add(ring(ldToR(ld), ld === 1 ? AMBER : GREEN, ld === 1 ? 0.75 : 0.3)));
+        [1, 10, 100].forEach((ld) => scene.add(ring(ldToR(ld), ld === 1 ? AMBER : GREEN, ld === 1 ? 0.42 : 0.16)));
         const moon = new THREE.Mesh(keep(new THREE.SphereGeometry(0.09, 16, 12)),
           keep(new THREE.MeshBasicMaterial({ color: AMBER })));
         scene.add(moon);
@@ -1903,12 +1983,12 @@
           const g = keep(new THREE.BufferGeometry().setFromPoints([
             new THREE.Vector3(Math.cos(a) * 1.0, 0, Math.sin(a) * 1.0),
             new THREE.Vector3(Math.cos(a) * 17.5, 0, Math.sin(a) * 17.5)]));
-          scene.add(new THREE.Line(g, keep(new THREE.LineBasicMaterial({ color: DIM, transparent: true, opacity: 0.16 }))));
+          scene.add(new THREE.Line(g, keep(new THREE.LineBasicMaterial({ color: DIM, transparent: true, opacity: 0.09 }))));
         }
 
         // Sweep, like a scope.
         const sweepG = keep(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(17.5, 0, 0)]));
-        const sweep = new THREE.Line(sweepG, keep(new THREE.LineBasicMaterial({ color: GREEN, transparent: true, opacity: 0.5 })));
+        const sweep = new THREE.Line(sweepG, keep(new THREE.LineBasicMaterial({ color: GREEN, transparent: true, opacity: 0.16 })));
         scene.add(sweep);
 
         // ── the objects ──
@@ -1942,7 +2022,7 @@
               path.push(new THREE.Vector3(Math.cos(ang) * rr, Math.sin(incl) * rr * 0.35, Math.sin(ang) * rr));
             }
             const line = new THREE.Line(keep(new THREE.BufferGeometry().setFromPoints(path)),
-              keep(new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.22 })));
+              keep(new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.16 })));
             trackGroup.add(dot); trackGroup.add(line);
             return { def: o, dot: dot, line: line, path: path, col: col };
           });
@@ -1952,7 +2032,7 @@
         function select(i) {
           selected = i;
           items.forEach((it, k) => {
-            it.line.material.opacity = k === i ? 0.85 : 0.18;
+            it.line.material.opacity = k === i ? 0.8 : 0.13;
             it.dot.scale.setScalar(k === i ? 2.1 : 1);
           });
           orbitBodies.forEach((ob) => {
@@ -2035,12 +2115,12 @@
           scene.children.forEach((c) => {
             if (c.type === "Line" && c !== sweep) c.visible = (m === "approach");
           });
-          tDist = m === "orbits" ? 30 : 26;
+          tDist = m === "orbits" ? 30 : 21;
           if (hud.onMode) hud.onMode(m, orbitBodies.length);
         }
 
         // ── view ──
-        let yaw = 0.6, pitch = 0.78, dist = 26, tDist = 26;
+        let yaw = 0.6, pitch = 0.62, dist = 21, tDist = 21;
         let dragging = false, lx = 0, ly = 0;
         function onDown(e) { dragging = true; lx = e.clientX; ly = e.clientY; cnv.style.cursor = "grabbing"; }
         function onMove(e) {
