@@ -1814,13 +1814,19 @@
       // 1000/hour; dropping it in here is the single best upgrade to this view.
       const NEO_KEY = "DEMO_KEY";
 
-      async function loadNEOs() {
+      // Both sources are read and merged. The shipped snapshot is a full year
+      // of JPL close approaches with published PHA flags, timing sigmas and
+      // orbital elements; the live feed reaches only seven days ahead but knows
+      // about anything discovered since the snapshot was cut. Where the two
+      // describe the same pass the snapshot wins, because it carries more.
+      async function loadLiveNEOs() {
         const iso = (d) => d.toISOString().slice(0, 10);
         const now = new Date();
         const end = new Date(now.getTime() + 6 * 864e5);
         try {
           const r = await fetch("https://api.nasa.gov/neo/rest/v1/feed?start_date=" +
-            iso(now) + "&end_date=" + iso(end) + "&detailed=true&api_key=" + NEO_KEY, { cache: "no-store" });
+            iso(now) + "&end_date=" + iso(end) + "&detailed=true&api_key=" + NEO_KEY,
+            { cache: "no-store" });
           if (!r.ok) throw new Error("HTTP " + r.status);
           const j = await r.json();
           const out = [];
@@ -1847,19 +1853,27 @@
                     i: parseFloat(d.inclination), om: parseFloat(d.ascending_node_longitude),
                     w: parseFloat(d.perihelion_argument), M: parseFloat(d.mean_anomaly),
                     per: parseFloat(d.orbital_period),
+                    // Without the epoch the mean anomaly cannot be propagated,
+                    // and the track silently degrades to an indicative line.
+                    ep: parseFloat(d.epoch_osculation),
                     cls: (d.orbit_class || {}).orbit_class_type || ""
                   };
                 })(o.orbital_data)
               });
             });
           });
-          if (!out.length) throw new Error("empty feed");
-          out.sort((a, b) => a.t - b.t);
-          return { objects: out };
-        } catch (e) {
-          const r = await fetch("data/neo-fallback.json", { cache: "force-cache" });
+          return out;
+        } catch (e) { return null; }
+      }
+
+      async function loadCachedNEOs() {
+        try {
+          // No force-cache: the snapshot is rebuilt from JPL and redeployed, and
+          // a stale copy would quietly drop the newer fields it gained.
+          const r = await fetch("data/neo-fallback.json");
+          if (!r.ok) throw new Error("HTTP " + r.status);
           const j = await r.json();
-          const out = j.objects.map((o) => ({
+          return (j.objects || []).map((o) => ({
             name: o.name,
             when: o.when,
             t: Date.parse(o.when.replace(/-/g, " ") + " UTC") || Date.now(),
@@ -1871,15 +1885,24 @@
             // not a guess reconstructed from size and approach distance.
             haz: !!o.pha,
             day: o.day, hm: o.hm, tsig: o.tsig, tsec: o.tsec, jd: o.jd,
-            // The snapshot carries JPL's Keplerian elements too, so the orbit
-            // view is drawn from real published orbits even on cached data.
             orb: o.orb || null
-          })).filter((o) => o.t > Date.now() - 864e5);
-          out.sort((a, b) => a.t - b.t);
-          return { objects: out };
-        }
+          }));
+        } catch (e) { return null; }
       }
 
+      async function loadNEOs() {
+        const [live, cached] = await Promise.all([loadLiveNEOs(), loadCachedNEOs()]);
+        // Keyed on designation and approach day, so the two sources agreeing
+        // about one pass produce one row rather than two.
+        const key = (o) => o.name + "|" + Math.round(o.t / 864e5);
+        const merged = new Map();
+        (live || []).forEach((o) => merged.set(key(o), o));
+        (cached || []).forEach((o) => merged.set(key(o), o));
+        const out = Array.from(merged.values())
+          .filter((o) => isFinite(o.t) && o.t > Date.now() - 864e5);
+        out.sort((a, b) => a.t - b.t);
+        return { objects: out };
+      }
 
       function initNEO(cnv, hud) {
         let renderer;
