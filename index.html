@@ -412,7 +412,7 @@
         <span>RINGS · 1 / 10 / 100 LD</span>
       </div>
 
-      <span class="neo-note" id="neo-note">Drag to orbit · scroll to zoom · radius is logarithmic in lunar distance · each track is the object's real path past the Earth, solved from NASA's published orbital elements</span>
+      <span class="neo-note" id="neo-note">Drag to orbit · scroll to zoom · radius is logarithmic in lunar distance · pick an object to draw its real path past the Earth, solved from NASA's published orbital elements</span>
     </div>
 
     <template id="modal-about">
@@ -2286,7 +2286,10 @@
           lgeo.setAttribute("position", new THREE.BufferAttribute(lp, 3));
           lgeo.setAttribute("color", new THREE.BufferAttribute(lineCol, 3));
           trackLines = new THREE.LineSegments(lgeo,
-            keep(new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1 })));
+            keep(new THREE.LineBasicMaterial({
+              vertexColors: true, transparent: true, opacity: 1,
+              blending: THREE.AdditiveBlending, depthWrite: false
+            })));
           trackGroup.add(trackLines);
 
           // ── marks ──
@@ -2332,11 +2335,11 @@
         function paintAll() {
           items.forEach((it, i) => {
             const on = i === selected, hot = i === hovered;
-            // With well over a thousand tracks on screen the unselected ones
-            // have to sit right back, or the field reads as a wall rather than
-            // as depth.
-            paintTrack(i, on ? 1.0 : hot ? 0.5 : 0.07);
-            paintDot(i, on ? 1.3 : hot ? 1.2 : 0.8, on ? 4.4 : hot ? 3.8 : 1.9);
+            // The field is the objects, not their history. A track is drawn
+            // only for whatever is currently selected; everything else flies
+            // unmarked, which is also what keeps a thousand of them readable.
+            paintTrack(i, on ? 1.0 : 0);
+            paintDot(i, on ? 1.35 : hot ? 1.2 : 0.85, on ? 4.6 : hot ? 3.8 : 2.1);
           });
           if (trackLines) trackLines.geometry.attributes.color.needsUpdate = true;
           if (trackDots) {
