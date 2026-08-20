@@ -4507,6 +4507,10 @@
           const helm = new THREE.Group();
           helm.position.y = -0.1;
           scene.add(helm);
+          // Everything below is a stand-in that shows instantly; the real
+          // scanned helmet replaces it as soon as it arrives.
+          const placeholder = new THREE.Group();
+          helm.add(placeholder);
 
           // white pressure shell
           const shell = new THREE.Mesh(
@@ -4515,7 +4519,7 @@
               color: 0xeef2f8, roughness: 0.34, metalness: 0.0,
               clearcoat: 1.0, clearcoatRoughness: 0.12, envMapIntensity: 1.0
             })));
-          helm.add(shell);
+          placeholder.add(shell);
 
           // gold-coated visor: a curved patch across the front of the shell
           const visor = new THREE.Mesh(
@@ -4525,7 +4529,7 @@
               color: 0xffcf7a, metalness: 1.0, roughness: 0.055,
               envMapIntensity: 3.0, side: THREE.DoubleSide
             })));
-          helm.add(visor);
+          placeholder.add(visor);
 
           // the seal around the visor aperture
           const seal = new THREE.Mesh(
@@ -4535,7 +4539,7 @@
             })));
           seal.position.z = 0.70;
           seal.scale.set(1, 0.78, 1);
-          helm.add(seal);
+          placeholder.add(seal);
 
           // aluminium neck ring
           const ring = new THREE.Mesh(
@@ -4545,7 +4549,7 @@
             })));
           ring.rotation.x = Math.PI / 2;
           ring.position.y = -0.86;
-          helm.add(ring);
+          placeholder.add(ring);
 
           // helmet lamp, off to one side
           const lamp = new THREE.Mesh(
@@ -4556,7 +4560,7 @@
             })));
           lamp.rotation.z = Math.PI / 2;
           lamp.position.set(0.95, 0.46, 0.2);
-          helm.add(lamp);
+          placeholder.add(lamp);
 
           // shoulders, so the helmet is worn rather than floating
           const torso = new THREE.Mesh(
@@ -4568,7 +4572,32 @@
           torso.position.y = -2.05;
           scene.add(torso);
 
-          let raf = 0, alive = true;
+          // The hero scene already fetches this helmet, so by the time the
+          // About panel opens the browser has it cached and this costs nothing
+          // beyond a parse. It is a real photogrammetry-grade PBR asset, which
+          // is what makes it read as an object rather than an illustration.
+          let model = null;
+          new GLTFLoader().load(HELMET_URL, (gltf) => {
+            if (!alive) return;
+            model = gltf.scene;
+            const box = new THREE.Box3().setFromObject(model);
+            const size = new THREE.Vector3(); box.getSize(size);
+            const centre = new THREE.Vector3(); box.getCenter(centre);
+            model.position.sub(centre);
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            model.scale.setScalar(2.5 / maxDim);
+            helm.add(model);
+            markDirty();
+            // The stand-in and its shoulders have done their job.
+            helm.remove(placeholder);
+            scene.remove(torso);
+            placeholder.traverse((o) => {
+              if (o.geometry) o.geometry.dispose();
+              if (o.material) o.material.dispose();
+            });
+          }, undefined, () => { /* keep the stand-in if the model cannot load */ });
+
+          let raf = 0, alive = true, dirty = true, lastX = NaN, lastY = NaN;
           function frame() {
             if (!alive) return;
             const ease = astReduce ? 1 : 0.12;
@@ -4579,9 +4608,17 @@
             helm.rotation.x = astY * 0.36;
             helm.rotation.z = -astX * 0.08;
             torso.rotation.y = astX * 0.16;
-            renderer.render(scene, camera);
+            // A second WebGL context is not free, and a badge that is holding
+            // still has nothing new to show — so redraw only once the pose has
+            // actually moved, which means it costs nothing while the cursor is
+            // parked or the panel is merely being read.
+            if (dirty || Math.abs(astX - lastX) > 0.0005 || Math.abs(astY - lastY) > 0.0005) {
+              renderer.render(scene, camera);
+              lastX = astX; lastY = astY; dirty = false;
+            }
             raf = requestAnimationFrame(frame);
           }
+          const markDirty = () => { dirty = true; };
           frame();
 
           return {
@@ -4590,10 +4627,24 @@
               renderer.setSize(w, h, false);
               camera.aspect = w / h;
               camera.updateProjectionMatrix();
+              markDirty();
             },
             stop: () => {
               alive = false;
               cancelAnimationFrame(raf);
+              if (model) model.traverse((o) => {
+                if (o.geometry) o.geometry.dispose();
+                if (o.material) {
+                  const mats = Array.isArray(o.material) ? o.material : [o.material];
+                  mats.forEach((m) => {
+                    Object.keys(m).forEach((k) => {
+                      const v = m[k];
+                      if (v && v.isTexture) v.dispose();
+                    });
+                    m.dispose();
+                  });
+                }
+              });
               junk.forEach((o) => o.dispose && o.dispose());
               env.dispose(); pmrem.dispose();
               renderer.dispose();
