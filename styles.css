@@ -3776,6 +3776,7 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 
 /* ═══ About: near-Earth encounter tracking ═══ */
 .neo-stage {
+  --jv: 122, 224, 255;                     /* the light the console is drawn in */
   position: fixed;
   inset: 0;
   z-index: 9000;
@@ -3831,8 +3832,8 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 .neo-hud--tl { top: 38px; left: 46px; }
 .neo-title {
   font-size: 10.5px; letter-spacing: 0.24em;
-  color: rgba(226, 236, 252, 0.86);
-  text-shadow: 0 1px 12px rgba(2, 4, 12, 0.95);
+  color: rgb(var(--jv));
+  text-shadow: 0 0 14px rgba(var(--jv), 0.55), 0 1px 12px rgba(2, 4, 12, 0.95);
 }
 
 /* ── Left rail: the track list, and the imagery feeds under it ───────────── */
@@ -3840,14 +3841,25 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   position: absolute; left: 46px; top: 76px; bottom: 92px; z-index: 4;
   width: 244px; display: flex; flex-direction: column; gap: 12px;
 }
-.neo-panel { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
-  transition: opacity 0.3s ease, transform 0.3s ease; }
+.neo-panel {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid rgba(var(--jv), 0.35); border-radius: 0;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px),
+                     calc(100% - 12px) 100%, 0 100%, 0 12px);
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--jv), 0.04) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, rgba(6, 20, 34, 0.88), rgba(2, 8, 16, 0.92));
+  box-shadow: 0 0 22px rgba(var(--jv), 0.12), inset 0 0 26px rgba(var(--jv), 0.05);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
 .neo-stage.list-hidden .neo-panel { opacity: 0; pointer-events: none; transform: translateX(-14px); }
 .neo-panel-head {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  padding: 9px 8px 9px 12px; border-bottom: 1px solid rgba(150, 185, 235, 0.12);
+  padding: 9px 8px 9px 12px; border-bottom: 1px solid rgba(var(--jv), 0.3);
+  background: linear-gradient(90deg, rgba(var(--jv), 0.13), transparent 75%);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9px; letter-spacing: 0.16em; color: rgba(170, 195, 230, 0.62);
+  font-size: 9px; letter-spacing: 0.16em; color: rgba(var(--jv), 0.85);
+  text-shadow: 0 0 10px rgba(var(--jv), 0.4);
 }
 .neo-head-tools { display: flex; align-items: center; gap: 2px; flex: none; }
 .neo-panel-x { width: 20px; height: 20px; border: 0; border-radius: 5px; background: transparent; color: rgba(200,216,240,0.7); font-size: 14px; cursor: pointer; }
@@ -3875,7 +3887,7 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   position: relative;
 }
 .neo-i-name { font-size: 11.5px; }
-.neo-i-ld { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; color: rgba(255, 196, 120, 0.85); }
+.neo-i-ld { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; color: rgba(var(--jv), 0.9); }
 .neo-item i {
   grid-column: 1 / -1; font-style: normal;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -3886,13 +3898,14 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   grid-column: 1 / -1; margin-top: 5px; height: 2px; border-radius: 2px;
   background: rgba(150, 185, 235, 0.14); overflow: hidden;
 }
-.neo-i-bar b { display: block; height: 100%; border-radius: 2px; background: #7fb2ff; }
+.neo-i-bar b { display: block; height: 100%; border-radius: 2px; background: rgb(var(--jv));
+  box-shadow: 0 0 6px rgba(var(--jv), 0.7); }
 .neo-item.is-haz .neo-i-bar b { background: #ff6b6b; }
-.neo-item:hover { background: rgba(127, 178, 255, 0.12); }
-.neo-item.is-on { background: rgba(127, 178, 255, 0.2); color: #fff; }
+.neo-item:hover { background: rgba(var(--jv), 0.12); }
+.neo-item.is-on { background: rgba(var(--jv), 0.2); color: #fff; }
 .neo-item.is-on::before {
   content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 2px;
-  background: #7fb2ff; box-shadow: 0 0 10px rgba(127, 178, 255, 0.9);
+  background: rgb(var(--jv)); box-shadow: 0 0 10px rgba(var(--jv), 0.95);
 }
 .neo-item.is-haz .neo-i-name { color: #ff9a9a; }
 
@@ -3910,11 +3923,11 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 .neo-hud--br { right: 46px; bottom: 64px; text-align: right; min-width: 268px; }
 .neo-d-name {
   font-family: "Space Grotesk", "Inter", sans-serif;
-  font-size: 19px; font-weight: 600; color: #f2f7ff; margin-bottom: 10px;
-  text-shadow: 0 2px 16px rgba(2, 4, 12, 0.95);
+  font-size: 19px; font-weight: 600; color: #f2fbff; margin-bottom: 10px;
+  text-shadow: 0 0 18px rgba(var(--jv), 0.4), 0 2px 16px rgba(2, 4, 12, 0.95);
 }
 .neo-d-row { display: flex; justify-content: space-between; gap: 20px; padding: 2.5px 0; font-size: 10px; }
-.neo-d-row span { color: rgba(150, 176, 214, 0.55); letter-spacing: 0.12em; }
+.neo-d-row span { color: rgba(var(--jv), 0.62); letter-spacing: 0.12em; }
 .neo-d-row b { color: rgba(220, 234, 252, 0.95); font-weight: 600; font-variant-numeric: tabular-nums; }
 /* Proximity gauge: 1 LD at the left edge, 100+ at the right, logarithmic. */
 .neo-d-gauge { margin-top: 12px; }
@@ -3936,7 +3949,6 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 /* Operator introduction */
 /* ── Operator card, as a holographic console panel ──────────────────────── */
 .neo-bio {
-  --jv: 122, 224, 255;                     /* the light everything is drawn in */
   position: absolute; right: 46px; top: 76px; z-index: 4; width: 318px;
   padding: 0; overflow: hidden;
   max-height: calc(100vh - 390px);
@@ -3986,7 +3998,7 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 @keyframes jvPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
 .neo-bio-sheet {
-  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  flex: 1 1 auto; min-height: 132px; overflow-y: auto;
   padding: 13px 16px 14px; position: relative; z-index: 2;
 }
 .neo-bio-sheet.is-scroll {
@@ -3997,13 +4009,17 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 .neo-bio-sheet::-webkit-scrollbar-thumb { background: rgba(var(--jv), 0.4); }
 
 /* ── the diagnostic assembly ── */
+/* Shrinks before the dossier does: on a short window the assembly scales
+   down inside its band rather than squeezing the introduction out. Below the
+   floor it steps aside entirely. */
 .neo-bio-draw {
-  flex: none; position: relative; z-index: 2;
+  flex: 0 1 auto; min-height: 0; max-height: 168px; overflow: hidden;
+  position: relative; z-index: 2;
   padding: 15px 10px 8px;
   border-top: 1px solid rgba(var(--jv), 0.24);
   background: radial-gradient(80% 120% at 50% 50%, rgba(var(--jv), 0.09), transparent 70%);
 }
-.neo-bio-draw svg { display: block; width: 100%; height: auto; overflow: visible; }
+.neo-bio-draw svg { display: block; width: 100%; height: 100%; }
 .neo-bio-draw-tag {
   position: absolute; left: 12px; top: 4px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -4127,6 +4143,33 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 }
 .neo-stage.bio-hidden .neo-bio-open { opacity: 1; pointer-events: auto; }
 
+/* ── target lock ── */
+.neo-lock {
+  position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none;
+  width: 0; height: 0; opacity: 0; transition: opacity 0.25s ease;
+}
+.neo-lock.is-on { opacity: 1; }
+.neo-lock-b {
+  position: absolute; width: 9px; height: 9px;
+  border: 1px solid rgba(122, 224, 255, 0.95);
+  filter: drop-shadow(0 0 4px rgba(122, 224, 255, 0.8));
+}
+.neo-lock.is-on .neo-lock-b { animation: lockIn 0.35s cubic-bezier(0.2, 0.8, 0.3, 1); }
+.neo-lock-b--tl { left: -19px; top: -19px; border-right: 0; border-bottom: 0; }
+.neo-lock-b--tr { left: 10px;  top: -19px; border-left: 0;  border-bottom: 0; }
+.neo-lock-b--bl { left: -19px; top: 10px;  border-right: 0; border-top: 0; }
+.neo-lock-b--br { left: 10px;  top: 10px;  border-left: 0;  border-top: 0; }
+@keyframes lockIn { from { transform: scale(2.6); opacity: 0; } }
+.neo-lock-tag {
+  position: absolute; left: 26px; top: -8px; white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px; letter-spacing: 0.16em; color: rgba(122, 224, 255, 0.95);
+  text-shadow: 0 0 10px rgba(122, 224, 255, 0.7);
+}
+/* the row matching whatever the pointer is over in the field */
+.neo-item.is-hot { background: rgba(122, 224, 255, 0.14); }
+.neo-item.is-hot .neo-i-name { color: #dff6ff; }
+
 .neo-legend {
   position: absolute; left: 50%; bottom: 46px; transform: translateX(-50%); z-index: 4;
   display: flex; gap: 24px; pointer-events: none; white-space: nowrap;
@@ -4144,6 +4187,11 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   width: min(900px, 92vw); text-align: center; pointer-events: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 8.5px; letter-spacing: 0.05em; line-height: 1.5; color: rgba(150, 176, 214, 0.36);
+}
+
+/* Below this the card cannot hold both, and the introduction is the point. */
+@media (max-height: 820px) {
+  .neo-bio-draw { display: none; }
 }
 
 @media (max-width: 1180px) {

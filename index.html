@@ -286,6 +286,14 @@
         <div class="neo-title">NEAR&#8209;EARTH ENCOUNTER TRACKING</div>
       </div>
 
+      <!-- Target lock: brackets that ride the selected object across the
+           screen, the way a HUD holds a mark rather than a list holding a row. -->
+      <div class="neo-lock" id="neo-lock" aria-hidden="true">
+        <i class="neo-lock-b neo-lock-b--tl"></i><i class="neo-lock-b neo-lock-b--tr"></i>
+        <i class="neo-lock-b neo-lock-b--bl"></i><i class="neo-lock-b neo-lock-b--br"></i>
+        <span class="neo-lock-tag" id="neo-lock-tag"></span>
+      </div>
+
       <div class="neo-rail" id="neo-rail">
         <div class="neo-panel" id="neo-panel">
           <div class="neo-panel-head">
@@ -2241,8 +2249,12 @@
           });
         }
 
+        const lockEl = document.getElementById("neo-lock");
+        const lockTag = document.getElementById("neo-lock-tag");
+
         let selected = -1;
         function select(i) {
+          if (lockTag && items[i]) lockTag.textContent = items[i].def.name;
           selected = i;
           items.forEach((it, k) => {
             it.line.material.opacity = k === i ? 0.8 : 0.13;
@@ -2261,8 +2273,61 @@
           pitch = THREE.MathUtils.clamp(pitch - (e.clientY - ly) * 0.005, 0.12, 1.45);
           lx = e.clientX; ly = e.clientY;
         }
-        function onUp() { dragging = false; cnv.style.cursor = "grab"; }
+        function onUp() { dragging = false; cnv.style.cursor = hovered >= 0 ? "pointer" : "grab"; }
         function onWheel(e) { e.preventDefault(); tDist = THREE.MathUtils.clamp(tDist * Math.exp(Math.sign(e.deltaY) * 0.15), 2.5, 70); }
+
+        // ── picking ──
+        // The objects are the controls. Sweep the pointer over the field and the
+        // mark under it lifts; press it and it becomes the selection, without
+        // going near the list.
+        const ray = new THREE.Raycaster();
+        ray.params.Points = { threshold: 0.3 };
+        const ndc = new THREE.Vector2();
+        let hovered = -1, downAt = null;
+
+        function pick(e) {
+          const r = cnv.getBoundingClientRect();
+          ndc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+          ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+          ray.setFromCamera(ndc, camera);
+          // A dot is a few pixels across, so test against a generous sphere
+          // around each rather than the mesh itself.
+          let best = -1, bestD = Infinity;
+          const p = new THREE.Vector3();
+          items.forEach((it, i) => {
+            p.copy(it.dot.position).project(camera);
+            if (p.z > 1) return;
+            const dx = (p.x - ndc.x) * r.width * 0.5;
+            const dy = (p.y - ndc.y) * r.height * 0.5;
+            const d = Math.hypot(dx, dy);
+            if (d < 14 && d < bestD) { bestD = d; best = i; }
+          });
+          return best;
+        }
+        function onHover(e) {
+          if (dragging) return;
+          const i = pick(e);
+          if (i !== hovered) {
+            hovered = i;
+            cnv.style.cursor = i >= 0 ? "pointer" : "grab";
+            if (hud.onHover) hud.onHover(i, i >= 0 && items[i] ? items[i].def : null);
+          }
+        }
+        cnv.addEventListener("pointermove", onHover);
+        cnv.addEventListener("pointerleave", () => {
+          if (hovered !== -1) { hovered = -1; if (hud.onHover) hud.onHover(-1, null); }
+        });
+        cnv.addEventListener("pointerdown", (e) => { downAt = { x: e.clientX, y: e.clientY }; });
+        cnv.addEventListener("pointerup", (e) => {
+          // Only a press that did not turn into a drag counts as a pick.
+          if (!downAt) return;
+          const moved = Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y);
+          downAt = null;
+          if (moved > 4) return;
+          const i = pick(e);
+          if (i >= 0) select(i);
+        });
+
         cnv.addEventListener("pointerdown", onDown);
         window.addEventListener("pointermove", onMove);
         window.addEventListener("pointerup", onUp);
@@ -2316,7 +2381,27 @@
               it.dot.scale.setScalar(k === selected ? 2.1 : 1);
             }
             it.dot.material.opacity = 1;
+            if (k === hovered) it.dot.scale.multiplyScalar(1.9);
           });
+
+          // Carry the lock to wherever the selected object now is on screen.
+          if (lockEl && items[selected]) {
+            const v = items[selected].dot.position.clone().project(camera);
+            const r = cnv.getBoundingClientRect();
+            const px = (v.x * 0.5 + 0.5) * r.width;
+            const py = (-v.y * 0.5 + 0.5) * r.height;
+            // Behind the camera, or off the edge of the field: drop the mark
+            // rather than pinning brackets to nothing.
+            const onField = v.z < 1 && px > 24 && py > 24 &&
+                            px < r.width - 24 && py < r.height - 24;
+            if (onField) {
+              lockEl.style.transform =
+                "translate(" + px.toFixed(1) + "px," + py.toFixed(1) + "px)";
+            }
+            lockEl.classList.toggle("is-on", onField);
+          } else if (lockEl) {
+            lockEl.classList.remove("is-on");
+          }
 
           renderer.render(scene, camera);
           raf = requestAnimationFrame(frame);
@@ -4447,6 +4532,8 @@
             Array.from(neoEl.list.children).forEach((c) => {
               c.classList.toggle("is-on", Number(c.dataset.i) === i);
             });
+            const row = neoEl.list.querySelector('.neo-item[data-i="' + i + '"]');
+            if (row) row.scrollIntoView({ block: "nearest" });
           }
         };
 
@@ -4720,6 +4807,14 @@
           astTX = astTY = astX = astY = 0;
         }
         window.addEventListener("resize", () => { if (astCtx) astCtx.resize(); });
+
+        // Sweeping the field lights the matching row, so the two halves of the
+        // console always agree about what is under the pointer.
+        neoHud.onHover = (i) => {
+          Array.from(neoEl.list.children).forEach((c) => {
+            c.classList.toggle("is-hot", Number(c.dataset.i) === i);
+          });
+        };
 
         // The introduction is height-capped on short windows; mark it when that
         // cap actually bites so the fade-out only shows on a card that scrolls.
