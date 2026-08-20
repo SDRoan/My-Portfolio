@@ -274,30 +274,29 @@
       <span class="sk-hint">Six constellations · every star is a skill</span>
     </div>
 
-    <!-- About: near-Earth encounter tracking, on live NASA data. -->
+    <!-- About: near-Earth encounter tracking, on NASA data.
+         NeoWs drives the scene when it is reachable; a JPL snapshot that ships
+         with the site takes over when it is not, so the display is never
+         empty. Every track is solved from published orbital elements. -->
     <div class="neo-stage" id="neo-stage" aria-hidden="true">
       <canvas id="neo-canvas"></canvas>
       <button type="button" class="projects-close" id="neo-close" aria-label="Close about">×</button>
 
       <div class="neo-hud neo-hud--tl">
         <div class="neo-title">NEAR&#8209;EARTH ENCOUNTER TRACKING</div>
-        <div class="neo-sub">
-          <span class="neo-src" id="neo-src">◇ CONNECTING…</span>
-          <span class="neo-clock" id="neo-clock">—</span>
-        </div>
-        <div class="neo-modes" role="group" aria-label="View mode">
-          <button type="button" class="neo-mode is-on" id="neo-m-app">APPROACH</button>
-          <button type="button" class="neo-mode" id="neo-m-orb">ORBITS</button>
-          <span class="neo-mode-note" id="neo-mode-note"></span>
-        </div>
       </div>
 
-      <div class="neo-panel" id="neo-panel">
-        <div class="neo-panel-head">
-          <span>INBOUND · NEXT ENCOUNTERS</span>
-          <button type="button" class="neo-panel-x" id="neo-panel-x" aria-label="Hide list">−</button>
+      <div class="neo-rail" id="neo-rail">
+        <div class="neo-panel" id="neo-panel">
+          <div class="neo-panel-head">
+            <span id="neo-panel-title">INBOUND · NEXT ENCOUNTERS</span>
+            <span class="neo-head-tools">
+              <button type="button" class="neo-filter" id="neo-filter" aria-pressed="false" title="Show only potentially hazardous">⚠</button>
+              <button type="button" class="neo-panel-x" id="neo-panel-x" aria-label="Hide list">−</button>
+            </span>
+          </div>
+          <div class="neo-list" id="neo-list"></div>
         </div>
-        <div class="neo-list" id="neo-list"></div>
       </div>
       <button type="button" class="neo-panel-open" id="neo-panel-open">☰ TRACK LIST</button>
 
@@ -308,21 +307,43 @@
           <span class="neo-bio-tag">◈ STATION OPERATOR</span>
           <button type="button" class="neo-panel-x" id="neo-bio-x" aria-label="Hide introduction">−</button>
         </div>
-        <strong class="neo-bio-name">Saibyasachi Ruhan</strong>
-        <span class="neo-bio-sub">QUEENS COLLEGE · CS &nbsp;·&nbsp; NEW YORK, NY</span>
+        <div class="neo-bio-id">
+          <!-- The operator, in a helmet, watching wherever the cursor goes.
+               Rendered in real 3D against the same PBR environment the hero
+               scene uses — the realism comes from the reflections in the visor,
+               which is also what makes the head turn read as a turn. -->
+          <span class="neo-ast" id="neo-ast" aria-hidden="true">
+            <canvas id="neo-ast-canvas"></canvas>
+          </span>
+          <span class="neo-bio-idtext">
+            <strong class="neo-bio-name">Saibyasachi Ruhan</strong>
+            <span class="neo-bio-sub">QUEENS COLLEGE · CS &nbsp;·&nbsp; NEW YORK, NY</span>
+          </span>
+        </div>
         <p>I'm a CS student who learns best by <b>building real things</b> — and then carefully measuring whether they actually helped.</p>
         <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+        <div class="neo-bio-chips">
+          <span class="neo-chip">Full‑stack</span>
+          <span class="neo-chip">AI / ML</span>
+          <span class="neo-chip">Product eng · biotech</span>
+        </div>
       </div>
       <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
 
       <div class="neo-hud neo-hud--br" id="neo-detail">
         <div class="neo-d-name" id="neo-d-name">—</div>
         <div class="neo-d-row"><span>CLOSE APPROACH</span><b id="neo-d-when">—</b></div>
+        <div class="neo-d-row"><span>TIME UNCERT · 3σ</span><b id="neo-d-sig">—</b></div>
         <div class="neo-d-row"><span>MISS DISTANCE</span><b id="neo-d-miss">—</b></div>
         <div class="neo-d-row"><span>IN LUNAR DIST</span><b id="neo-d-ld">—</b></div>
         <div class="neo-d-row"><span>REL. VELOCITY</span><b id="neo-d-vel">—</b></div>
         <div class="neo-d-row"><span>EST. DIAMETER</span><b id="neo-d-dia">—</b></div>
         <div class="neo-d-row"><span>ORBIT CLASS</span><b id="neo-d-cls">—</b></div>
+        <!-- Where this pass sits on the same logarithmic scale the scene uses. -->
+        <div class="neo-d-gauge" aria-hidden="true">
+          <span class="neo-d-track"><i class="neo-d-pin" id="neo-d-pin"></i></span>
+          <span class="neo-d-scale"><i>1 LD</i><i>10</i><i>100+</i></span>
+        </div>
         <div class="neo-d-flag" id="neo-d-flag"></div>
       </div>
 
@@ -333,7 +354,7 @@
         <span>RINGS · 1 / 10 / 100 LD</span>
       </div>
 
-      <span class="neo-note" id="neo-note">Drag to orbit · scroll to zoom · radius is logarithmic in lunar distance · distances, speeds and sizes are live NASA values; approach bearings are indicative</span>
+      <span class="neo-note" id="neo-note">Drag to orbit · scroll to zoom · radius is logarithmic in lunar distance · each track is the object's real path past the Earth, solved from NASA's published orbital elements</span>
     </div>
 
     <template id="modal-about">
@@ -1787,7 +1808,11 @@
       // live feed is rate-limited, so the display is never empty.
       const LD_KM = 384400;                 // one lunar distance
       const AU_KM_N = 149597870.7;
-      const NEO_KEY = "DEMO_KEY";           // free, no signup; swap for a free key at api.nasa.gov
+      // One key for all four NASA feeds. DEMO_KEY works with no signup but is
+      // shared and metered per IP — around 10 calls an hour, which a first page
+      // load can spend on its own. A free key from api.nasa.gov lifts that to
+      // 1000/hour; dropping it in here is the single best upgrade to this view.
+      const NEO_KEY = "DEMO_KEY";
 
       async function loadNEOs() {
         const iso = (d) => d.toISOString().slice(0, 10);
@@ -1806,8 +1831,9 @@
               const dmin = o.estimated_diameter.meters.estimated_diameter_min;
               const dmax = o.estimated_diameter.meters.estimated_diameter_max;
               out.push({
-                name: o.name.replace(/^\(|\)$/g, ""),
+                name: o.name.replace(/^\((.*)\)$/, "$1"),
                 when: ca.close_approach_date_full || ca.close_approach_date,
+                tsec: null,      // NeoWs does not publish a close-approach time sigma
                 t: ca.epoch_date_close_approach,
                 km: parseFloat(ca.miss_distance.kilometers),
                 ld: parseFloat(ca.miss_distance.lunar),
@@ -1829,7 +1855,7 @@
           });
           if (!out.length) throw new Error("empty feed");
           out.sort((a, b) => a.t - b.t);
-          return { objects: out, live: true, label: "LIVE · NASA NeoWs" };
+          return { objects: out };
         } catch (e) {
           const r = await fetch("data/neo-fallback.json", { cache: "force-cache" });
           const j = await r.json();
@@ -1841,12 +1867,19 @@
             ld: (o.au * AU_KM_N) / LD_KM,
             vkms: o.vkms,
             dia: o.dia || 0,
-            haz: (o.dia || 0) > 140 && o.au < 0.05
+            // JPL's published PHA designation (H ≤ 22 and MOID ≤ 0.05 au),
+            // not a guess reconstructed from size and approach distance.
+            haz: !!o.pha,
+            day: o.day, hm: o.hm, tsig: o.tsig, tsec: o.tsec, jd: o.jd,
+            // The snapshot carries JPL's Keplerian elements too, so the orbit
+            // view is drawn from real published orbits even on cached data.
+            orb: o.orb || null
           })).filter((o) => o.t > Date.now() - 864e5);
           out.sort((a, b) => a.t - b.t);
-          return { objects: out, live: false, label: "CACHED · JPL CNEOS" };
+          return { objects: out };
         }
       }
+
 
       function initNEO(cnv, hud) {
         let renderer;
@@ -2002,29 +2035,132 @@
           return ((h >>> 0) % 100000) / 100000;
         }
 
+        // ── the simulated clock ──
+        // Positions are not animated by an invented loop; a clock runs forward
+        // from the moment the view opened, across the year the feed covers, and
+        // every object is drawn wherever it genuinely is at that instant.
+        const DEG2 = Math.PI / 180;
+        const SIM_SPAN = 365;          // days of real time the view walks through
+        const SIM_RATE = 4;            // simulated days per real second
+        const SIM_STEPS = 200;         // samples per drawn track
+        const jdNow = () => Date.now() / 86400000 + 2440587.5;
+        let simJD0 = jdNow();
+        let simJD = simJD0;
+
+        // The orientation of an orbit never changes between frames, so the six
+        // rotation coefficients are solved once and reused. Only the anomaly
+        // has to be advanced, which keeps 143 objects cheap to place per frame.
+        function prepOrbit(o) {
+          if (!o || !isFinite(o.a) || !isFinite(o.ep) || !isFinite(o.per) || o.per <= 0) return null;
+          const w = o.w * DEG2, om = o.om * DEG2, I = o.i * DEG2;
+          const cw = Math.cos(w), sw = Math.sin(w);
+          const cn = Math.cos(om), sn = Math.sin(om);
+          const ci = Math.cos(I), si = Math.sin(I);
+          return {
+            a: o.a, e: o.e, ep: o.ep, M0: o.M, n: 360 / o.per,
+            s: Math.sqrt(Math.max(0, 1 - o.e * o.e)),
+            ax: cw * cn - sw * sn * ci, bx: -sw * cn - cw * sn * ci,
+            ay: cw * sn + sw * cn * ci, by: -sw * sn + cw * cn * ci,
+            az: sw * si, bz: cw * si
+          };
+        }
+
+        // Heliocentric position at Julian date jd: advance the mean anomaly at
+        // the object's own rate, solve Kepler's equation, rotate into the
+        // ecliptic — the same construction the planets use, fed by JPL's
+        // published elements for this asteroid.
+        function astHelio(ob, jd) {
+          let M = ((ob.M0 + ob.n * (jd - ob.ep)) % 360 + 360) % 360;
+          if (M > 180) M -= 360;
+          M *= DEG2;
+          const e = ob.e;
+          let E = M + e * Math.sin(M);
+          for (let k = 0; k < 8; k++) {
+            const se = Math.sin(E), ce = Math.cos(E);
+            const dE = (E - e * se - M) / (1 - e * ce);
+            E -= dE;
+            if (dE < 1e-10 && dE > -1e-10) break;
+          }
+          const xv = ob.a * (Math.cos(E) - e);
+          const yv = ob.a * ob.s * Math.sin(E);
+          return [ob.ax * xv + ob.bx * yv, ob.ay * xv + ob.by * yv, ob.az * xv + ob.bz * yv];
+        }
+
+        // Geocentric direction and distance of an object at one instant.
+        function geoAt(ob, jd, earthVec) {
+          const A = astHelio(ob, jd);
+          const gx = A[0] - earthVec[0], gy = A[1] - earthVec[1], gz = A[2] - earthVec[2];
+          const d = Math.sqrt(gx * gx + gy * gy + gz * gz);
+          if (!(d > 0)) return null;
+          return { dir: astroToWorld([gx / d, gy / d, gz / d]), ld: d * AU_KM_N / LD_KM };
+        }
+
         function build(objects) {
           while (trackGroup.children.length) trackGroup.remove(trackGroup.children[0]);
-          items = objects.slice(0, 40).map((o) => {
-            // NeoWs gives distance and speed but not the approach geometry, so
-            // the bearing is derived from the name — stable per object, and
-            // labelled as indicative rather than dressed up as real.
-            const a = hash(o.name) * Math.PI * 2;
-            const incl = (hash(o.name + "i") - 0.5) * 0.9;
-            const r = ldToR(o.ld);
+          simJD0 = jdNow();
+          simJD = simJD0;
+
+          // Earth's own track over the window, shared by every object.
+          const grid = [], earthAt = [];
+          for (let i = 0; i <= SIM_STEPS; i++) {
+            const jd = simJD0 + (i / SIM_STEPS) * SIM_SPAN;
+            grid.push(jd);
+            earthAt.push(helioVec("Earth", (jd - 2451545.0) / 36525));
+          }
+
+          items = objects.map((o) => {
             const col = o.haz ? RED : GREEN;
             const dot = new THREE.Mesh(keep(new THREE.SphereGeometry(0.06, 12, 10)),
               keep(new THREE.MeshBasicMaterial({ color: col })));
-            const path = [];
-            for (let i = 0; i <= 60; i++) {
-              const u = (i / 60) * 2 - 1;               // -1 inbound, +1 outbound
-              const ang = a + u * 0.85;
-              const rr = Math.sqrt(r * r + Math.pow(u * r * 1.7, 2));
-              path.push(new THREE.Vector3(Math.cos(ang) * rr, Math.sin(incl) * rr * 0.35, Math.sin(ang) * rr));
+            const ob = prepOrbit(o.orb);
+
+            let path = [], k = 1;
+            if (ob) {
+              // The real relative path: this object's orbit and Earth's,
+              // differenced across the whole window the clock walks through.
+              const raw = [];
+              for (let i = 0; i <= SIM_STEPS; i++) {
+                const q = geoAt(ob, grid[i], earthAt[i]);
+                if (!q) { raw.length = 0; break; }
+                raw.push(q);
+              }
+              if (raw.length) {
+                let lo = 0;
+                raw.forEach((q, i) => { if (q.ld < raw[lo].ld) lo = i; });
+                // Two-body propagation lands near, but not exactly on, JPL's
+                // integrated miss distance. One constant factor pins the pass to
+                // the published value; the shape it came from is untouched.
+                if (raw[lo].ld > 0) k = o.ld / raw[lo].ld;
+                path = raw.map((q) => new THREE.Vector3(q.dir[0], q.dir[1], q.dir[2])
+                  .multiplyScalar(ldToR(q.ld * k)));
+              }
             }
+            if (!path.length) {
+              // No usable elements — a straight indicative pass, as before.
+              const r = ldToR(o.ld);
+              const a = hash(o.name) * Math.PI * 2;
+              const inc = hash(o.name + "i") * 30 * DEG2;
+              const node = hash(o.name + "n") * 360 * DEG2;
+              const Nv = new THREE.Vector3(Math.sin(inc) * Math.sin(node), Math.cos(inc),
+                                           -Math.sin(inc) * Math.cos(node)).normalize();
+              let U = new THREE.Vector3(0, 1, 0).cross(Nv);
+              if (U.lengthSq() < 1e-6) U.set(1, 0, 0);
+              U.normalize();
+              const V = new THREE.Vector3().crossVectors(Nv, U).normalize();
+              const P = new THREE.Vector3().addScaledVector(U, Math.cos(a) * r)
+                                           .addScaledVector(V, Math.sin(a) * r);
+              const D = new THREE.Vector3().crossVectors(Nv, P).normalize();
+              for (let i = 0; i <= 60; i++) {
+                const u = (i / 60) * 2 - 1;
+                path.push(new THREE.Vector3().copy(P).addScaledVector(D, u * r * 2.4));
+              }
+            }
+
             const line = new THREE.Line(keep(new THREE.BufferGeometry().setFromPoints(path)),
               keep(new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.16 })));
             trackGroup.add(dot); trackGroup.add(line);
-            return { def: o, dot: dot, line: line, path: path, col: col };
+            dot.position.copy(path[0]);
+            return { def: o, dot: dot, line: line, path: path, col: col, ob: ob, k: k };
           });
         }
 
@@ -2035,88 +2171,7 @@
             it.line.material.opacity = k === i ? 0.8 : 0.13;
             it.dot.scale.setScalar(k === i ? 2.1 : 1);
           });
-          orbitBodies.forEach((ob) => {
-            ob.line.material.opacity = ob.idx === i ? 0.9 : 0.16;
-            ob.dot.scale.setScalar(ob.idx === i ? 2.2 : 1);
-          });
           if (hud.onSelect) hud.onSelect(i, items[i] ? items[i].def : null);
-        }
-
-        // ── heliocentric view: the actual orbits, from the published elements ──
-        // Same Keplerian construction as any ephemeris: solve for the eccentric
-        // anomaly, place the point in the orbital plane, then rotate by the
-        // argument of perihelion, the inclination and the node.
-        const orbitGroup = new THREE.Group();
-        orbitGroup.visible = false;
-        scene.add(orbitGroup);
-        const AU_U = 4.2;                       // scene units per astronomical unit
-        const D2R = Math.PI / 180;
-
-        function orbPoint(o, E) {
-          const xv = o.a * (Math.cos(E) - o.e);
-          const yv = o.a * Math.sqrt(Math.max(0, 1 - o.e * o.e)) * Math.sin(E);
-          const w = o.w * D2R, om = o.om * D2R, inc = o.i * D2R;
-          const cw = Math.cos(w), sw = Math.sin(w);
-          const co = Math.cos(om), so = Math.sin(om);
-          const ci = Math.cos(inc), si = Math.sin(inc);
-          const X = (cw * co - sw * so * ci) * xv + (-sw * co - cw * so * ci) * yv;
-          const Y = (cw * so + sw * co * ci) * xv + (-sw * so + cw * co * ci) * yv;
-          const Z = (sw * si) * xv + (cw * si) * yv;
-          return new THREE.Vector3(X * AU_U, Z * AU_U, -Y * AU_U);   // astro → three
-        }
-        function keplerE(M, e) {
-          let E = M;
-          for (let k = 0; k < 8; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-          return E;
-        }
-
-        const sunDot = new THREE.Mesh(keep(new THREE.SphereGeometry(0.22, 20, 14)),
-          keep(new THREE.MeshBasicMaterial({ color: AMBER })));
-        orbitGroup.add(sunDot);
-        // Earth, for scale — 1 AU, near-circular.
-        (function () {
-          const E0 = { a: 1, e: 0.0167, i: 0, om: 0, w: 102.9, M: 0 };
-          const pts = [];
-          for (let k = 0; k <= 180; k++) pts.push(orbPoint(E0, (k / 180) * Math.PI * 2));
-          orbitGroup.add(new THREE.Line(keep(new THREE.BufferGeometry().setFromPoints(pts)),
-            keep(new THREE.LineBasicMaterial({ color: 0x6fd0ff, transparent: true, opacity: 0.65 }))));
-          const eb = new THREE.Mesh(keep(new THREE.SphereGeometry(0.13, 16, 12)),
-            keep(new THREE.MeshBasicMaterial({ color: 0x6fd0ff })));
-          eb.position.copy(orbPoint(E0, 1.2));
-          orbitGroup.add(eb);
-        })();
-
-        let orbitBodies = [];
-        function buildOrbits(list) {
-          while (orbitGroup.children.length > 3) orbitGroup.remove(orbitGroup.children[3]);
-          orbitBodies = [];
-          list.forEach((it, idx) => {
-            const o = it.def.orb;
-            if (!o || !isFinite(o.a) || o.a <= 0) return;
-            const pts = [];
-            for (let k = 0; k <= 160; k++) pts.push(orbPoint(o, (k / 160) * Math.PI * 2));
-            const col = it.def.haz ? RED : GREEN;
-            const line = new THREE.Line(keep(new THREE.BufferGeometry().setFromPoints(pts)),
-              keep(new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.2 })));
-            const dot = new THREE.Mesh(keep(new THREE.SphereGeometry(0.075, 12, 10)),
-              keep(new THREE.MeshBasicMaterial({ color: col })));
-            dot.position.copy(orbPoint(o, keplerE(o.M * D2R, o.e)));
-            orbitGroup.add(line); orbitGroup.add(dot);
-            orbitBodies.push({ idx: idx, o: o, line: line, dot: dot });
-          });
-          return orbitBodies.length;
-        }
-
-        let mode = "approach";
-        function setMode(m) {
-          mode = m;
-          orbitGroup.visible = (m === "orbits");
-          globe.visible = trackGroup.visible = sweep.visible = moon.visible = (m === "approach");
-          scene.children.forEach((c) => {
-            if (c.type === "Line" && c !== sweep) c.visible = (m === "approach");
-          });
-          tDist = m === "orbits" ? 30 : 21;
-          if (hud.onMode) hud.onMode(m, orbitBodies.length);
         }
 
         // ── view ──
@@ -2165,24 +2220,26 @@
           const ma = t * 0.08;
           moon.position.set(Math.cos(ma) * ldToR(1), 0, Math.sin(ma) * ldToR(1));
 
-          // Each object runs its own approach loop, so the field is always moving.
+          // Advance the clock and put every object where it actually is.
+          simJD = simJD0 + ((t * SIM_RATE) % SIM_SPAN);
+          const earthNow = helioVec("Earth", (simJD - 2451545.0) / 36525);
           items.forEach((it, k) => {
-            const phase = ((t * 0.055 + hash(it.def.name + "p")) % 1);
-            const idx = Math.floor(phase * (it.path.length - 1));
-            it.dot.position.copy(it.path[idx]);
-            const near = 1 - Math.abs(phase - 0.5) * 2;
+            if (it.ob) {
+              const q = geoAt(it.ob, simJD, earthNow);
+              if (q) {
+                const R = ldToR(q.ld * it.k);
+                it.dot.position.set(q.dir[0] * R, q.dir[1] * R, q.dir[2] * R);
+                // Nearer passes read larger, straight off the real distance.
+                const near = Math.max(0, Math.min(1, 1 - Math.log10(Math.max(1, q.ld * it.k)) / 2.4));
+                it.dot.scale.setScalar((k === selected ? 2.1 : 1) * (0.7 + near * 0.9));
+              }
+            } else {
+              const phase = ((t * 0.055 + hash(it.def.name + "p")) % 1);
+              it.dot.position.copy(it.path[Math.floor(phase * (it.path.length - 1))]);
+              it.dot.scale.setScalar(k === selected ? 2.1 : 1);
+            }
             it.dot.material.opacity = 1;
-            it.dot.scale.setScalar((k === selected ? 2.1 : 1) * (0.75 + near * 0.6));
           });
-
-          if (mode === "orbits") {
-            orbitBodies.forEach((ob) => {
-              // Advance the mean anomaly at the object's real orbital rate.
-              const n = 360 / (ob.o.per || 365);
-              const M = (ob.o.M + n * t * 2.2) * D2R;
-              ob.dot.position.copy(orbPoint(ob.o, keplerE(M, ob.o.e)));
-            });
-          }
 
           renderer.render(scene, camera);
           raf = requestAnimationFrame(frame);
@@ -2190,8 +2247,7 @@
         raf = requestAnimationFrame(frame);
 
         return {
-          setMode: setMode,
-          setData: (objs) => { build(objs); buildOrbits(items); if (objs.length) select(0); },
+          setData: (objs) => { build(objs); if (objs.length) select(0); },
           select: select,
           stop: () => {
             alive = false;
@@ -4254,19 +4310,52 @@
         // About opens the encounter tracker.
         const neoStage = document.getElementById("neo-stage");
         const neoEl = {
-          src: document.getElementById("neo-src"), clock: document.getElementById("neo-clock"),
           list: document.getElementById("neo-list"), name: document.getElementById("neo-d-name"),
           when: document.getElementById("neo-d-when"), miss: document.getElementById("neo-d-miss"),
           ld: document.getElementById("neo-d-ld"), vel: document.getElementById("neo-d-vel"),
           dia: document.getElementById("neo-d-dia"), flag: document.getElementById("neo-d-flag"),
-          cls: document.getElementById("neo-d-cls"), modeNote: document.getElementById("neo-mode-note")
+          cls: document.getElementById("neo-d-cls"), sig: document.getElementById("neo-d-sig"),
+          pin: document.getElementById("neo-d-pin"), panelTitle: document.getElementById("neo-panel-title"),
+          filter: document.getElementById("neo-filter")
         };
-        let neoClockRaf = 0;
+        const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+        // JPL publishes a 3-sigma uncertainty on each approach time, and for
+        // most objects it is hours or days. Printing a minute against a ±9-day
+        // uncertainty would be invented precision, so the stamp is only ever
+        // shown as finely as the uncertainty actually supports.
+        function sigText(sec) {
+          if (sec < 3600) return Math.round(sec / 60) + " min";
+          if (sec < 86400) return Math.round(sec / 3600) + " h";
+          return Math.round(sec / 86400) + " d";
+        }
+        function fmtWhen(o) {
+          if (o.tsec == null || !o.day) return o.when;   // no sigma published
+          if (o.tsec <= 60) return o.when;               // good to the minute
+          if (o.tsec <= 2700) return o.day + " ~" + o.hm;
+          if (o.tsec <= 43200) return o.day + " ~" + o.hm.slice(0, 2) + "h";
+          return o.day + " ±" + sigText(o.tsec);
+        }
+
+        // A miss distance means very little as a number, so the readout also
+        // pins it on the same logarithmic 1–100 LD scale the scene is drawn on.
+        const ldPos = (ld) => Math.max(0, Math.min(1, Math.log10(Math.max(ld, 1)) / 2));
+
+        // Every encounter the feed returns is listed and drawn — the list, the
+        // 3D scene, the header count and select() all read this one array, so a
+        // row can never appear without a scene object behind it to select.
+        let neoObjects = [];      // the tracked passes, in encounter order
+        let neoHazOnly = false;   // track-list filter
+        let neoSelected = -1;
+
         const neoHud = {
           onSelect: (i, o) => {
             if (!o) return;
+            neoSelected = i;
             neoEl.name.textContent = o.name;
-            neoEl.when.textContent = o.when + " UTC";
+            neoEl.when.textContent = fmtWhen(o) + (o.tsec == null || o.tsec <= 43200 ? " UTC" : "");
+            neoEl.sig.textContent = o.tsec == null ? "not published" : "± " + sigText(o.tsec);
             neoEl.miss.textContent = Math.round(o.km).toLocaleString() + " km";
             neoEl.ld.textContent = o.ld.toFixed(2) + " LD";
             neoEl.vel.textContent = o.vkms.toFixed(2) + " km/s";
@@ -4274,31 +4363,245 @@
             neoEl.flag.textContent = o.haz ? "⚠ POTENTIALLY HAZARDOUS" : "";
             neoEl.flag.className = "neo-d-flag" + (o.haz ? " is-haz" : "");
             neoEl.cls.textContent = (o.orb && o.orb.cls) ? o.orb.cls : "—";
-            Array.from(neoEl.list.children).forEach((c, k) => c.classList.toggle("is-on", k === i));
+            if (neoEl.pin) {
+              neoEl.pin.style.left = (ldPos(o.ld) * 100).toFixed(1) + "%";
+              neoEl.pin.className = "neo-d-pin" + (o.haz ? " is-haz" : "");
+            }
+            Array.from(neoEl.list.children).forEach((c) => {
+              c.classList.toggle("is-on", Number(c.dataset.i) === i);
+            });
           }
         };
-        neoHud.onMode = (m, n) => {
-          const a = document.getElementById("neo-m-app"), o = document.getElementById("neo-m-orb");
-          if (a) a.classList.toggle("is-on", m === "approach");
-          if (o) o.classList.toggle("is-on", m === "orbits");
-          if (neoEl.modeNote) {
-            neoEl.modeNote.textContent = m === "orbits"
-              ? (n ? n + " REAL ORBITS · HELIOCENTRIC · 1 AU = EARTH RING" : "NO ELEMENTS IN CACHED DATA")
-              : "";
+
+        // The list is rebuilt rather than filtered in place so each row keeps a
+        // straight line back to its index in the full data set.
+        function neoRenderList() {
+          neoEl.list.innerHTML = "";
+          let shown = 0;
+          neoObjects.forEach((o, i) => {
+            if (neoHazOnly && !o.haz) return;
+            shown++;
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "neo-item" + (o.haz ? " is-haz" : "") + (i === neoSelected ? " is-on" : "");
+            b.dataset.i = i;
+            b.innerHTML = '<span class="neo-i-name">' + esc(o.name) + '</span>' +
+                          '<span class="neo-i-ld">' + o.ld.toFixed(1) + ' LD</span>' +
+                          '<span class="neo-i-bar"><b style="width:' +
+                            (ldPos(o.ld) * 100).toFixed(1) + '%"></b></span>';
+            b.addEventListener("click", () => neoView && neoView.select(i));
+            neoEl.list.appendChild(b);
+          });
+          if (!shown) {
+            const empty = document.createElement("p");
+            empty.className = "neo-empty";
+            empty.textContent = neoHazOnly
+              ? "No potentially hazardous passes in this window."
+              : "No encounters returned.";
+            neoEl.list.appendChild(empty);
           }
-          // The caveat belongs to the approach view only — the orbit view is
-          // drawn from published elements, so claiming otherwise would undersell it.
-          const note = document.getElementById("neo-note");
-          if (note) {
-            note.textContent = m === "orbits"
-              ? "Drag to orbit · scroll to zoom · orbits solved from NASA's published Keplerian elements · positions advance at each object's real orbital rate"
-              : "Drag to orbit · scroll to zoom · radius is logarithmic in lunar distance · distances, speeds and sizes are live NASA values; approach bearings are indicative";
+          if (neoEl.panelTitle) {
+            const haz = neoObjects.filter((o) => o.haz).length;
+            neoEl.panelTitle.textContent = neoHazOnly
+              ? "HAZARDOUS · " + haz + " OF " + neoObjects.length
+              : "INBOUND · " + neoObjects.length + " TRACKED";
           }
-        };
-        function neoTick() {
-          if (neoEl.clock) neoEl.clock.textContent = new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC";
-          neoClockRaf = requestAnimationFrame(neoTick);
         }
+
+        if (neoEl.filter) {
+          neoEl.filter.addEventListener("click", () => {
+            neoHazOnly = !neoHazOnly;
+            neoEl.filter.classList.toggle("is-on", neoHazOnly);
+            neoEl.filter.setAttribute("aria-pressed", String(neoHazOnly));
+            neoRenderList();
+          });
+        }
+
+        // ── the astronaut watches the pointer ──
+        // A real helmet in real 3D, lit by the same room environment the hero
+        // scene uses. A gold-coated visor over a white shell is what an EMU
+        // actually looks like, and at this size the reflections sliding across
+        // that visor are what sell the turn — not the silhouette.
+        let astCtx = null;
+        let astTX = 0, astTY = 0, astX = 0, astY = 0;
+        const astReduce = window.matchMedia
+          ? window.matchMedia("(prefers-reduced-motion: reduce)").matches : false;
+
+        function astAim(e) {
+          const box = document.getElementById("neo-ast");
+          if (!box) return;
+          const r = box.getBoundingClientRect();
+          if (!r.width) return;
+          const REACH = 300;                        // px at which the look saturates
+          astTX = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / REACH));
+          astTY = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / REACH));
+        }
+
+        function initAstronaut(cnv) {
+          let renderer;
+          try {
+            renderer = new THREE.WebGLRenderer({ canvas: cnv, antialias: true, alpha: true });
+          } catch (err) { return null; }
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          renderer.setPixelRatio(dpr);
+          renderer.setSize(cnv.clientWidth || 72, cnv.clientHeight || 72, false);
+          renderer.toneMapping = THREE.ACESFilmicToneMapping;
+          renderer.toneMappingExposure = 1.32;
+          renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 40);
+          camera.position.set(0, 0.05, 6.2);
+          camera.lookAt(0, -0.05, 0);
+
+          const pmrem = new THREE.PMREMGenerator(renderer);
+          const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+          scene.environment = env;
+
+          // A key light gives the shell a defined edge the environment alone
+          // would leave flat.
+          const key = new THREE.DirectionalLight(0xffffff, 2.1);
+          key.position.set(-2.4, 3, 4);
+          scene.add(key);
+          const rim = new THREE.DirectionalLight(0x9fd0ff, 1.5);
+          rim.position.set(3, -1, -2.5);
+          scene.add(rim);
+          // A gold visor is only as bright as what it has to reflect. A pair of
+          // front lights lay a specular sweep across it — a RectAreaLight would
+          // read better still, but it contributes nothing without the extra
+          // uniforms addon, so it is not worth the dependency here.
+          const fillA = new THREE.DirectionalLight(0xdfe9ff, 2.6);
+          fillA.position.set(-1.6, 1.9, 4.4);
+          scene.add(fillA);
+          const fillB = new THREE.DirectionalLight(0xfff2d8, 1.4);
+          fillB.position.set(1.8, 0.6, 3.2);
+          scene.add(fillB);
+          scene.add(new THREE.AmbientLight(0xbfd4f0, 0.35));
+
+          const junk = [];
+          const keep = (o) => { junk.push(o); return o; };
+
+          const helm = new THREE.Group();
+          helm.position.y = -0.1;
+          scene.add(helm);
+
+          // white pressure shell
+          const shell = new THREE.Mesh(
+            keep(new THREE.SphereGeometry(1, 64, 48)),
+            keep(new THREE.MeshPhysicalMaterial({
+              color: 0xeef2f8, roughness: 0.34, metalness: 0.0,
+              clearcoat: 1.0, clearcoatRoughness: 0.12, envMapIntensity: 1.0
+            })));
+          helm.add(shell);
+
+          // gold-coated visor: a curved patch across the front of the shell
+          const visor = new THREE.Mesh(
+            keep(new THREE.SphereGeometry(1.012, 64, 48,
+              Math.PI / 2 - 0.72, 1.44, Math.PI / 2 - 0.60, 1.02)),
+            keep(new THREE.MeshPhysicalMaterial({
+              color: 0xffcf7a, metalness: 1.0, roughness: 0.055,
+              envMapIntensity: 3.0, side: THREE.DoubleSide
+            })));
+          helm.add(visor);
+
+          // the seal around the visor aperture
+          const seal = new THREE.Mesh(
+            keep(new THREE.TorusGeometry(0.665, 0.048, 18, 64)),
+            keep(new THREE.MeshStandardMaterial({
+              color: 0x99a4b3, metalness: 1.0, roughness: 0.28, envMapIntensity: 1.3
+            })));
+          seal.position.z = 0.70;
+          seal.scale.set(1, 0.78, 1);
+          helm.add(seal);
+
+          // aluminium neck ring
+          const ring = new THREE.Mesh(
+            keep(new THREE.TorusGeometry(0.62, 0.1, 20, 64)),
+            keep(new THREE.MeshStandardMaterial({
+              color: 0xb9c2cf, metalness: 1.0, roughness: 0.22, envMapIntensity: 1.4
+            })));
+          ring.rotation.x = Math.PI / 2;
+          ring.position.y = -0.86;
+          helm.add(ring);
+
+          // helmet lamp, off to one side
+          const lamp = new THREE.Mesh(
+            keep(new THREE.CylinderGeometry(0.13, 0.13, 0.16, 24)),
+            keep(new THREE.MeshStandardMaterial({
+              color: 0xffc478, emissive: 0xffa53a, emissiveIntensity: 0.9,
+              metalness: 0.6, roughness: 0.35
+            })));
+          lamp.rotation.z = Math.PI / 2;
+          lamp.position.set(0.95, 0.46, 0.2);
+          helm.add(lamp);
+
+          // shoulders, so the helmet is worn rather than floating
+          const torso = new THREE.Mesh(
+            keep(new THREE.SphereGeometry(1.5, 48, 32, 0, Math.PI * 2, 0, Math.PI / 2)),
+            keep(new THREE.MeshPhysicalMaterial({
+              color: 0xdfe6f0, roughness: 0.62, metalness: 0.0,
+              clearcoat: 0.4, clearcoatRoughness: 0.5
+            })));
+          torso.position.y = -2.05;
+          scene.add(torso);
+
+          let raf = 0, alive = true;
+          function frame() {
+            if (!alive) return;
+            const ease = astReduce ? 1 : 0.12;
+            astX += (astTX - astX) * ease;
+            astY += (astTY - astY) * ease;
+            // A real head turn: yaw and pitch, with a little counter-roll.
+            helm.rotation.y = astX * 0.5;
+            helm.rotation.x = astY * 0.36;
+            helm.rotation.z = -astX * 0.08;
+            torso.rotation.y = astX * 0.16;
+            renderer.render(scene, camera);
+            raf = requestAnimationFrame(frame);
+          }
+          frame();
+
+          return {
+            resize: () => {
+              const w = cnv.clientWidth || 72, h = cnv.clientHeight || 72;
+              renderer.setSize(w, h, false);
+              camera.aspect = w / h;
+              camera.updateProjectionMatrix();
+            },
+            stop: () => {
+              alive = false;
+              cancelAnimationFrame(raf);
+              junk.forEach((o) => o.dispose && o.dispose());
+              env.dispose(); pmrem.dispose();
+              renderer.dispose();
+            }
+          };
+        }
+
+        function astStart() {
+          const cnv = document.getElementById("neo-ast-canvas");
+          if (!cnv) return;
+          window.addEventListener("pointermove", astAim, { passive: true });
+          if (astCtx) astCtx.stop();
+          astCtx = initAstronaut(cnv);
+          if (astCtx) astCtx.resize();
+        }
+        function astStop() {
+          window.removeEventListener("pointermove", astAim);
+          if (astCtx) { astCtx.stop(); astCtx = null; }
+          astTX = astTY = astX = astY = 0;
+        }
+        window.addEventListener("resize", () => { if (astCtx) astCtx.resize(); });
+
+        // The introduction is height-capped on short windows; mark it when that
+        // cap actually bites so the fade-out only shows on a card that scrolls.
+        function neoSyncBioScroll() {
+          const bio = document.getElementById("neo-bio");
+          if (!bio) return;
+          bio.classList.toggle("is-scroll", bio.scrollHeight - bio.clientHeight > 4);
+        }
+        window.addEventListener("resize", neoSyncBioScroll);
+
         function openAbout() {
           aboutActive = true;
           bodyEl.classList.add("projects-mode");
@@ -4306,35 +4609,26 @@
           neoStage.setAttribute("aria-hidden", "false");
           const cv = neoStage.querySelector("#neo-canvas");
           if (!cv) return;
+          requestAnimationFrame(neoSyncBioScroll);
+          astStart();
           requestAnimationFrame(async () => {
             if (neoView) neoView.stop();
             neoView = initNEO(cv, neoHud);
-            cancelAnimationFrame(neoClockRaf); neoTick();
             if (!neoView) return;
             const res = await loadNEOs();
             if (!aboutActive || !neoView) return;
-            neoEl.src.textContent = (res.live ? "● " : "◇ ") + res.label;
-            neoEl.src.className = "neo-src" + (res.live ? " is-live" : "");
-            neoEl.list.innerHTML = "";
-            res.objects.slice(0, 40).forEach((o, i) => {
-              const b = document.createElement("button");
-              b.type = "button";
-              b.className = "neo-item" + (o.haz ? " is-haz" : "");
-              b.innerHTML = '<span class="neo-i-name">' + o.name + '</span>' +
-                            '<span class="neo-i-ld">' + o.ld.toFixed(1) + ' LD</span>' +
-                            '<i>' + o.when + '</i>';
-              b.addEventListener("click", () => neoView && neoView.select(i));
-              neoEl.list.appendChild(b);
-            });
-            neoView.setData(res.objects);
+            neoObjects = res.objects;
+            neoSelected = -1;
+            neoRenderList();
+            neoView.setData(neoObjects);
           });
         }
         function closeAbout() {
           aboutActive = false;
+          astStop();
           bodyEl.classList.remove("projects-mode");
           neoStage.classList.remove("is-open");
           neoStage.setAttribute("aria-hidden", "true");
-          cancelAnimationFrame(neoClockRaf);
           if (neoView) { neoView.stop(); neoView = null; }
         }
         bindCloseButton(document.getElementById("neo-close"), closeAbout);
@@ -4346,9 +4640,6 @@
         const neoBioOpen = document.getElementById("neo-bio-open");
         if (neoBioX) neoBioX.addEventListener("click", () => neoStage.classList.add("bio-hidden"));
         if (neoBioOpen) neoBioOpen.addEventListener("click", () => neoStage.classList.remove("bio-hidden"));
-        const mApp = document.getElementById("neo-m-app"), mOrb = document.getElementById("neo-m-orb");
-        if (mApp) mApp.addEventListener("click", () => neoView && neoView.setMode("approach"));
-        if (mOrb) mOrb.addEventListener("click", () => neoView && neoView.setMode("orbits"));
 
         // Skills opens the star chart.
         const skStage = document.getElementById("skills-stage");

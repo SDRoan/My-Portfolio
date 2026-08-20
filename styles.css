@@ -3800,6 +3800,30 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
     linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 20%, transparent 76%, rgba(0, 0, 0, 0.6) 100%);
 }
 
+/* ── One card, used by every panel on the console ──────────────────────────
+   Same border, same glass, same hairline of light along the top edge, so the
+   four NASA feeds read as instruments on one instrument panel. */
+.neo-panel, .neo-bio {
+  border: 1px solid rgba(150, 185, 235, 0.16);
+  border-radius: 11px;
+  background:
+    linear-gradient(180deg, rgba(120, 170, 240, 0.07), rgba(120, 170, 240, 0) 42%),
+    rgba(5, 9, 20, 0.74);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(190, 220, 255, 0.09);
+}
+
+/* Panels arrive with the scene rather than sitting there waiting for it. */
+@keyframes neoIn { from { opacity: 0; transform: translateY(10px); } }
+.neo-stage.is-open .neo-hud--tl { animation: neoIn 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) 0.05s backwards; }
+.neo-stage.is-open .neo-rail    { animation: neoIn 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) 0.2s backwards; }
+.neo-stage.is-open .neo-bio     { animation: neoIn 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) 0.26s backwards; }
+.neo-stage.is-open .neo-hud--br { animation: neoIn 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) 0.32s backwards; }
+@media (prefers-reduced-motion: reduce) {
+  .neo-stage.is-open .neo-hud--tl, .neo-stage.is-open .neo-rail,
+  .neo-stage.is-open .neo-bio, .neo-stage.is-open .neo-hud--br { animation: none; }
+}
+
 .neo-hud {
   position: absolute; z-index: 4; pointer-events: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -3810,56 +3834,45 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   color: rgba(226, 236, 252, 0.86);
   text-shadow: 0 1px 12px rgba(2, 4, 12, 0.95);
 }
-.neo-sub { margin-top: 7px; display: flex; gap: 16px; font-size: 10px; letter-spacing: 0.1em; }
-.neo-src { color: rgba(255, 196, 120, 0.9); }
-.neo-src.is-live { color: #8fe3b4; }
-.neo-clock { color: rgba(150, 176, 214, 0.55); }
 
-/* View mode */
-.neo-modes { margin-top: 10px; display: flex; align-items: center; gap: 7px; pointer-events: auto; }
-.neo-mode {
-  padding: 5px 12px; border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(8, 14, 28, 0.5);
-  color: rgba(190, 212, 240, 0.72);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9px; letter-spacing: 0.15em; cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+/* ── Left rail: the track list, and the imagery feeds under it ───────────── */
+.neo-rail {
+  position: absolute; left: 46px; top: 76px; bottom: 92px; z-index: 4;
+  width: 244px; display: flex; flex-direction: column; gap: 12px;
 }
-.neo-mode:hover { border-color: rgba(190, 214, 255, 0.6); color: #fff; }
-.neo-mode.is-on {
-  background: rgba(127, 178, 255, 0.18);
-  border-color: rgba(127, 178, 255, 0.7);
-  color: #fff;
-}
-.neo-mode-note { margin-left: 6px; font-size: 8.5px; letter-spacing: 0.1em; color: rgba(150, 176, 214, 0.55); }
-
-/* Track list */
-.neo-panel {
-  position: absolute; left: 46px; top: 50%; transform: translateY(-50%); z-index: 4;
-  width: 238px; max-height: 54vh; display: flex; flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
-  background: rgba(5, 9, 20, 0.7); backdrop-filter: blur(8px); overflow: hidden;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.neo-stage.list-hidden .neo-panel { opacity: 0; pointer-events: none; transform: translateY(-50%) translateX(-14px); }
+.neo-panel { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease; }
+.neo-stage.list-hidden .neo-panel { opacity: 0; pointer-events: none; transform: translateX(-14px); }
 .neo-panel-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 9px 8px 9px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 9px 8px 9px 12px; border-bottom: 1px solid rgba(150, 185, 235, 0.12);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9px; letter-spacing: 0.16em; color: rgba(170, 195, 230, 0.6);
+  font-size: 9px; letter-spacing: 0.16em; color: rgba(170, 195, 230, 0.62);
 }
+.neo-head-tools { display: flex; align-items: center; gap: 2px; flex: none; }
 .neo-panel-x { width: 20px; height: 20px; border: 0; border-radius: 5px; background: transparent; color: rgba(200,216,240,0.7); font-size: 14px; cursor: pointer; }
 .neo-panel-x:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.neo-filter {
+  width: 20px; height: 20px; border: 0; border-radius: 5px; background: transparent;
+  color: rgba(200, 216, 240, 0.5); font-size: 10px; line-height: 1; cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.neo-filter:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.neo-filter.is-on { background: rgba(255, 107, 107, 0.2); color: #ff9a9a; }
 .neo-list { overflow-y: auto; padding: 2px 0 6px; }
 .neo-list::-webkit-scrollbar { width: 6px; }
 .neo-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); border-radius: 3px; }
+.neo-empty {
+  margin: 0; padding: 16px 14px; font-family: "Inter", system-ui, sans-serif;
+  font-size: 11px; line-height: 1.5; color: rgba(150, 176, 214, 0.5);
+}
 .neo-item {
   display: grid; grid-template-columns: 1fr auto; gap: 2px 8px;
-  width: 100%; padding: 6px 12px; border: 0; background: transparent;
+  width: 100%; padding: 7px 12px 8px; border: 0; background: transparent;
   color: rgba(216, 230, 250, 0.85); text-align: left; cursor: pointer;
   transition: background 0.15s ease;
   font-family: "Inter", system-ui, sans-serif;
+  position: relative;
 }
 .neo-i-name { font-size: 11.5px; }
 .neo-i-ld { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; color: rgba(255, 196, 120, 0.85); }
@@ -3868,12 +3881,23 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 8.5px; color: rgba(150, 176, 214, 0.5);
 }
+/* A one-glance sense of how close this pass is, on the same log scale. */
+.neo-i-bar {
+  grid-column: 1 / -1; margin-top: 5px; height: 2px; border-radius: 2px;
+  background: rgba(150, 185, 235, 0.14); overflow: hidden;
+}
+.neo-i-bar b { display: block; height: 100%; border-radius: 2px; background: #7fb2ff; }
+.neo-item.is-haz .neo-i-bar b { background: #ff6b6b; }
 .neo-item:hover { background: rgba(127, 178, 255, 0.12); }
 .neo-item.is-on { background: rgba(127, 178, 255, 0.2); color: #fff; }
+.neo-item.is-on::before {
+  content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 2px;
+  background: #7fb2ff; box-shadow: 0 0 10px rgba(127, 178, 255, 0.9);
+}
 .neo-item.is-haz .neo-i-name { color: #ff9a9a; }
 
 .neo-panel-open {
-  position: absolute; left: 46px; top: 50%; transform: translateY(-50%); z-index: 4;
+  position: absolute; left: 46px; top: 76px; z-index: 4;
   padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12);
   background: rgba(8,14,28,0.6); color: rgba(214,228,250,0.7);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -3883,7 +3907,7 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 .neo-stage.list-hidden .neo-panel-open { opacity: 1; pointer-events: auto; }
 
 /* Detail readout */
-.neo-hud--br { right: 46px; bottom: 64px; text-align: right; min-width: 250px; }
+.neo-hud--br { right: 46px; bottom: 64px; text-align: right; min-width: 268px; }
 .neo-d-name {
   font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: 19px; font-weight: 600; color: #f2f7ff; margin-bottom: 10px;
@@ -3892,25 +3916,59 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 .neo-d-row { display: flex; justify-content: space-between; gap: 20px; padding: 2.5px 0; font-size: 10px; }
 .neo-d-row span { color: rgba(150, 176, 214, 0.55); letter-spacing: 0.12em; }
 .neo-d-row b { color: rgba(220, 234, 252, 0.95); font-weight: 600; font-variant-numeric: tabular-nums; }
-.neo-d-flag { margin-top: 9px; font-size: 9.5px; letter-spacing: 0.13em; color: transparent; }
+/* Proximity gauge: 1 LD at the left edge, 100+ at the right, logarithmic. */
+.neo-d-gauge { margin-top: 12px; }
+.neo-d-track {
+  display: block; position: relative; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, rgba(255, 107, 107, 0.55), rgba(255, 196, 120, 0.45) 42%, rgba(127, 178, 255, 0.4));
+}
+.neo-d-pin {
+  position: absolute; top: 50%; left: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px;
+  border-radius: 50%; background: #dceaff; box-shadow: 0 0 10px rgba(220, 234, 255, 0.9);
+  transition: left 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.neo-d-pin.is-haz { background: #ff6b6b; box-shadow: 0 0 12px rgba(255, 107, 107, 0.95); }
+.neo-d-scale { display: flex; justify-content: space-between; margin-top: 5px; }
+.neo-d-scale i { font-style: normal; font-size: 7.5px; letter-spacing: 0.12em; color: rgba(150, 176, 214, 0.42); }
+.neo-d-flag { margin-top: 10px; font-size: 9.5px; letter-spacing: 0.13em; color: transparent; }
 .neo-d-flag.is-haz { color: #ff9a9a; }
 
 /* Operator introduction */
 .neo-bio {
-  position: absolute; right: 46px; top: 104px; z-index: 4; width: 306px;
-  padding: 13px 15px 15px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
-  background: rgba(5, 9, 20, 0.72); backdrop-filter: blur(8px);
+  position: absolute; right: 46px; top: 76px; z-index: 4; width: 318px;
+  padding: 13px 16px 15px;
+  /* Never let the introduction grow down into the detail readout. */
+  max-height: calc(100vh - 390px); overflow-y: auto;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+/* Only worn when the card really does overflow, so a short bio is never dimmed. */
+.neo-bio.is-scroll {
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 34px), transparent 100%);
+          mask-image: linear-gradient(180deg, #000 calc(100% - 34px), transparent 100%);
+}
+.neo-bio::-webkit-scrollbar { width: 6px; }
+.neo-bio::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 3px; }
 .neo-stage.bio-hidden .neo-bio { opacity: 0; pointer-events: none; transform: translateX(14px); }
 .neo-bio-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 9px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.09);
+  padding-bottom: 9px; margin-bottom: 12px; border-bottom: 1px solid rgba(150, 185, 235, 0.12);
 }
 .neo-bio-tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 8.5px; letter-spacing: 0.18em; color: rgba(255, 196, 120, 0.9);
 }
+.neo-bio-id { display: flex; align-items: center; gap: 12px; }
+.neo-ast {
+  flex: none; width: 72px; height: 72px; border-radius: 18px;
+  display: block; overflow: hidden;
+  border: 1px solid rgba(127, 178, 255, 0.32);
+  background:
+    radial-gradient(120% 100% at 30% 0%, rgba(127, 178, 255, 0.26), rgba(8, 14, 28, 0.6) 70%),
+    #070d1a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.neo-ast canvas { display: block; width: 100%; height: 100%; }
+.neo-bio-idtext { min-width: 0; }
 .neo-bio-name {
   display: block; font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: 17px; font-weight: 600; color: #eef5ff;
@@ -3918,15 +3976,23 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 .neo-bio-sub {
   display: block; margin-top: 3px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 8.5px; letter-spacing: 0.14em; color: rgba(150, 176, 214, 0.58);
+  font-size: 8.5px; letter-spacing: 0.08em; color: rgba(150, 176, 214, 0.58);
 }
 .neo-bio p {
-  margin: 10px 0 0; font-family: "Inter", system-ui, sans-serif;
+  margin: 11px 0 0; font-family: "Inter", system-ui, sans-serif;
   font-size: 12.5px; line-height: 1.62; color: rgba(210, 224, 246, 0.8);
 }
 .neo-bio p b { color: #fff; font-weight: 600; }
+.neo-bio-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+.neo-chip {
+  padding: 4px 9px; border-radius: 999px;
+  border: 1px solid rgba(150, 185, 235, 0.2); background: rgba(127, 178, 255, 0.08);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(198, 216, 244, 0.75);
+}
 .neo-bio-open {
-  position: absolute; right: 46px; top: 104px; z-index: 4;
+  position: absolute; right: 46px; top: 76px; z-index: 4;
   padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12);
   background: rgba(8,14,28,0.6); color: rgba(255,196,120,0.85);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -3954,17 +4020,24 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
   font-size: 8.5px; letter-spacing: 0.05em; line-height: 1.5; color: rgba(150, 176, 214, 0.36);
 }
 
-@media (max-width: 1100px) {
-  .neo-bio { width: 250px; right: 16px; top: 96px; }
-  .neo-bio-open { right: 16px; top: 96px; }
+@media (max-width: 1180px) {
+  .neo-bio { width: 262px; right: 16px; top: 100px; max-height: calc(100vh - 380px); }
+  .neo-bio-open { right: 16px; top: 100px; }
+  .neo-rail { left: 20px; width: 220px; }
+  .neo-panel-open { left: 20px; }
+  .neo-hud--br { right: 16px; }
 }
 @media (max-width: 900px) {
   .neo-hud--tl { top: 70px; left: 14px; }
-  .neo-panel { left: 12px; width: 190px; max-height: 36vh; }
-  .neo-panel-open { left: 12px; }
-  .neo-bio { left: 12px; right: 12px; width: auto; top: auto; bottom: 96px; }
+  .neo-rail { left: 12px; width: 190px; top: 112px; bottom: auto; max-height: 34vh; }
+  .neo-panel-open { left: 12px; top: 112px; }
+  .neo-bio { left: 12px; right: 12px; width: auto; top: auto; bottom: 100px;
+             max-height: calc(74vh - 290px); }
   .neo-stage.bio-hidden .neo-bio { transform: translateY(14px); }
   .neo-bio-open { right: 12px; top: 70px; }
   .neo-hud--br { display: none; }
-  .neo-legend { gap: 12px; font-size: 8px; }
+  /* Wrapped and lifted, so it stops printing over the caption below it. */
+  .neo-legend { bottom: 58px; gap: 10px; row-gap: 5px; font-size: 8px;
+                flex-wrap: wrap; justify-content: center; max-width: 92vw; }
+  .neo-note { bottom: 14px; }
 }
