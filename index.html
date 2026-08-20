@@ -30,7 +30,26 @@
             <span class="spline-loader-dot"></span>
           </div>
           <nav class="robot-orbit" role="navigation" aria-label="Main navigation">
-            <div class="robot-orbit-ring" aria-hidden="true"></div>
+            <!-- The ring the nav rides on, drawn as an instrument: a tick
+                 collar, counter-turning tracks, a slow arc pair and cardinal
+                 crosshairs. The nodes orbit on the outermost circle. -->
+            <div class="robot-orbit-ring" aria-hidden="true">
+              <svg class="hud-rings" viewBox="0 0 400 400" focusable="false">
+                <g class="hr">
+                  <circle class="hr-main" cx="200" cy="200" r="198"/>
+                  <circle class="hr-tick" cx="200" cy="200" r="189"/>
+                  <circle class="hr-dash hr-spin" cx="200" cy="200" r="177"/>
+                  <circle class="hr-faint" cx="200" cy="200" r="150"/>
+                  <circle class="hr-dash2 hr-spin-rev" cx="200" cy="200" r="131"/>
+                  <circle class="hr-faint" cx="200" cy="200" r="110"/>
+                  <g class="hr-spin-slow">
+                    <path class="hr-arc" d="M200 35a165 165 0 0 1 117 48"/>
+                    <path class="hr-arc" d="M200 365a165 165 0 0 1-117-48"/>
+                  </g>
+                  <path class="hr-cross" d="M200 2v20M200 378v20M2 200h20M378 200h20"/>
+                </g>
+              </svg>
+            </div>
             <a href="#about" class="orbit-node" data-modal="about" data-index="0" aria-label="About">
               <span class="orbit-node-dot">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -92,6 +111,11 @@
             <span class="frame-corner frame-corner--tr"></span>
             <span class="frame-corner frame-corner--bl"></span>
             <span class="frame-corner frame-corner--br"></span>
+            <!-- The terminal says what it is, the way one does. -->
+            <span class="hud-tag hud-tag--tl"><i class="hud-live"></i>SYS · ONLINE</span>
+            <span class="hud-tag hud-tag--tr">REACTOR · 98.4 %</span>
+            <span class="hud-tag hud-tag--bl">NAV · 5 NODES</span>
+            <span class="hud-tag hud-tag--br">OPERATOR · S. RUHAN</span>
           </div>
           <div class="stage-vignette" aria-hidden="true"></div>
           <div class="stage-grain" aria-hidden="true"></div>
