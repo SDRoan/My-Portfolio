@@ -3339,24 +3339,6 @@ img {
 }
 .ct-copy svg { width: 14px; height: 14px; flex: none; }
 .ct-copy:hover { border-color: rgba(255, 255, 255, 0.3); color: #fff; background: rgba(255, 255, 255, 0.07); }
-.ct-copy.is-done { border-color: #7fb2ff; color: #cfe2ff; }
-
-/* The copy control shrinks to its glyph; the label is kept for screen readers
-   and reappears when it has something to report. */
-.ct-copy--icon { padding: 9px 11px; gap: 0; }
-.ct-copy--icon .ct-copy-label {
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
-  transition: max-width 0.35s ease, opacity 0.3s ease, margin 0.35s ease;
-}
-.ct-copy--icon.is-done .ct-copy-label {
-  max-width: 240px;
-  opacity: 1;
-  margin-left: 8px;
-}
-
 .ct-board {
   border-color: rgba(127, 178, 255, 0.32);
   background: linear-gradient(180deg, rgba(127, 178, 255, 0.14), rgba(127, 178, 255, 0.05));

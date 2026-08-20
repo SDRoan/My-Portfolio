@@ -214,10 +214,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4a6 6 0 0 1 5.5 5.5"/><path d="M13 8.5a2.5 2.5 0 0 1 2.5 2.5"/><path d="m11 10-7 7 3 3 7-7"/><path d="m13.5 4.5 6 6-3.5 3.5-6-6z"/></svg>
           <span id="ct-board-txt">Board a satellite</span>
         </button>
-        <button type="button" class="ct-copy ct-copy--icon" id="ct-copy" aria-label="Copy email address" title="Copy email address">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="13" height="13" x="9" y="9" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          <span id="ct-copy-txt" class="ct-copy-label">Copy email address</span>
-        </button>
       </div>
 
       <!-- Onboard camera: the view from whichever relay you're riding. -->
@@ -4445,9 +4441,6 @@
         // Contact opens the Earth relay.
         const ctStage = document.getElementById("contact-stage");
         const ctClose = document.getElementById("contact-close");
-        const ctCopy = document.getElementById("ct-copy");
-        const ctCopyTxt = document.getElementById("ct-copy-txt");
-        const EMAIL = "sabyasachidasrohan71@gmail.com";
         function openContact() {
           contactActive = true;
           bodyEl.classList.add("projects-mode");
@@ -4886,26 +4879,6 @@
           if (chartStop) { chartStop(); chartStop = null; }
         }
         bindCloseButton(skClose, closeSkills);
-
-        if (ctCopy) ctCopy.addEventListener("click", async () => {
-          let ok = true;
-          try { await navigator.clipboard.writeText(EMAIL); }
-          catch (err) {
-            const ta = document.createElement("textarea");
-            ta.value = EMAIL; ta.setAttribute("readonly", "");
-            ta.style.cssText = "position:fixed;opacity:0";
-            document.body.appendChild(ta); ta.select();
-            try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
-            ta.remove();
-          }
-          ctCopy.classList.add("is-done");
-          if (ctCopyTxt) ctCopyTxt.textContent = ok ? "Copied" : EMAIL;
-          if (uplink) uplink.ping();
-          setTimeout(() => {
-            ctCopy.classList.remove("is-done");
-            if (ctCopyTxt) ctCopyTxt.textContent = "Copy email address";
-          }, 1900);
-        });
 
         // ── Riding a relay ────────────────────────────────────────────────
         // Board one of the satellites and shoot the Earth from up there.
