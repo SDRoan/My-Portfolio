@@ -307,25 +307,36 @@
           <span class="neo-bio-tag">◈ STATION OPERATOR</span>
           <button type="button" class="neo-panel-x" id="neo-bio-x" aria-label="Hide introduction">−</button>
         </div>
-        <div class="neo-bio-id">
-          <!-- The operator, in a helmet, watching wherever the cursor goes.
-               Rendered in real 3D against the same PBR environment the hero
-               scene uses — the realism comes from the reflections in the visor,
-               which is also what makes the head turn read as a turn. -->
-          <span class="neo-ast" id="neo-ast" aria-hidden="true">
-            <canvas id="neo-ast-canvas"></canvas>
-          </span>
-          <span class="neo-bio-idtext">
-            <strong class="neo-bio-name">Saibyasachi Ruhan</strong>
-            <span class="neo-bio-sub">QUEENS COLLEGE · CS &nbsp;·&nbsp; NEW YORK, NY</span>
-          </span>
+        <!-- The sheet scrolls; the frame, the grid and the title block below
+             stay put, the way they would on a real drawing. -->
+        <div class="neo-bio-sheet" id="neo-bio-sheet">
+          <div class="neo-bio-id">
+            <!-- The operator, in a helmet, watching wherever the cursor goes.
+                 Rendered in real 3D against the same PBR environment the hero
+                 scene uses — the realism comes from the reflections in the
+                 visor, which is what makes the head turn read as a turn. -->
+            <span class="neo-ast" id="neo-ast" aria-hidden="true">
+              <canvas id="neo-ast-canvas"></canvas>
+              <span class="neo-ast-fig">FIG.1</span>
+            </span>
+            <span class="neo-bio-idtext">
+              <strong class="neo-bio-name">Saibyasachi Ruhan</strong>
+              <span class="neo-bio-sub">QUEENS COLLEGE · CS &nbsp;·&nbsp; NEW YORK, NY</span>
+            </span>
+          </div>
+          <p>I'm a CS student who learns best by <b>building real things</b> — and then carefully measuring whether they actually helped.</p>
+          <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
+          <div class="neo-bio-chips">
+            <span class="neo-chip">Full‑stack</span>
+            <span class="neo-chip">AI / ML</span>
+            <span class="neo-chip">Product eng · biotech</span>
+          </div>
         </div>
-        <p>I'm a CS student who learns best by <b>building real things</b> — and then carefully measuring whether they actually helped.</p>
-        <p>Over the last few years I've bounced between full‑stack work, AI‑flavored side projects, and a product engineering internship in biotech. I like being close to the problem: talking to people, understanding what's slow or confusing today, and shipping a change we can measure.</p>
-        <div class="neo-bio-chips">
-          <span class="neo-chip">Full‑stack</span>
-          <span class="neo-chip">AI / ML</span>
-          <span class="neo-chip">Product eng · biotech</span>
+        <!-- Title block, where an engineering drawing keeps its provenance. -->
+        <div class="neo-bio-block" aria-hidden="true">
+          <span><i>DRAWN</i><b>S. RUHAN</b></span>
+          <span><i>UNIT</i><b>EVA‑01</b></span>
+          <span><i>SHEET</i><b>1 OF 1</b></span>
         </div>
       </div>
       <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
@@ -4670,7 +4681,7 @@
         // The introduction is height-capped on short windows; mark it when that
         // cap actually bites so the fade-out only shows on a card that scrolls.
         function neoSyncBioScroll() {
-          const bio = document.getElementById("neo-bio");
+          const bio = document.getElementById("neo-bio-sheet");
           if (!bio) return;
           bio.classList.toggle("is-scroll", bio.scrollHeight - bio.clientHeight > 4);
         }
