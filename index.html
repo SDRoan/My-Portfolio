@@ -304,7 +304,7 @@
            backdrop it is read against, not a replacement for it. -->
       <div class="neo-bio" id="neo-bio">
         <div class="neo-bio-head">
-          <span class="neo-bio-tag">◈ STATION OPERATOR</span>
+          <span class="neo-bio-tag"><i class="neo-live"></i>STATION OPERATOR</span>
           <button type="button" class="neo-panel-x" id="neo-bio-x" aria-label="Hide introduction">−</button>
         </div>
         <!-- The sheet scrolls; the frame, the grid and the title block below
@@ -332,47 +332,54 @@
             <span class="neo-chip">Product eng · biotech</span>
           </div>
         </div>
-        <!-- The subject of the sheet gets its own drawing area, the way it
-             would on paper: dash-dot centre line, dashed hidden edges,
-             extension lines and an arrowed overall dimension. -->
+        <!-- The station, held inside a rotating diagnostic assembly: concentric
+             rings, counter-turning dashed tracks and radial ticks, with the
+             elevation itself scaled down at the centre. -->
         <div class="neo-bio-draw" aria-hidden="true">
-          <span class="neo-bio-draw-tag">STATION · SIDE ELEVATION</span>
-          <svg viewBox="0 0 340 124" focusable="false" preserveAspectRatio="xMidYMid meet">
-            <g class="bp-thin">
-              <path class="bp-centre" d="M14 60H326"/>
-              <!-- pressure hull -->
-              <path d="M132 44h60v32h-60z"/>
-              <path d="M192 44c11 0 20 7 20 16s-9 16-20 16"/>
-              <path d="M132 44c-9 0-16 7-16 16s7 16 16 16"/>
-              <path d="M148 44v32M164 44v32M178 44v32"/>
-              <!-- docking probe forward, engine bell aft -->
-              <path d="M212 52h9v16h-9zM221 57h13v6h-13zM234 59h16"/>
-              <path d="M116 48 99 39v42l17-9z"/>
-              <path class="bp-hidden" d="M105 46v28"/>
-              <!-- truss out to the arrays -->
-              <path d="M99 60H36M250 60h56"/>
-              <path d="M44 56h50v8H44zM256 56h50v8h-50z"/>
-              <!-- solar arrays -->
-              <path d="M30 22h46v76H30zM264 22h46v76h-46z"/>
-              <path d="M30 41h46M30 60h46M30 79h46M53 22v76"/>
-              <path d="M264 41h46M264 60h46M264 79h46M287 22v76"/>
-              <!-- antenna and callout -->
-              <path d="M186 44c0-9 8-16 17-16M203 28v6"/>
-              <path d="M209 24h22"/><circle cx="237" cy="24" r="6.5"/>
-              <text x="237" y="27" class="bp-mark">A</text>
-              <!-- overall dimension -->
-              <path class="bp-ext" d="M30 100v14M310 100v14"/>
-              <path d="M30 110h280"/>
-              <path class="bp-fill" d="M30 110l8-3.5v7zM310 110l-8-3.5v7z"/>
-              <text x="170" y="107" class="bp-dim">31.40 M</text>
+          <span class="neo-bio-draw-tag">STATION · EVA-01</span>
+          <span class="neo-bio-draw-tag neo-bio-draw-tag--r">SCAN ACTIVE</span>
+          <svg viewBox="0 0 340 152" focusable="false" preserveAspectRatio="xMidYMid meet">
+            <g class="jv">
+              <circle class="jv-ring" cx="170" cy="74" r="66"/>
+              <circle class="jv-ring jv-faint" cx="170" cy="74" r="50"/>
+              <circle class="jv-tick" cx="170" cy="74" r="71"/>
+              <circle class="jv-dash jv-spin" cx="170" cy="74" r="60"/>
+              <circle class="jv-dash2 jv-spin-rev" cx="170" cy="74" r="44"/>
+              <g class="jv-spin-slow">
+                <path class="jv-arc" d="M170 0a74 74 0 0 1 64 37"/>
+                <path class="jv-arc" d="M170 148a74 74 0 0 1-64-37"/>
+              </g>
+              <path class="jv-cross" d="M170 4v14M170 130v14M96 74h14M230 74h14"/>
+              <!-- the elevation, scaled into the middle of the assembly -->
+              <g class="jv-ship" transform="translate(170 74) scale(0.5) translate(-170 -60)">
+                <path class="jv-centre" d="M14 60H326"/>
+                <path d="M132 44h60v32h-60z"/>
+                <path d="M192 44c11 0 20 7 20 16s-9 16-20 16"/>
+                <path d="M132 44c-9 0-16 7-16 16s7 16 16 16"/>
+                <path d="M148 44v32M164 44v32M178 44v32"/>
+                <path d="M212 52h9v16h-9zM221 57h13v6h-13zM234 59h16"/>
+                <path d="M116 48 99 39v42l17-9z"/>
+                <path d="M99 60H36M250 60h56"/>
+                <path d="M44 56h50v8H44zM256 56h50v8h-50z"/>
+                <path d="M30 22h46v76H30zM264 22h46v76h-46z"/>
+                <path d="M30 41h46M30 60h46M30 79h46M53 22v76"/>
+                <path d="M264 41h46M264 60h46M264 79h46M287 22v76"/>
+                <path d="M186 44c0-9 8-16 17-16M203 28v6"/>
+              </g>
+              <text class="jv-label" x="24" y="30">HULL</text>
+              <text class="jv-label" x="24" y="42">NOMINAL</text>
+              <text class="jv-label jv-r" x="316" y="30">SPAN</text>
+              <text class="jv-label jv-r" x="316" y="42">31.40 M</text>
+              <text class="jv-label" x="24" y="126">ARRAY</text>
+              <text class="jv-label jv-r" x="316" y="126">98.4 %</text>
             </g>
           </svg>
         </div>
         <!-- Title block, where an engineering drawing keeps its provenance. -->
         <div class="neo-bio-block" aria-hidden="true">
-          <span><i>DRAWN</i><b>S. RUHAN</b></span>
-          <span><i>UNIT</i><b>EVA‑01</b></span>
-          <span><i>SHEET</i><b>1 OF 1</b></span>
+          <span><i>OPERATOR</i><b>S. RUHAN</b></span>
+          <span><i>LINK</i><b class="is-on">ONLINE</b></span>
+          <span><i>PWR</i><b>98.4 %</b></span>
         </div>
       </div>
       <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
