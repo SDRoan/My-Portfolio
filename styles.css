@@ -3929,39 +3929,80 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 }
 .neo-stage.list-hidden .neo-panel-open { opacity: 1; pointer-events: auto; }
 
-/* Detail readout */
-.neo-hud--br { right: 46px; bottom: 64px; text-align: right; min-width: 268px; }
+/* ── target scope ──────────────────────────────────────────────────────── */
+.neo-hud--br { right: 46px; bottom: 64px; text-align: right; width: 182px; }
 .neo-d-name {
   font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: 19px; font-weight: 600; color: #f2fbff; margin-bottom: 10px;
   text-shadow: 0 0 18px rgba(var(--jv), 0.4), 0 2px 16px rgba(2, 4, 12, 0.95);
 }
-.neo-d-row { display: flex; justify-content: space-between; gap: 20px; padding: 2.5px 0; font-size: 10px; }
-.neo-d-row span { color: rgba(var(--jv), 0.62); letter-spacing: 0.12em; }
-.neo-d-row b { color: rgba(220, 234, 252, 0.95); font-weight: 600; font-variant-numeric: tabular-nums; }
-/* Proximity gauge: 1 LD at the left edge, 100+ at the right, logarithmic. */
-.neo-d-gauge { margin-top: 12px; }
-.neo-d-track {
-  display: block; position: relative; height: 3px; border-radius: 2px;
-  background: linear-gradient(90deg, rgba(255, 107, 107, 0.55), rgba(255, 196, 120, 0.45) 42%, rgba(127, 178, 255, 0.4));
+.neo-scope { position: relative; width: 100%; }
+.neo-scope svg {
+  display: block; width: 100%; height: auto;
+  filter: drop-shadow(0 0 5px rgba(var(--jv), 0.3));
 }
-.neo-d-pin {
-  position: absolute; top: 50%; left: 0; width: 8px; height: 8px; margin: -4px 0 0 -4px;
-  border-radius: 50%; background: #dceaff; box-shadow: 0 0 10px rgba(220, 234, 255, 0.9);
-  transition: left 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+.ns { fill: none; stroke: rgb(var(--jv)); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.ns-ring  { stroke: rgba(var(--jv), 0.4); }
+.ns-faint { stroke: rgba(var(--jv), 0.2); }
+.ns-tick  { stroke: rgba(var(--jv), 0.34); stroke-width: 5; stroke-dasharray: 1 9; }
+.ns-cross { stroke: rgba(var(--jv), 0.42); }
+.ns-wedge { fill: url(#neoSweep); stroke: none; }
+.ns-edge  { stroke: rgba(var(--jv), 0.75); }
+.ns-earth { fill: rgba(var(--jv), 0.9); stroke: none; }
+/* the return, sweeping the scope */
+.ns-sweep { transform-box: view-box; transform-origin: 100px 100px;
+            animation: nsSweep 5.2s linear infinite; }
+@keyframes nsSweep { to { transform: rotate(360deg); } }
+/* the selected object, sitting where it actually passes */
+.ns-mark circle { fill: rgb(var(--jv)); stroke: none; }
+.ns-mark .ns-halo {
+  fill: none; stroke: rgba(var(--jv), 0.7); stroke-width: 1;
+  transform-box: fill-box; transform-origin: center;
+  animation: nsPing 2.4s ease-out infinite;
 }
-.neo-d-pin.is-haz { background: #ff6b6b; box-shadow: 0 0 12px rgba(255, 107, 107, 0.95); }
-.neo-d-scale { display: flex; justify-content: space-between; margin-top: 5px; }
-.neo-d-scale i { font-style: normal; font-size: 7.5px; letter-spacing: 0.12em; color: rgba(150, 176, 214, 0.42); }
-.neo-d-flag { margin-top: 10px; font-size: 9.5px; letter-spacing: 0.13em; color: transparent; }
-.neo-d-flag.is-haz { color: #ff9a9a; }
+.ns-mark.is-haz circle { fill: #ff6b6b; }
+.ns-mark.is-haz .ns-halo { stroke: rgba(255, 107, 107, 0.75); }
+@keyframes nsPing {
+  from { transform: scale(0.35); opacity: 1; }
+  to   { transform: scale(1.5); opacity: 0; }
+}
+/* The rings are named once underneath rather than labelled individually,
+   which kept crowding the Earth at the centre. */
+.ns-key {
+  display: block; margin-top: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 7px; letter-spacing: 0.16em; color: rgba(var(--jv), 0.5);
+}
+
+.neo-d-read { margin-top: 8px; display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
+.neo-d-read b {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 23px; font-weight: 600; color: rgb(var(--jv));
+  text-shadow: 0 0 20px rgba(var(--jv), 0.5); font-variant-numeric: tabular-nums;
+}
+.neo-d-read i {
+  font-style: normal; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 7px; letter-spacing: 0.14em; color: rgba(var(--jv), 0.55);
+  max-width: 58px; text-align: left; line-height: 1.35;
+}
+.neo-d-flag {
+  margin-top: 8px; font-size: 9.5px; letter-spacing: 0.13em; color: transparent;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.neo-d-flag.is-haz { color: #ff9a9a; text-shadow: 0 0 12px rgba(255, 107, 107, 0.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ns-sweep, .ns-mark .ns-halo { animation: none; }
+}
 
 /* Operator introduction */
 /* ── Operator card, as a holographic console panel ──────────────────────── */
 .neo-bio {
   position: absolute; right: 46px; top: 76px; z-index: 4; width: 318px;
   padding: 0; overflow: hidden;
-  max-height: calc(100vh - 390px);
+  /* The scope below stands 290px tall on a 64px margin, so the card has to
+     stop 16px clear of it: 76 top + 290 + 64 + 16. */
+  max-height: calc(100vh - 446px);
   display: flex; flex-direction: column;
   border: 1px solid rgba(var(--jv), 0.42);
   border-radius: 0;
@@ -4205,7 +4246,7 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 }
 
 @media (max-width: 1180px) {
-  .neo-bio { width: 262px; right: 16px; top: 100px; max-height: calc(100vh - 380px); }
+  .neo-bio { width: 262px; right: 16px; top: 100px; max-height: calc(100vh - 470px); }
   .neo-bio-open { right: 16px; top: 100px; }
   .neo-rail { left: 20px; width: 220px; }
   .neo-panel-open { left: 20px; }

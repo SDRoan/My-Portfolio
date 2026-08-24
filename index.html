@@ -412,20 +412,39 @@
       </div>
       <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
 
+      <!-- A scope rather than a table. The Earth holds the centre, the rings
+           are the same logarithmic 1/10/100 lunar distances the scene is drawn
+           on, and the selected object sits where it actually passes. -->
       <div class="neo-hud neo-hud--br" id="neo-detail">
         <div class="neo-d-name" id="neo-d-name">—</div>
-        <div class="neo-d-row"><span>CLOSE APPROACH</span><b id="neo-d-when">—</b></div>
-        <div class="neo-d-row"><span>TIME UNCERT · 3σ</span><b id="neo-d-sig">—</b></div>
-        <div class="neo-d-row"><span>MISS DISTANCE</span><b id="neo-d-miss">—</b></div>
-        <div class="neo-d-row"><span>IN LUNAR DIST</span><b id="neo-d-ld">—</b></div>
-        <div class="neo-d-row"><span>REL. VELOCITY</span><b id="neo-d-vel">—</b></div>
-        <div class="neo-d-row"><span>EST. DIAMETER</span><b id="neo-d-dia">—</b></div>
-        <div class="neo-d-row"><span>ORBIT CLASS</span><b id="neo-d-cls">—</b></div>
-        <!-- Where this pass sits on the same logarithmic scale the scene uses. -->
-        <div class="neo-d-gauge" aria-hidden="true">
-          <span class="neo-d-track"><i class="neo-d-pin" id="neo-d-pin"></i></span>
-          <span class="neo-d-scale"><i>1 LD</i><i>10</i><i>100+</i></span>
+        <div class="neo-scope">
+          <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="neoSweep" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="rgba(122,224,255,0.34)"/>
+                <stop offset="1" stop-color="rgba(122,224,255,0)"/>
+              </linearGradient>
+            </defs>
+            <g class="ns">
+              <circle class="ns-tick"  cx="100" cy="100" r="93"/>
+              <circle class="ns-ring"  cx="100" cy="100" r="86"/>
+              <circle class="ns-faint" cx="100" cy="100" r="53"/>
+              <circle class="ns-faint" cx="100" cy="100" r="20"/>
+              <g class="ns-sweep">
+                <path class="ns-wedge" d="M100 100 L100 7 A93 93 0 0 1 165 34 Z"/>
+                <path class="ns-edge" d="M100 100 L100 7"/>
+              </g>
+              <path class="ns-cross" d="M100 2v13M100 185v13M2 100h13M185 100h13"/>
+              <circle class="ns-earth" cx="100" cy="100" r="4.5"/>
+              <g class="ns-mark" id="neo-scope-mark">
+                <circle r="4.5"/>
+                <circle class="ns-halo" r="11"/>
+              </g>
+            </g>
+          </svg>
         </div>
+        <span class="ns-key">SCOPE · 1 / 10 / 100 LD</span>
+        <div class="neo-d-read"><b id="neo-d-ld">—</b><i>LD AT CLOSEST</i></div>
         <div class="neo-d-flag" id="neo-d-flag"></div>
       </div>
 
@@ -4693,32 +4712,13 @@
         const neoStage = document.getElementById("neo-stage");
         const neoEl = {
           list: document.getElementById("neo-list"), name: document.getElementById("neo-d-name"),
-          when: document.getElementById("neo-d-when"), miss: document.getElementById("neo-d-miss"),
-          ld: document.getElementById("neo-d-ld"), vel: document.getElementById("neo-d-vel"),
-          dia: document.getElementById("neo-d-dia"), flag: document.getElementById("neo-d-flag"),
-          cls: document.getElementById("neo-d-cls"), sig: document.getElementById("neo-d-sig"),
-          pin: document.getElementById("neo-d-pin"), panelTitle: document.getElementById("neo-panel-title"),
+          ld: document.getElementById("neo-d-ld"), flag: document.getElementById("neo-d-flag"),
+          mark: document.getElementById("neo-scope-mark"),
+          panelTitle: document.getElementById("neo-panel-title"),
           filter: document.getElementById("neo-filter")
         };
         const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g,
           (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
-        // JPL publishes a 3-sigma uncertainty on each approach time, and for
-        // most objects it is hours or days. Printing a minute against a ±9-day
-        // uncertainty would be invented precision, so the stamp is only ever
-        // shown as finely as the uncertainty actually supports.
-        function sigText(sec) {
-          if (sec < 3600) return Math.round(sec / 60) + " min";
-          if (sec < 86400) return Math.round(sec / 3600) + " h";
-          return Math.round(sec / 86400) + " d";
-        }
-        function fmtWhen(o) {
-          if (o.tsec == null || !o.day) return o.when;   // no sigma published
-          if (o.tsec <= 60) return o.when;               // good to the minute
-          if (o.tsec <= 2700) return o.day + " ~" + o.hm;
-          if (o.tsec <= 43200) return o.day + " ~" + o.hm.slice(0, 2) + "h";
-          return o.day + " ±" + sigText(o.tsec);
-        }
 
         // A miss distance means very little as a number, so the readout also
         // pins it on the same logarithmic 1–100 LD scale the scene is drawn on.
@@ -4736,18 +4736,21 @@
             if (!o) return;
             neoSelected = i;
             neoEl.name.textContent = o.name;
-            neoEl.when.textContent = fmtWhen(o) + (o.tsec == null || o.tsec <= 43200 ? " UTC" : "");
-            neoEl.sig.textContent = o.tsec == null ? "not published" : "± " + sigText(o.tsec);
-            neoEl.miss.textContent = Math.round(o.km).toLocaleString() + " km";
-            neoEl.ld.textContent = o.ld.toFixed(2) + " LD";
-            neoEl.vel.textContent = o.vkms.toFixed(2) + " km/s";
-            neoEl.dia.textContent = o.dia ? Math.round(o.dia).toLocaleString() + " m" : "unknown";
+            neoEl.ld.textContent = o.ld.toFixed(2);
             neoEl.flag.textContent = o.haz ? "⚠ POTENTIALLY HAZARDOUS" : "";
             neoEl.flag.className = "neo-d-flag" + (o.haz ? " is-haz" : "");
-            neoEl.cls.textContent = (o.orb && o.orb.cls) ? o.orb.cls : "—";
-            if (neoEl.pin) {
-              neoEl.pin.style.left = (ldPos(o.ld) * 100).toFixed(1) + "%";
-              neoEl.pin.className = "neo-d-pin" + (o.haz ? " is-haz" : "");
+            // Plot the object on the scope: distance sets the radius on the same
+            // log scale the rings mark, and a hash of the designation gives it a
+            // stable bearing so it does not jump about between selections.
+            if (neoEl.mark) {
+              const r = 20 + ldPos(o.ld) * 66;
+              let h = 0;
+              for (let k = 0; k < o.name.length; k++) h = (h * 31 + o.name.charCodeAt(k)) >>> 0;
+              const a = (h % 3600) / 3600 * Math.PI * 2;
+              neoEl.mark.setAttribute("transform",
+                "translate(" + (100 + Math.cos(a) * r).toFixed(1) + " " +
+                               (100 + Math.sin(a) * r).toFixed(1) + ")");
+              neoEl.mark.setAttribute("class", "ns-mark" + (o.haz ? " is-haz" : ""));
             }
             Array.from(neoEl.list.children).forEach((c) => {
               c.classList.toggle("is-on", Number(c.dataset.i) === i);
