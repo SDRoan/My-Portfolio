@@ -17,6 +17,27 @@
       />
   </head>
   <body class="home-immersive">
+  <script>
+    // GitHub Pages serves index.html with max-age=600, so a browser can sit on
+    // a stale copy for ten minutes after a deploy — long enough for a shipped
+    // change to look like it never shipped. Ask once whether the build moved on,
+    // and reload if it did. Keyed on the new build id, so it cannot loop.
+    (function () {
+      var BUILD = "20260825-120909";
+      try {
+        fetch("version.json", { cache: "no-store" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (v) {
+            if (!v || !v.build || v.build === BUILD) return;
+            if (sessionStorage.getItem("build-seen") === v.build) return;
+            sessionStorage.setItem("build-seen", v.build);
+            location.reload();
+          })
+          .catch(function () {});
+      } catch (e) {}
+    })();
+  </script>
+
     <main id="top" id="site-main">
       <section class="section spline-section" id="interactive-3d">
         <div class="spline-stage">
