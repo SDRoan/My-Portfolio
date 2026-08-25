@@ -23,7 +23,7 @@
     // change to look like it never shipped. Ask once whether the build moved on,
     // and reload if it did. Keyed on the new build id, so it cannot loop.
     (function () {
-      var BUILD = "20260825-205234";
+      var BUILD = "20260825-205846";
       try {
         fetch("version.json", { cache: "no-store" })
           .then(function (r) { return r.ok ? r.json() : null; })
