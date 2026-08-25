@@ -3929,62 +3929,72 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 }
 .neo-stage.list-hidden .neo-panel-open { opacity: 1; pointer-events: auto; }
 
-/* ── specimen window ───────────────────────────────────────────────────── */
-.neo-hud--br { right: 46px; bottom: 64px; text-align: right; width: 190px; }
+/* ── flight control ────────────────────────────────────────────────────── */
+.neo-hud--br { right: 46px; bottom: 64px; text-align: right; width: 214px; pointer-events: auto; }
 .neo-d-name {
   font-family: "Space Grotesk", "Inter", sans-serif;
-  font-size: 18px; font-weight: 600; color: #f2fbff; margin-bottom: 9px;
+  font-size: 18px; font-weight: 600; color: #f2fbff; margin-bottom: 10px;
   text-shadow: 0 0 18px rgba(var(--jv), 0.4), 0 2px 16px rgba(2, 4, 12, 0.95);
 }
-/* Only a frame: the body itself is rendered underneath, straight into this
-   box, so the panel must stay transparent. */
-.neo-spec {
-  position: relative; width: 100%; aspect-ratio: 1 / 1;
-  border: 1px solid rgba(var(--jv), 0.2);
-  background: linear-gradient(180deg, rgba(var(--jv), 0.05), transparent 60%);
-  overflow: hidden;
+.neo-fly {
+  border: 1px solid rgba(var(--jv), 0.3);
+  clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px),
+                     calc(100% - 11px) 100%, 0 100%, 0 11px);
+  background:
+    repeating-linear-gradient(0deg, rgba(var(--jv), 0.04) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, rgba(6, 20, 34, 0.86), rgba(2, 8, 16, 0.9));
+  padding: 11px 12px 10px; text-align: left;
 }
-.sp-br {
-  position: absolute; width: 13px; height: 13px;
-  border: 1px solid rgba(var(--jv), 0.85);
-  filter: drop-shadow(0 0 4px rgba(var(--jv), 0.5));
-}
-.sp-br--tl { left: 5px;  top: 5px;    border-right: 0; border-bottom: 0; }
-.sp-br--tr { right: 5px; top: 5px;    border-left: 0;  border-bottom: 0; }
-.sp-br--bl { left: 5px;  bottom: 5px; border-right: 0; border-top: 0; }
-.sp-br--br { right: 5px; bottom: 5px; border-left: 0;  border-top: 0; }
-/* a line drawn down the body, the way a scanner reads one */
-.sp-scan {
-  position: absolute; left: 0; right: 0; height: 1px; top: 0;
-  background: linear-gradient(90deg, transparent, rgba(var(--jv), 0.8), transparent);
-  box-shadow: 0 0 10px rgba(var(--jv), 0.6);
-  animation: spScan 3.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-}
-@keyframes spScan { 0% { top: 6%; } 50% { top: 94%; } 100% { top: 6%; } }
-.sp-tag {
-  position: absolute; left: 0; right: 0; bottom: 5px; text-align: center;
+.neo-fly-btn {
+  display: block; width: 100%; padding: 8px 10px; cursor: pointer;
+  border: 1px solid rgba(var(--jv), 0.55); border-radius: 0;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px),
+                     calc(100% - 8px) 100%, 0 100%, 0 8px);
+  background: rgba(var(--jv), 0.12); color: rgb(var(--jv));
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 6.5px; letter-spacing: 0.2em; color: rgba(var(--jv), 0.6);
+  font-size: 9px; letter-spacing: 0.18em;
+  text-shadow: 0 0 10px rgba(var(--jv), 0.6);
+  transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
+.neo-fly-btn:hover { background: rgba(var(--jv), 0.26); box-shadow: 0 0 22px rgba(var(--jv), 0.4); color: #fff; }
+.neo-fly-btn.is-live { background: rgba(122, 224, 255, 0.3); color: #fff; box-shadow: 0 0 26px rgba(var(--jv), 0.55); }
 
-.neo-d-read { margin-top: 9px; display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
-.neo-d-read b {
+.neo-fly-keys { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+.neo-fly-keys span { display: flex; align-items: center; gap: 4px; }
+.neo-fly-keys b {
+  min-width: 15px; padding: 2px 4px; text-align: center;
+  border: 1px solid rgba(var(--jv), 0.32); background: rgba(var(--jv), 0.08);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px; font-weight: 600; color: rgba(var(--jv), 0.9);
+}
+.neo-fly-keys em {
+  font-style: normal; margin-left: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 7.5px; letter-spacing: 0.14em; color: rgba(var(--jv), 0.5);
+}
+.neo-fly-stat {
+  margin-top: 10px; padding-top: 9px; display: flex; gap: 14px;
+  border-top: 1px solid rgba(var(--jv), 0.18);
+}
+.neo-fly-stat span { flex: 1; min-width: 0; }
+.neo-fly-stat i {
+  display: block; font-style: normal;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 6.5px; letter-spacing: 0.2em; color: rgba(var(--jv), 0.55);
+}
+.neo-fly-stat b {
+  display: block; margin-top: 2px;
   font-family: "Space Grotesk", "Inter", sans-serif;
-  font-size: 23px; font-weight: 600; color: rgb(var(--jv));
-  text-shadow: 0 0 20px rgba(var(--jv), 0.5); font-variant-numeric: tabular-nums;
+  font-size: 15px; font-weight: 600; color: rgb(var(--jv));
+  text-shadow: 0 0 14px rgba(var(--jv), 0.45); font-variant-numeric: tabular-nums;
 }
-.neo-d-read i {
-  font-style: normal; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 7px; letter-spacing: 0.14em; color: rgba(var(--jv), 0.55);
-  max-width: 58px; text-align: left; line-height: 1.35;
-}
+.neo-fly-stat b#neo-fly-state { font-size: 10px; letter-spacing: 0.1em; }
+
 .neo-d-flag {
-  margin-top: 8px; font-size: 9.5px; letter-spacing: 0.13em; color: transparent;
+  margin-top: 9px; font-size: 9.5px; letter-spacing: 0.13em; color: transparent;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .neo-d-flag.is-haz { color: #ff9a9a; text-shadow: 0 0 12px rgba(255, 107, 107, 0.5); }
-
-@media (prefers-reduced-motion: reduce) { .sp-scan { animation: none; } }
 
 
 /* Operator introduction */

@@ -412,18 +412,22 @@
       </div>
       <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
 
-      <!-- A window on the object itself. The body is the one selected, turned
-           under a light so its shape reads; the panel is only the frame around
-           it, so the render underneath shows through. -->
+      <!-- Flight control. The craft is always out there; this hands you the
+           stick. -->
       <div class="neo-hud neo-hud--br" id="neo-detail">
         <div class="neo-d-name" id="neo-d-name">—</div>
-        <div class="neo-spec" id="neo-spec">
-          <i class="sp-br sp-br--tl"></i><i class="sp-br sp-br--tr"></i>
-          <i class="sp-br sp-br--bl"></i><i class="sp-br sp-br--br"></i>
-          <i class="sp-scan"></i>
-          <span class="sp-tag">SPECIMEN · LIVE SCAN</span>
+        <div class="neo-fly">
+          <button type="button" class="neo-fly-btn" id="neo-fly-btn">◈ TAKE THE HELM</button>
+          <div class="neo-fly-keys">
+            <span><b>W</b><b>A</b><b>S</b><b>D</b><em>steer</em></span>
+            <span><b>SPACE</b><em>fire</em></span>
+            <span><b>ESC</b><em>release</em></span>
+          </div>
+          <div class="neo-fly-stat">
+            <span><i>DESTROYED</i><b id="neo-fly-kills">0</b></span>
+            <span><i>STATUS</i><b id="neo-fly-state">STANDBY</b></span>
+          </div>
         </div>
-        <div class="neo-d-read"><b id="neo-d-ld">—</b><i>LD AT CLOSEST</i></div>
         <div class="neo-d-flag" id="neo-d-flag"></div>
       </div>
 
@@ -2045,7 +2049,6 @@
           renderer = new THREE.WebGLRenderer({ canvas: cnv, antialias: true, alpha: false });
         } catch (err) { cnv.style.display = "none"; return null; }
         renderer.setClearColor(0x02040a, 1);
-        renderer.autoClear = false;   // the specimen pass draws over the scene
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         renderer.setPixelRatio(dpr);
 
@@ -2402,6 +2405,9 @@
           trackRocks.frustumCulled = false;
           trackGroup.add(trackRocks);
 
+          destroyed = new Uint8Array(items.length);
+          killed = 0;
+          if (flyKills) flyKills.textContent = "0";
           items.forEach((it, i) => {
             const p0 = it.path[0];
             dotPos[i * 3] = p0.x; dotPos[i * 3 + 1] = p0.y; dotPos[i * 3 + 2] = p0.z;
@@ -2453,30 +2459,127 @@
           if (trackRocks && trackRocks.instanceColor) trackRocks.instanceColor.needsUpdate = true;
         }
 
-        // ── specimen ──
-        // A second pass into a corner of the same canvas rather than a second
-        // WebGL context: one renderer, one extra scene holding a single body,
-        // drawn through a scissor box that tracks the panel in the HUD.
-        const specBox = document.getElementById("neo-spec");
-        const specScene = new THREE.Scene();
-        const specCam = new THREE.PerspectiveCamera(34, 1, 0.1, 40);
-        // The body carries a displaced radius near 1.4, so it has to sit well
-        // back to read as an object rather than a wall of facets.
-        specCam.position.set(0, 0, 6.2);
-        const specMesh = new THREE.Mesh(
-          keep(rockGeometry(5)),
-          keep(new THREE.MeshStandardMaterial({
-            map: surfaceTexture("rock"), roughness: 0.95, metalness: 0.0,
-            emissive: 0x1b2740, emissiveIntensity: 0.55
+        // ── the craft ──────────────────────────────────────────────────────
+        // Built here rather than loaded: every freely licensed rocket I could
+        // find is cartoon low-poly, which would sit badly against a field of
+        // real bodies. Panelled metal, a lit engine bell and a thruster that
+        // answers the throttle read as a craft; a toy would not.
+        const ship = new THREE.Group();
+        ship.visible = false;
+        scene.add(ship);
+        (function buildShip() {
+          const hull = keep(new THREE.MeshStandardMaterial({
+            color: 0xd7e2f0, metalness: 0.9, roughness: 0.28, envMapIntensity: 1.2
+          }));
+          const trim = keep(new THREE.MeshStandardMaterial({
+            color: 0x2c3d55, metalness: 0.85, roughness: 0.35
+          }));
+          const glow = keep(new THREE.MeshStandardMaterial({
+            color: 0x7ae0ff, emissive: 0x7ae0ff, emissiveIntensity: 2.4,
+            metalness: 0.2, roughness: 0.4
+          }));
+          // Forward is -Z, matching how the chase camera and the guns aim.
+          const body = new THREE.Mesh(keep(new THREE.CylinderGeometry(0.075, 0.1, 0.44, 28)), hull);
+          body.rotation.x = Math.PI / 2;
+          ship.add(body);
+          const nose = new THREE.Mesh(keep(new THREE.ConeGeometry(0.075, 0.22, 28)), hull);
+          nose.rotation.x = -Math.PI / 2;
+          nose.position.z = -0.33;
+          ship.add(nose);
+          const collar = new THREE.Mesh(keep(new THREE.CylinderGeometry(0.104, 0.104, 0.05, 28)), trim);
+          collar.rotation.x = Math.PI / 2;
+          collar.position.z = -0.1;
+          ship.add(collar);
+          const bell = new THREE.Mesh(keep(new THREE.CylinderGeometry(0.13, 0.085, 0.13, 28, 1, true)), trim);
+          bell.rotation.x = Math.PI / 2;
+          bell.position.z = 0.27;
+          bell.material.side = THREE.DoubleSide;
+          ship.add(bell);
+          const eye = new THREE.Mesh(keep(new THREE.SphereGeometry(0.045, 20, 14)), glow);
+          eye.position.set(0, 0.045, -0.16);
+          ship.add(eye);
+          // three fins on the quarter
+          for (let k = 0; k < 3; k++) {
+            const fin = new THREE.Mesh(keep(new THREE.BoxGeometry(0.015, 0.15, 0.2)), trim);
+            const a = (k / 3) * Math.PI * 2;
+            fin.position.set(Math.cos(a) * 0.1, Math.sin(a) * 0.1, 0.2);
+            fin.rotation.z = a - Math.PI / 2;
+            ship.add(fin);
+          }
+          const flame = new THREE.Mesh(
+            keep(new THREE.ConeGeometry(0.062, 0.3, 20, 1, true)),
+            keep(new THREE.MeshBasicMaterial({
+              color: 0x9fe8ff, transparent: true, opacity: 0.85,
+              blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+            })));
+          flame.rotation.x = -Math.PI / 2;
+          flame.position.z = 0.4;   // seated in the bell, not trailing behind it
+          flame.name = "flame";
+          ship.add(flame);
+          ship.userData.flame = flame;
+        })();
+
+        // Bolts are pooled: a shooter that allocates on every trigger pull
+        // stutters exactly when it should not.
+        const BOLT_N = 26, BOLT_SPEED = 26, BOLT_LIFE = 2.4, HIT_R = 0.42;
+        const bolts = [];
+        const boltGeo = keep(new THREE.CapsuleGeometry(0.018, 0.14, 4, 8));
+        const boltMat = keep(new THREE.MeshBasicMaterial({
+          color: 0x9fe8ff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+        }));
+        for (let k = 0; k < BOLT_N; k++) {
+          const m = new THREE.Mesh(boltGeo, boltMat);
+          m.visible = false;
+          scene.add(m);
+          bolts.push({ mesh: m, vel: new THREE.Vector3(), life: 0 });
+        }
+
+        // Bursts, likewise pooled.
+        const BURST_N = 14;
+        const bursts = [];
+        const burstGeo = keep(new THREE.SphereGeometry(1, 16, 12));
+        for (let k = 0; k < BURST_N; k++) {
+          const m = new THREE.Mesh(burstGeo, keep(new THREE.MeshBasicMaterial({
+            color: 0xffd9a0, transparent: true, opacity: 0,
+            blending: THREE.AdditiveBlending, depthWrite: false, wireframe: true
           })));
-        specScene.add(specMesh);
-        const specKey = new THREE.DirectionalLight(0xffffff, 2.4);
-        specKey.position.set(-2, 1.6, 3);
-        specScene.add(specKey);
-        const specRim = new THREE.DirectionalLight(0x7ae0ff, 1.6);
-        specRim.position.set(2.4, -0.6, -1.4);
-        specScene.add(specRim);
-        specScene.add(new THREE.AmbientLight(0x9fd0ff, 0.35));
+          m.visible = false;
+          scene.add(m);
+          bursts.push({ mesh: m, life: 0 });
+        }
+
+        const flyBtn = document.getElementById("neo-fly-btn");
+        const flyState = document.getElementById("neo-fly-state");
+        const flyKills = document.getElementById("neo-fly-kills");
+        let flying = false, killed = 0;
+        let destroyed = null;                     // per-object, set once data lands
+        const shipVel = new THREE.Vector3();
+        let shipYaw = 0, shipPitch = 0, fireCool = 0;
+        const keyState = Object.create(null);
+        const shipFwd = new THREE.Vector3();
+        const chase = new THREE.Vector3();
+
+        function fire() {
+          if (fireCool > 0) return;
+          fireCool = 0.14;
+          const b = bolts.find((x) => x.life <= 0);
+          if (!b) return;
+          shipFwd.set(0, 0, -1).applyQuaternion(ship.quaternion);   // the nose
+          b.mesh.position.copy(ship.position).addScaledVector(shipFwd, 0.34);
+          b.mesh.quaternion.copy(ship.quaternion);
+          b.mesh.rotateX(Math.PI / 2);
+          b.vel.copy(shipFwd).multiplyScalar(BOLT_SPEED);
+          b.life = BOLT_LIFE;
+          b.mesh.visible = true;
+        }
+
+        function burstAt(v) {
+          const b = bursts.find((x) => x.life <= 0) || bursts[0];
+          b.mesh.position.copy(v);
+          b.mesh.scale.setScalar(0.05);
+          b.mesh.visible = true;
+          b.life = 0.55;
+        }
 
         // Scratch objects for the per-frame instance placement, so a thousand
         // bodies do not allocate a thousand temporaries every frame.
@@ -2489,13 +2592,6 @@
 
         let selected = -1;
         function select(i) {
-          // The specimen takes the selected body's own proportions and colour,
-          // so the thing under the light is the thing in the field.
-          if (items[i]) {
-            const sc = i * 3;
-            specMesh.scale.set(rockScale[sc] * 0.62, rockScale[sc + 1] * 0.62, rockScale[sc + 2] * 0.62);
-            specMesh.material.color.setHex(items[i].def.haz ? 0xffb4ac : 0xffffff);
-          }
           if (lockTag && items[i]) lockTag.textContent = items[i].def.name;
           selected = i;
           paintAll();
@@ -2515,6 +2611,45 @@
         function onUp() { dragging = false; cnv.style.cursor = hovered >= 0 ? "pointer" : "grab"; }
         function onWheel(e) { e.preventDefault(); tDist = THREE.MathUtils.clamp(tDist * Math.exp(Math.sign(e.deltaY) * 0.15), 2.5, 70); }
 
+        // ── flight ──
+        function setFlying(on) {
+          flying = on;
+          ship.visible = on;
+          if (flyBtn) {
+            flyBtn.classList.toggle("is-live", on);
+            flyBtn.textContent = on ? "◈ RELEASE HELM" : "◈ TAKE THE HELM";
+          }
+          if (flyState) flyState.textContent = on ? "FLYING" : "STANDBY";
+          cnv.style.cursor = on ? "crosshair" : "grab";
+          if (on) {
+            // Start where the camera already is, pointed inward, so taking the
+            // helm does not teleport you somewhere unrecognisable.
+            ship.position.copy(camera.position).multiplyScalar(0.62);
+            shipYaw = Math.atan2(ship.position.x, ship.position.z);
+            shipPitch = 0;
+            shipVel.set(0, 0, 0);
+          } else {
+            bolts.forEach((b) => { b.life = 0; b.mesh.visible = false; });
+            for (const k in keyState) keyState[k] = false;
+          }
+        }
+        if (flyBtn) flyBtn.addEventListener("click", () => setFlying(!flying));
+
+        function onFlyKey(e) {
+          const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+          // Esc gives the helm back before the stage handler closes the section.
+          if (k === "Escape" && flying && e.type === "keydown") {
+            setFlying(false); e.stopImmediatePropagation(); return;
+          }
+          if (!flying) return;
+          if ("wasd".indexOf(k) >= 0 || k === " " || e.code === "Space") {
+            e.preventDefault();
+            keyState[k === " " ? "space" : k] = e.type === "keydown";
+          }
+        }
+        window.addEventListener("keydown", onFlyKey, true);
+        window.addEventListener("keyup", onFlyKey, true);
+
         // ── picking ──
         // The objects are the controls. Sweep the pointer over the field and the
         // mark under it lifts; press it and it becomes the selection, without
@@ -2533,6 +2668,7 @@
           // rather than raycasting geometry that no longer exists per object.
           let best = -1, bestD = Infinity;
           for (let i = 0; i < items.length; i++) {
+            if (destroyed && destroyed[i]) continue;
             _p.set(dotPos[i * 3], dotPos[i * 3 + 1], dotPos[i * 3 + 2]).project(camera);
             if (_p.z > 1) continue;
             const dx = (_p.x - ndc.x) * r.width * 0.5;
@@ -2589,12 +2725,14 @@
           const dt = Math.min(70, now - last) || 16.7; last = now;
           const t = (now - t0) * 0.001;
 
-          dist += (tDist - dist) * Math.min(1, dt * 0.006);
-          camera.position.set(
-            Math.cos(yaw) * Math.cos(pitch) * dist,
-            Math.sin(pitch) * dist,
-            Math.sin(yaw) * Math.cos(pitch) * dist);
-          camera.lookAt(0, 0, 0);
+          if (!flying) {
+            dist += (tDist - dist) * Math.min(1, dt * 0.006);
+            camera.position.set(
+              Math.cos(yaw) * Math.cos(pitch) * dist,
+              Math.sin(pitch) * dist,
+              Math.sin(yaw) * Math.cos(pitch) * dist);
+            camera.lookAt(0, 0, 0);
+          }
 
           globe.rotation.y += dt * 0.00008;
           neoClouds.rotation.y += dt * 0.00002;   // the deck drifts over the surface
@@ -2631,7 +2769,7 @@
                      rockSpin[sp + 1] + t * rockSpin[sp + 3] * 0.7,
                      rockSpin[sp + 2]);
               _q.setFromEuler(_e);
-              const g = ROCK_R * (on ? 2.6 : hot ? 1.9 : 1);
+              const g = (destroyed && destroyed[k]) ? 0 : ROCK_R * (on ? 2.6 : hot ? 1.9 : 1);
               _s.set(rockScale[sc] * g, rockScale[sc + 1] * g, rockScale[sc + 2] * g);
               _v.set(dotPos[k * 3], dotPos[k * 3 + 1], dotPos[k * 3 + 2]);
               _m.compose(_v, _q, _s);
@@ -2660,27 +2798,71 @@
             lockEl.classList.remove("is-on");
           }
 
-          renderer.clear();
-          renderer.render(scene, camera);
+          // ── fly the craft ──
+          if (flying) {
+            const turn = 1.5 * dt * 0.001;
+            if (keyState.a) shipYaw += turn;
+            if (keyState.d) shipYaw -= turn;
+            if (keyState.w) shipPitch = Math.max(-1.2, shipPitch - turn);
+            if (keyState.s) shipPitch = Math.min(1.2, shipPitch + turn);
+            ship.rotation.set(0, 0, 0);
+            ship.rotateY(shipYaw);
+            ship.rotateX(shipPitch);
+            shipFwd.set(0, 0, -1).applyQuaternion(ship.quaternion);
+            ship.position.addScaledVector(shipFwd, 7.5 * dt * 0.001);
+            // A craft that can leave the field entirely is a craft you lose.
+            // Keep it inside the field: past the outer ring there is nothing
+            // to fly through and nothing to shoot.
+            if (ship.position.length() > 19) ship.position.setLength(19);
+            const fl = ship.userData.flame;
+            if (fl) fl.scale.setScalar(0.8 + Math.sin(t * 40) * 0.12);
+            fireCool -= dt * 0.001;
+            if (keyState.space) fire();
+            // Chase: behind and a little above, easing so it swings, not snaps.
+            // Far enough back that the craft reads as a craft rather than
+            // filling the screen.
+            chase.copy(ship.position).addScaledVector(shipFwd, -5.2);
+            chase.y += 1.4;
+            camera.position.lerp(chase, Math.min(1, dt * 0.008));
+            camera.lookAt(ship.position);
+          }
 
-          // The specimen, drawn into its corner of the same frame.
-          if (specBox && items[selected]) {
-            const br = specBox.getBoundingClientRect();
-            const cr = cnv.getBoundingClientRect();
-            if (br.width > 8 && br.height > 8) {
-              const x = br.left - cr.left;
-              const y = cr.height - (br.top - cr.top) - br.height;
-              specMesh.rotation.y = t * 0.42;
-              specMesh.rotation.x = Math.sin(t * 0.21) * 0.3;
-              renderer.setScissorTest(true);
-              renderer.setViewport(x, y, br.width, br.height);
-              renderer.setScissor(x, y, br.width, br.height);
-              renderer.clearDepth();
-              renderer.render(specScene, specCam);
-              renderer.setScissorTest(false);
-              renderer.setViewport(0, 0, cr.width, cr.height);
+          // ── bolts, and what they hit ──
+          for (let k = 0; k < bolts.length; k++) {
+            const b = bolts[k];
+            if (b.life <= 0) continue;
+            b.life -= dt * 0.001;
+            if (b.life <= 0) { b.mesh.visible = false; continue; }
+            b.mesh.position.addScaledVector(b.vel, dt * 0.001);
+            if (!destroyed) continue;
+            for (let m = 0; m < items.length; m++) {
+              if (destroyed[m]) continue;
+              const dx = dotPos[m * 3] - b.mesh.position.x;
+              const dy = dotPos[m * 3 + 1] - b.mesh.position.y;
+              const dz = dotPos[m * 3 + 2] - b.mesh.position.z;
+              if (dx * dx + dy * dy + dz * dz < HIT_R * HIT_R) {
+                destroyed[m] = 1;
+                killed++;
+                if (flyKills) flyKills.textContent = killed;
+                burstAt(b.mesh.position);
+                b.life = 0; b.mesh.visible = false;
+                paintAll();
+                break;
+              }
             }
           }
+          for (let k = 0; k < bursts.length; k++) {
+            const u = bursts[k];
+            if (u.life <= 0) continue;
+            u.life -= dt * 0.001;
+            const f = Math.max(0, u.life / 0.55);
+            u.mesh.scale.setScalar(0.05 + (1 - f) * 1.1);
+            u.mesh.material.opacity = f * 0.9;
+            if (u.life <= 0) u.mesh.visible = false;
+          }
+
+          renderer.render(scene, camera);
+
           raf = requestAnimationFrame(frame);
         }
         raf = requestAnimationFrame(frame);
@@ -2690,7 +2872,10 @@
           select: select,
           stop: () => {
             alive = false;
+            setFlying(false);
             cancelAnimationFrame(raf);
+            window.removeEventListener("keydown", onFlyKey, true);
+            window.removeEventListener("keyup", onFlyKey, true);
             window.removeEventListener("resize", resize);
             cnv.removeEventListener("pointerdown", onDown);
             window.removeEventListener("pointermove", onMove);
@@ -4747,8 +4932,7 @@
         const neoStage = document.getElementById("neo-stage");
         const neoEl = {
           list: document.getElementById("neo-list"), name: document.getElementById("neo-d-name"),
-          ld: document.getElementById("neo-d-ld"), flag: document.getElementById("neo-d-flag"),
-          mark: document.getElementById("neo-scope-mark"),
+          flag: document.getElementById("neo-d-flag"),
           panelTitle: document.getElementById("neo-panel-title"),
           filter: document.getElementById("neo-filter")
         };
@@ -4771,7 +4955,6 @@
             if (!o) return;
             neoSelected = i;
             neoEl.name.textContent = o.name;
-            neoEl.ld.textContent = o.ld.toFixed(2);
             neoEl.flag.textContent = o.haz ? "⚠ POTENTIALLY HAZARDOUS" : "";
             neoEl.flag.className = "neo-d-flag" + (o.haz ? " is-haz" : "");
             // Plot the object on the scope: distance sets the radius on the same
