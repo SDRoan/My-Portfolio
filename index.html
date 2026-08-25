@@ -412,38 +412,17 @@
       </div>
       <button type="button" class="neo-bio-open" id="neo-bio-open">◈ ABOUT ME</button>
 
-      <!-- A scope rather than a table. The Earth holds the centre, the rings
-           are the same logarithmic 1/10/100 lunar distances the scene is drawn
-           on, and the selected object sits where it actually passes. -->
+      <!-- A window on the object itself. The body is the one selected, turned
+           under a light so its shape reads; the panel is only the frame around
+           it, so the render underneath shows through. -->
       <div class="neo-hud neo-hud--br" id="neo-detail">
         <div class="neo-d-name" id="neo-d-name">—</div>
-        <div class="neo-scope">
-          <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="neoSweep" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="rgba(122,224,255,0.34)"/>
-                <stop offset="1" stop-color="rgba(122,224,255,0)"/>
-              </linearGradient>
-            </defs>
-            <g class="ns">
-              <circle class="ns-tick"  cx="100" cy="100" r="93"/>
-              <circle class="ns-ring"  cx="100" cy="100" r="86"/>
-              <circle class="ns-faint" cx="100" cy="100" r="53"/>
-              <circle class="ns-faint" cx="100" cy="100" r="20"/>
-              <g class="ns-sweep">
-                <path class="ns-wedge" d="M100 100 L100 7 A93 93 0 0 1 165 34 Z"/>
-                <path class="ns-edge" d="M100 100 L100 7"/>
-              </g>
-              <path class="ns-cross" d="M100 2v13M100 185v13M2 100h13M185 100h13"/>
-              <circle class="ns-earth" cx="100" cy="100" r="4.5"/>
-              <g class="ns-mark" id="neo-scope-mark">
-                <circle r="4.5"/>
-                <circle class="ns-halo" r="11"/>
-              </g>
-            </g>
-          </svg>
+        <div class="neo-spec" id="neo-spec">
+          <i class="sp-br sp-br--tl"></i><i class="sp-br sp-br--tr"></i>
+          <i class="sp-br sp-br--bl"></i><i class="sp-br sp-br--br"></i>
+          <i class="sp-scan"></i>
+          <span class="sp-tag">SPECIMEN · LIVE SCAN</span>
         </div>
-        <span class="ns-key">SCOPE · 1 / 10 / 100 LD</span>
         <div class="neo-d-read"><b id="neo-d-ld">—</b><i>LD AT CLOSEST</i></div>
         <div class="neo-d-flag" id="neo-d-flag"></div>
       </div>
@@ -2066,6 +2045,7 @@
           renderer = new THREE.WebGLRenderer({ canvas: cnv, antialias: true, alpha: false });
         } catch (err) { cnv.style.display = "none"; return null; }
         renderer.setClearColor(0x02040a, 1);
+        renderer.autoClear = false;   // the specimen pass draws over the scene
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         renderer.setPixelRatio(dpr);
 
@@ -2301,8 +2281,11 @@
         // One lumpy body, instanced. A different orientation, tumble and
         // proportion per instance reads as a field of separate rocks while
         // still costing a single draw call for all of them.
-        function rockGeometry() {
-          const g = new THREE.IcosahedronGeometry(1, 3);
+        // Detail is a parameter because the two uses pull opposite ways: the
+        // field wants it low enough to instance a thousand times, the specimen
+        // wants it high enough to survive a close look.
+        function rockGeometry(detail) {
+          const g = new THREE.IcosahedronGeometry(1, detail == null ? 3 : detail);
           const pos = g.attributes.position;
           const v = new THREE.Vector3();
           for (let i = 0; i < pos.count; i++) {
@@ -2470,6 +2453,31 @@
           if (trackRocks && trackRocks.instanceColor) trackRocks.instanceColor.needsUpdate = true;
         }
 
+        // ── specimen ──
+        // A second pass into a corner of the same canvas rather than a second
+        // WebGL context: one renderer, one extra scene holding a single body,
+        // drawn through a scissor box that tracks the panel in the HUD.
+        const specBox = document.getElementById("neo-spec");
+        const specScene = new THREE.Scene();
+        const specCam = new THREE.PerspectiveCamera(34, 1, 0.1, 40);
+        // The body carries a displaced radius near 1.4, so it has to sit well
+        // back to read as an object rather than a wall of facets.
+        specCam.position.set(0, 0, 6.2);
+        const specMesh = new THREE.Mesh(
+          keep(rockGeometry(5)),
+          keep(new THREE.MeshStandardMaterial({
+            map: surfaceTexture("rock"), roughness: 0.95, metalness: 0.0,
+            emissive: 0x1b2740, emissiveIntensity: 0.55
+          })));
+        specScene.add(specMesh);
+        const specKey = new THREE.DirectionalLight(0xffffff, 2.4);
+        specKey.position.set(-2, 1.6, 3);
+        specScene.add(specKey);
+        const specRim = new THREE.DirectionalLight(0x7ae0ff, 1.6);
+        specRim.position.set(2.4, -0.6, -1.4);
+        specScene.add(specRim);
+        specScene.add(new THREE.AmbientLight(0x9fd0ff, 0.35));
+
         // Scratch objects for the per-frame instance placement, so a thousand
         // bodies do not allocate a thousand temporaries every frame.
         const ROCK_R = 0.072;
@@ -2481,6 +2489,13 @@
 
         let selected = -1;
         function select(i) {
+          // The specimen takes the selected body's own proportions and colour,
+          // so the thing under the light is the thing in the field.
+          if (items[i]) {
+            const sc = i * 3;
+            specMesh.scale.set(rockScale[sc] * 0.62, rockScale[sc + 1] * 0.62, rockScale[sc + 2] * 0.62);
+            specMesh.material.color.setHex(items[i].def.haz ? 0xffb4ac : 0xffffff);
+          }
           if (lockTag && items[i]) lockTag.textContent = items[i].def.name;
           selected = i;
           paintAll();
@@ -2645,7 +2660,27 @@
             lockEl.classList.remove("is-on");
           }
 
+          renderer.clear();
           renderer.render(scene, camera);
+
+          // The specimen, drawn into its corner of the same frame.
+          if (specBox && items[selected]) {
+            const br = specBox.getBoundingClientRect();
+            const cr = cnv.getBoundingClientRect();
+            if (br.width > 8 && br.height > 8) {
+              const x = br.left - cr.left;
+              const y = cr.height - (br.top - cr.top) - br.height;
+              specMesh.rotation.y = t * 0.42;
+              specMesh.rotation.x = Math.sin(t * 0.21) * 0.3;
+              renderer.setScissorTest(true);
+              renderer.setViewport(x, y, br.width, br.height);
+              renderer.setScissor(x, y, br.width, br.height);
+              renderer.clearDepth();
+              renderer.render(specScene, specCam);
+              renderer.setScissorTest(false);
+              renderer.setViewport(0, 0, cr.width, cr.height);
+            }
+          }
           raf = requestAnimationFrame(frame);
         }
         raf = requestAnimationFrame(frame);

@@ -3929,52 +3929,45 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 }
 .neo-stage.list-hidden .neo-panel-open { opacity: 1; pointer-events: auto; }
 
-/* ── target scope ──────────────────────────────────────────────────────── */
-.neo-hud--br { right: 46px; bottom: 64px; text-align: right; width: 182px; }
+/* ── specimen window ───────────────────────────────────────────────────── */
+.neo-hud--br { right: 46px; bottom: 64px; text-align: right; width: 190px; }
 .neo-d-name {
   font-family: "Space Grotesk", "Inter", sans-serif;
-  font-size: 19px; font-weight: 600; color: #f2fbff; margin-bottom: 10px;
+  font-size: 18px; font-weight: 600; color: #f2fbff; margin-bottom: 9px;
   text-shadow: 0 0 18px rgba(var(--jv), 0.4), 0 2px 16px rgba(2, 4, 12, 0.95);
 }
-.neo-scope { position: relative; width: 100%; }
-.neo-scope svg {
-  display: block; width: 100%; height: auto;
-  filter: drop-shadow(0 0 5px rgba(var(--jv), 0.3));
+/* Only a frame: the body itself is rendered underneath, straight into this
+   box, so the panel must stay transparent. */
+.neo-spec {
+  position: relative; width: 100%; aspect-ratio: 1 / 1;
+  border: 1px solid rgba(var(--jv), 0.2);
+  background: linear-gradient(180deg, rgba(var(--jv), 0.05), transparent 60%);
+  overflow: hidden;
 }
-.ns { fill: none; stroke: rgb(var(--jv)); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.ns-ring  { stroke: rgba(var(--jv), 0.4); }
-.ns-faint { stroke: rgba(var(--jv), 0.2); }
-.ns-tick  { stroke: rgba(var(--jv), 0.34); stroke-width: 5; stroke-dasharray: 1 9; }
-.ns-cross { stroke: rgba(var(--jv), 0.42); }
-.ns-wedge { fill: url(#neoSweep); stroke: none; }
-.ns-edge  { stroke: rgba(var(--jv), 0.75); }
-.ns-earth { fill: rgba(var(--jv), 0.9); stroke: none; }
-/* the return, sweeping the scope */
-.ns-sweep { transform-box: view-box; transform-origin: 100px 100px;
-            animation: nsSweep 5.2s linear infinite; }
-@keyframes nsSweep { to { transform: rotate(360deg); } }
-/* the selected object, sitting where it actually passes */
-.ns-mark circle { fill: rgb(var(--jv)); stroke: none; }
-.ns-mark .ns-halo {
-  fill: none; stroke: rgba(var(--jv), 0.7); stroke-width: 1;
-  transform-box: fill-box; transform-origin: center;
-  animation: nsPing 2.4s ease-out infinite;
+.sp-br {
+  position: absolute; width: 13px; height: 13px;
+  border: 1px solid rgba(var(--jv), 0.85);
+  filter: drop-shadow(0 0 4px rgba(var(--jv), 0.5));
 }
-.ns-mark.is-haz circle { fill: #ff6b6b; }
-.ns-mark.is-haz .ns-halo { stroke: rgba(255, 107, 107, 0.75); }
-@keyframes nsPing {
-  from { transform: scale(0.35); opacity: 1; }
-  to   { transform: scale(1.5); opacity: 0; }
+.sp-br--tl { left: 5px;  top: 5px;    border-right: 0; border-bottom: 0; }
+.sp-br--tr { right: 5px; top: 5px;    border-left: 0;  border-bottom: 0; }
+.sp-br--bl { left: 5px;  bottom: 5px; border-right: 0; border-top: 0; }
+.sp-br--br { right: 5px; bottom: 5px; border-left: 0;  border-top: 0; }
+/* a line drawn down the body, the way a scanner reads one */
+.sp-scan {
+  position: absolute; left: 0; right: 0; height: 1px; top: 0;
+  background: linear-gradient(90deg, transparent, rgba(var(--jv), 0.8), transparent);
+  box-shadow: 0 0 10px rgba(var(--jv), 0.6);
+  animation: spScan 3.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
-/* The rings are named once underneath rather than labelled individually,
-   which kept crowding the Earth at the centre. */
-.ns-key {
-  display: block; margin-top: 5px;
+@keyframes spScan { 0% { top: 6%; } 50% { top: 94%; } 100% { top: 6%; } }
+.sp-tag {
+  position: absolute; left: 0; right: 0; bottom: 5px; text-align: center;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 7px; letter-spacing: 0.16em; color: rgba(var(--jv), 0.5);
+  font-size: 6.5px; letter-spacing: 0.2em; color: rgba(var(--jv), 0.6);
 }
 
-.neo-d-read { margin-top: 8px; display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
+.neo-d-read { margin-top: 9px; display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
 .neo-d-read b {
   font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: 23px; font-weight: 600; color: rgb(var(--jv));
@@ -3991,9 +3984,8 @@ body.projects-mode .cursor-glow { opacity: 0 !important; }
 }
 .neo-d-flag.is-haz { color: #ff9a9a; text-shadow: 0 0 12px rgba(255, 107, 107, 0.5); }
 
-@media (prefers-reduced-motion: reduce) {
-  .ns-sweep, .ns-mark .ns-halo { animation: none; }
-}
+@media (prefers-reduced-motion: reduce) { .sp-scan { animation: none; } }
+
 
 /* Operator introduction */
 /* ── Operator card, as a holographic console panel ──────────────────────── */
