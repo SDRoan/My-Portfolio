@@ -23,7 +23,7 @@
     // change to look like it never shipped. Ask once whether the build moved on,
     // and reload if it did. Keyed on the new build id, so it cannot loop.
     (function () {
-      var BUILD = "20260825-205846";
+      var BUILD = "20261021-211207";
       try {
         fetch("version.json", { cache: "no-store" })
           .then(function (r) { return r.ok ? r.json() : null; })
@@ -1283,11 +1283,51 @@
       // Astronomical ecliptic (z north) → three.js world (y up), right-handed.
       function astroToWorld(v) { return [v[0], v[2], -v[1]]; }
 
-      function eqToWorld(raHours, decDeg) {
-        const a = raHours * 15 * DEG, d = decDeg * DEG;
-        const x = Math.cos(d) * Math.cos(a), y = Math.cos(d) * Math.sin(a), z = Math.sin(d);
+      // Equatorial unit vector (x to the equinox, z to the celestial pole) → world.
+      function eqVecToWorld(x, y, z) {
         return astroToWorld([x, y * Math.cos(OBLIQ) + z * Math.sin(OBLIQ),
                              -y * Math.sin(OBLIQ) + z * Math.cos(OBLIQ)]);
+      }
+      function eqToWorld(raHours, decDeg) {
+        const a = raHours * 15 * DEG, d = decDeg * DEG;
+        return eqVecToWorld(Math.cos(d) * Math.cos(a), Math.cos(d) * Math.sin(a), Math.sin(d));
+      }
+
+      // IAU rotational elements: north pole RA and Dec (deg, plus rates per
+      // century) and the prime meridian W (deg, plus rate per day). Negative
+      // rates on W are the retrograde rotators.
+      const BODY_SPIN = {
+        Sun:     [286.13, 0, 63.87, 0, 84.176, 14.1844000],
+        Mercury: [281.0103, -0.0328, 61.4155, -0.0049, 329.5988, 6.1385108],
+        Venus:   [272.76, 0, 67.16, 0, 160.20, -1.4813688],
+        Mars:    [317.68143, -0.1061, 52.88650, -0.0609, 176.630, 350.89198226],
+        Jupiter: [268.056595, -0.006499, 64.495303, 0.002413, 284.95, 870.5360000],
+        Saturn:  [40.589, -0.036, 83.537, -0.004, 38.90, 810.7939024],
+        Uranus:  [257.311, 0, -15.175, 0, 203.81, -501.1600928],
+        Neptune: [299.36, 0, 43.46, 0, 249.978, 541.1397757]
+      };
+      // Polar flattening — the giants spin fast enough to bulge visibly.
+      const FLATTENING = { Jupiter: 0.06487, Saturn: 0.09796, Uranus: 0.0229, Neptune: 0.0171 };
+
+      // Turn a unit sphere so its north pole and prime meridian point where they
+      // really do. Sphere local axes: +Y north, +X longitude 0, −Z longitude 90°E.
+      const spinBasis = new THREE.Matrix4();
+      const spinX = new THREE.Vector3(), spinY = new THREE.Vector3(), spinZ = new THREE.Vector3();
+      function orientBody(mesh, name, T, days) {
+        const e = BODY_SPIN[name];
+        const a = (e[0] + e[1] * T) * DEG, d = (e[2] + e[3] * T) * DEG;
+        const W = ((e[4] + e[5] * days) % 360) * DEG;
+        const P = [Math.cos(d) * Math.cos(a), Math.cos(d) * Math.sin(a), Math.sin(d)];
+        const N = [-Math.sin(a), Math.cos(a), 0];        // ascending node of the equator
+        const Q = [P[1] * N[2] - P[2] * N[1], P[2] * N[0] - P[0] * N[2], P[0] * N[1] - P[1] * N[0]];
+        const cw = Math.cos(W), sw = Math.sin(W);
+        const m = eqVecToWorld(cw * N[0] + sw * Q[0], cw * N[1] + sw * Q[1], cw * N[2] + sw * Q[2]);
+        const p = eqVecToWorld(P[0], P[1], P[2]);
+        spinX.set(m[0], m[1], m[2]);
+        spinY.set(p[0], p[1], p[2]);
+        spinZ.crossVectors(spinX, spinY);
+        mesh.quaternion.setFromRotationMatrix(spinBasis.makeBasis(spinX, spinY, spinZ));
+        return spinY;
       }
       function worldToEq(v) {
         const x = v.x, ye = -v.z, ze = v.y;                 // back to ecliptic
@@ -1419,11 +1459,20 @@
         return c;
       }
 
-      // ── generated surface textures ─────────────────────────────────────
-      // Lifted to module scope so the encounter stage can dress its Moon in
-      // the same lunar surface the sky uses, rather than keeping a second
-      // copy. The noise helpers are prefixed because a different fbm of the
-      // same name already lives out here.
+      // ── surface textures ───────────────────────────────────────────────
+      // Real bodies wear real maps: global mosaics from NASA mission imagery
+      // (Solar System Scope, CC BY 4.0), equirectangular and centred on
+      // longitude 0. Module scope so the encounter stage's Moon shares them.
+      function planetTexture(file) {
+        const tex = new THREE.TextureLoader().load("textures/" + file);
+        if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        return tex;
+      }
+
+      // Asteroids have no maps, so their surfaces are generated. The noise
+      // helpers are prefixed because a different fbm of the same name already
+      // lives out here.
 
       function sfNoise2(x, y, s) {
         let n = Math.imul(x | 0, 1619) ^ Math.imul(y | 0, 31337) ^ Math.imul(s, 6971);
@@ -1442,80 +1491,36 @@
         return sum;
       }
 
-      function surfaceTexture(kind) {
-        // Kept modest on purpose: these are generated per pixel in JS, and at
-        // 512×256 across eight bodies that is a multi-second freeze. Even filling
-        // the frame, a planet only ever shows one hemisphere of this.
+      function rockTexture() {
+        // Kept modest on purpose: these are generated per pixel in JS.
         const W = 320, H = 160;
         const c = document.createElement("canvas");
         c.width = W; c.height = H;
         const g = c.getContext("2d");
         const img = g.createImageData(W, H);
         const D = img.data;
-        const bands = {
-          rock:   [[110, 106, 100], [150, 146, 138]],
-          moon:   [[118, 118, 122], [176, 176, 180]],
-          venus:  [[196, 166, 108], [236, 214, 160]],
-          mars:   [[142, 78, 48], [198, 128, 88]],
-          jupiter:[[168, 134, 100], [226, 204, 176]],
-          saturn: [[192, 168, 124], [226, 206, 168]],
-          uranus: [[150, 200, 208], [186, 224, 228]],
-          neptune:[[54, 84, 168], [96, 132, 208]]
-        }[kind] || [[130, 130, 130], [180, 180, 180]];
-        const gassy = kind === "jupiter" || kind === "saturn" || kind === "uranus" || kind === "neptune";
+        const lo = [110, 106, 100], hi = [150, 146, 138];
         for (let y = 0; y < H; y++) {
           for (let x = 0; x < W; x++) {
-            let t;
-            if (gassy) {
-              // Zonal bands: latitude-driven, with turbulence smearing them out.
-              const lat = (y / H) * 2 - 1;
-              const freq = kind === "jupiter" ? 15 : kind === "saturn" ? 10 : 4;
-              const warp = sfFbm(x * 0.048, y * 0.26, 11, 2) * (kind === "uranus" || kind === "neptune" ? 0.6 : 2.2);
-              t = 0.5 + 0.5 * Math.sin(lat * freq + warp);
-              t = t * 0.72 + sfFbm(x * 0.032, y * 0.14, 3, 2) * 0.28;
-            } else {
-              t = sfFbm(x * 0.072, y * 0.072, 7, 3);
-              if (kind === "mars") t = t * 0.8 + sfFbm(x * 0.019, y * 0.019, 21, 2) * 0.2;
-            }
+            const t = sfFbm(x * 0.072, y * 0.072, 7, 3);
             const i = (y * W + x) * 4;
-            D[i] = bands[0][0] + (bands[1][0] - bands[0][0]) * t;
-            D[i + 1] = bands[0][1] + (bands[1][1] - bands[0][1]) * t;
-            D[i + 2] = bands[0][2] + (bands[1][2] - bands[0][2]) * t;
+            D[i] = lo[0] + (hi[0] - lo[0]) * t;
+            D[i + 1] = lo[1] + (hi[1] - lo[1]) * t;
+            D[i + 2] = lo[2] + (hi[2] - lo[2]) * t;
             D[i + 3] = 255;
           }
         }
         g.putImageData(img, 0, 0);
-        // Craters for the airless bodies, polar caps for Mars.
-        if (kind === "rock" || kind === "moon") {
-          for (let i = 0; i < 90; i++) {
-            const x = Math.random() * W, y = 20 + Math.random() * (H - 40);
-            const r = 2 + Math.pow(Math.random(), 2.4) * 16;
-            const rg = g.createRadialGradient(x, y, 0, x, y, r);
-            rg.addColorStop(0, "rgba(70,70,74,0.5)");
-            rg.addColorStop(0.72, "rgba(90,90,94,0.28)");
-            rg.addColorStop(1, "rgba(210,210,214,0.16)");
-            g.fillStyle = rg;
-            g.beginPath(); g.ellipse(x, y, r, r * 0.85, 0, 0, Math.PI * 2); g.fill();
-          }
-        }
-        if (kind === "mars") {
-          g.fillStyle = "rgba(244,248,255,0.88)";
-          g.beginPath(); g.ellipse(W * 0.5, 0, W * 0.42, 15, 0, 0, Math.PI * 2); g.fill();
-          g.beginPath(); g.ellipse(W * 0.5, H, W * 0.36, 12, 0, 0, Math.PI * 2); g.fill();
-        }
-        if (kind === "jupiter") {
-          const rg = g.createRadialGradient(W * 0.63, H * 0.63, 0, W * 0.63, H * 0.63, 34);
-          rg.addColorStop(0, "rgba(196,96,62,0.92)");
-          rg.addColorStop(1, "rgba(196,96,62,0)");
+        // Craters.
+        for (let i = 0; i < 90; i++) {
+          const x = Math.random() * W, y = 20 + Math.random() * (H - 40);
+          const r = 2 + Math.pow(Math.random(), 2.4) * 16;
+          const rg = g.createRadialGradient(x, y, 0, x, y, r);
+          rg.addColorStop(0, "rgba(70,70,74,0.5)");
+          rg.addColorStop(0.72, "rgba(90,90,94,0.28)");
+          rg.addColorStop(1, "rgba(210,210,214,0.16)");
           g.fillStyle = rg;
-          g.beginPath(); g.ellipse(W * 0.63, H * 0.63, 34, 17, 0, 0, Math.PI * 2); g.fill();
-        }
-        if (kind === "neptune") {
-          const rg = g.createRadialGradient(W * 0.35, H * 0.6, 0, W * 0.35, H * 0.6, 26);
-          rg.addColorStop(0, "rgba(18,34,92,0.85)");
-          rg.addColorStop(1, "rgba(18,34,92,0)");
-          g.fillStyle = rg;
-          g.beginPath(); g.ellipse(W * 0.35, H * 0.6, 26, 13, 0, 0, Math.PI * 2); g.fill();
+          g.beginPath(); g.ellipse(x, y, r, r * 0.85, 0, 0, Math.PI * 2); g.fill();
         }
         const tex = new THREE.CanvasTexture(c);
         if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
@@ -1530,31 +1535,142 @@
         const fadeables = [];       // plain materials that fade with the ride
 
 
-        // ── surface textures, generated rather than fetched ──
+        // ── surfaces ──
         // Lit like the real thing: the terminator falls where the Sun actually is,
-        // which is what gives Venus its crescent and the Moon its phase.
-        function bodyMaterial(tex) {
+        // which is what gives Venus its crescent and the Moon its phase. Airless
+        // regolith scatters back toward the light (Lommel–Seeliger), so a full
+        // Moon looks flat rather than like a shaded ball; deep atmospheres darken
+        // toward the limb instead.
+        //
+        // The bodies Webb has actually imaged are drawn as NIRCam sees them, not
+        // as the eye would. In the near infrared, methane soaks up sunlight
+        // wherever the gas column is deep, so what shows is whatever sits high:
+        // hazes, ice clouds, polar caps, rings. The colours are Webb's own
+        // chromatic ordering of its filters — shortest wavelength blue, longest red.
+        //   1 Jupiter  F150W2 / F212N / F360M — teal belts, white zones and Great
+        //              Red Spot, green-gold polar haze, red aurorae at the poles
+        //   2 Saturn   F323N — the globe almost black, the icy rings blazing
+        //   3 Uranus   F140M–F300M — blue disc, bright seasonal north polar cap
+        //              with a darker collar and storms along it
+        //   4 Neptune  F140M / F210M — ghostly grey-white, bright methane-ice
+        //              streaks, a thin equatorial line, the south polar vortex
+        //   5 Mars     F212N — reflected near-infrared, in amber
+        // Mercury, Venus, the Moon and the Sun stay in visible light: Webb's
+        // sunshield can't face that close to the Sun, and the Moon is too bright
+        // and too fast to track.
+        function bodyMaterial(tex, look) {
           return new THREE.ShaderMaterial({
             transparent: true,
             uniforms: {
               map: { value: tex },
               sunDir: { value: new THREE.Vector3(1, 0, 0) },
-              ambient: { value: 0.025 },
+              ambient: { value: 0.012 },
+              airless: { value: look.airless ? 1 : 0 },
+              limb: { value: look.limb || 0 },
+              sat: { value: look.sat || 1 },
+              webb: { value: look.webb || 0 },
               fade: { value: 0 }
             },
             vertexShader: [
-              "varying vec2 vUv; varying vec3 vN;",
-              "void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal);",
+              "varying vec2 vUv; varying vec3 vN; varying vec3 vP; varying vec3 vL;",
+              "void main(){ vUv = uv; vL = normal; vN = normalize(mat3(modelMatrix) * normal);",
+              "  vP = (modelMatrix * vec4(position,1.0)).xyz;",
               "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }"
             ].join("\n"),
             fragmentShader: [
               "uniform sampler2D map; uniform vec3 sunDir; uniform float ambient; uniform float fade;",
-              "varying vec2 vUv; varying vec3 vN;",
+              "uniform float airless; uniform float limb; uniform float sat; uniform float webb;",
+              "varying vec2 vUv; varying vec3 vN; varying vec3 vP; varying vec3 vL;",
               "void main(){",
-              "  float d = max(dot(normalize(vN), normalize(sunDir)), 0.0);",
-              "  d = d * smoothstep(0.0, 0.12, d);",
+              "  vec3 n = normalize(vN);",
+              "  float mu0 = max(dot(n, normalize(sunDir)), 0.0);",
+              "  float mu = max(dot(n, normalize(cameraPosition - vP)), 0.0);",
+              "  float lit = mix(mu0 * pow(mu, limb), 2.0 * mu0 / (mu0 + mu + 1e-4) * smoothstep(0.0, 0.06, mu0), airless);",
               "  vec3 c = texture2D(map, vUv).rgb;",
-              "  gl_FragColor = vec4(c * (ambient + d * 1.9), fade); }"
+              "  c = mix(vec3(dot(c, vec3(0.2126, 0.7152, 0.0722))), c, sat);",
+              "  float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));",
+              "  float lat = normalize(vL).y;",                 // sine of latitude
+              "  float rim = 1.0 - mu;",
+              "  vec3 glow = vec3(0.0);",                       // self-lit: aurorae
+              "  if (webb > 0.5 && webb < 1.5) {",
+              "    c = mix(vec3(0.02, 0.12, 0.26), vec3(0.78, 0.78, 0.72), smoothstep(0.15, 0.85, lum));",
+              "    float pol = smoothstep(0.55, 0.88, abs(lat));",
+              "    c = mix(c, vec3(0.62, 0.72, 0.26) * (0.5 + lum), pol * 0.75);",
+              "    c += vec3(0.5, 0.7, 0.95) * pow(rim, 5.0) * 0.4;",
+              "    glow = vec3(1.0, 0.28, 0.08) * smoothstep(0.9, 0.99, abs(lat)) * (0.06 + 0.9 * pow(rim, 3.0));",
+              "  } else if (webb > 1.5 && webb < 2.5) {",
+              "    c = vec3(0.022, 0.016, 0.011) * (0.3 + 1.2 * lum);",
+              "    c += vec3(0.03, 0.024, 0.017) * smoothstep(0.82, 0.96, lat);",
+              "  } else if (webb > 2.5 && webb < 3.5) {",
+              "    c = vec3(0.12, 0.36, 0.6) * (0.85 + 0.5 * lum);",
+              // The polar hood fades in from about 45°N, with a darker collar
+              // at its edge and small bright storms strung along the collar.
+              "    c *= 1.0 - 0.3 * exp(-pow((lat - 0.7) / 0.035, 2.0));",
+              "    c = mix(c, vec3(0.55, 0.74, 0.84), smoothstep(0.72, 0.93, lat));",
+              "    float lon = vUv.x;",
+              "    float st = exp(-pow((lat - 0.74) / 0.018, 2.0)) * (",
+              "      exp(-pow((lon - 0.18) / 0.012, 2.0)) + 0.7 * exp(-pow((lon - 0.47) / 0.009, 2.0)) +",
+              "      0.8 * exp(-pow((lon - 0.81) / 0.011, 2.0)));",
+              "    c = mix(c, vec3(0.8, 0.9, 0.95), st * 0.8);",
+              "  } else if (webb > 3.5 && webb < 4.5) {",
+              "    c = vec3(0.34, 0.4, 0.52) * (0.55 + 0.6 * lum);",
+              "    c = mix(c, vec3(1.0), smoothstep(0.3, 0.6, lum));",
+              "    c += vec3(0.5, 0.55, 0.65) * exp(-pow(lat / 0.02, 2.0)) * 0.7;",
+              "    c += vec3(0.5, 0.55, 0.62) * smoothstep(0.9, 0.98, -lat);",
+              "    c += vec3(0.6, 0.7, 0.85) * pow(rim, 4.0) * 0.4;",
+              "  } else if (webb > 4.5) {",
+              "    c = mix(vec3(0.16, 0.06, 0.02), vec3(1.0, 0.66, 0.32), smoothstep(0.03, 0.35, lum));",
+              "  }",
+              "  gl_FragColor = vec4(c * (ambient + lit * 1.15) + glow, fade);",
+              "  #include <colorspace_fragment>",
+              "}"
+            ].join("\n")
+          });
+        }
+
+        // Planetary rings: their own texture, the planet's shadow across them, and
+        // only the faint glow of light passing through when seen from the dark face.
+        // In Webb's infrared the ice in them is bright against a methane-dark
+        // globe, so gain lifts them and sat pulls them toward white.
+        // A thousand units out, the depth buffer can't tell ring from globe, so
+        // the globe hides the far side of the rings here, by geometry.
+        function ringMaterial(tex, gain, sat) {
+          return new THREE.ShaderMaterial({
+            transparent: true, depthWrite: false, depthTest: false, side: THREE.DoubleSide,
+            uniforms: {
+              map: { value: tex },
+              sunDir: { value: new THREE.Vector3(1, 0, 0) },
+              pole: { value: new THREE.Vector3(0, 1, 0) },
+              center: { value: new THREE.Vector3() },
+              radius: { value: 1 },
+              gain: { value: gain },
+              sat: { value: sat },
+              fade: { value: 0 }
+            },
+            vertexShader: [
+              "varying vec2 vUv; varying vec3 vP;",
+              "void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position,1.0); vP = w.xyz;",
+              "  gl_Position = projectionMatrix * viewMatrix * w; }"
+            ].join("\n"),
+            fragmentShader: [
+              "uniform sampler2D map; uniform vec3 sunDir; uniform vec3 pole; uniform vec3 center;",
+              "uniform float radius; uniform float gain; uniform float sat; uniform float fade;",
+              "varying vec2 vUv; varying vec3 vP;",
+              "void main(){",
+              "  vec4 t = texture2D(map, vUv);",
+              "  vec3 s = normalize(sunDir);",
+              "  vec3 p = vP - center;",
+              "  vec3 v = normalize(cameraPosition - center);",
+              "  float toward = dot(p, v);",
+              "  if (toward < 0.0 && length(p - toward * v) < radius) discard;",
+              "  float along = dot(p, s);",
+              "  float shade = (along < 0.0 && length(p - along * s) < radius) ? 0.04 : 1.0;",
+              "  float sameSide = dot(pole, s) * dot(pole, cameraPosition - vP);",
+              "  float light = (sameSide >= 0.0 ? 1.0 : 0.22) * shade;",
+              "  vec3 c = mix(vec3(dot(t.rgb, vec3(0.2126, 0.7152, 0.0722))), t.rgb, sat);",
+              "  gl_FragColor = vec4(c * light * gain, min(1.0, t.a * gain) * fade);",
+              "  #include <colorspace_fragment>",
+              "}"
             ].join("\n")
           });
         }
@@ -1583,11 +1699,12 @@
               "  float r = length(p);",
               "  if (r > 1.0) discard;",
               "  float a = pow(max(0.0, 1.0 - r * vK), 2.4);",
-              // Six-armed diffraction pattern — the giveaway of a segmented
-              // hexagonal mirror, and why Webb's stars look the way they do.
+              // Webb's eight-pointed star: six bright arms from the hexagonal
+              // segments, one pair vertical, and two fainter horizontal ones from
+              // the strut holding the secondary mirror.
               "  if (vS > 0.001) {",
               "    float th = atan(p.y, p.x);",
-              "    float arms = pow(abs(cos(3.0 * th)), 34.0);",
+              "    float arms = pow(abs(sin(3.0 * th)), 34.0) + 0.45 * pow(abs(cos(th)), 220.0);",
               "    a += arms * pow(max(0.0, 1.0 - r), 2.2) * vS * 0.85;",
               "  }",
               "  gl_FragColor = vec4(vT, min(1.0, a) * vA * fade); }"
@@ -1746,43 +1863,86 @@
         });
 
         // ── solar system ──
-        const BODY_KIND = {
-          Mercury: "rock", Venus: "venus", Mars: "mars", Jupiter: "jupiter",
-          Saturn: "saturn", Uranus: "uranus", Neptune: "neptune", Moon: "moon"
+        // Map, and how each surface takes the light: limb is limb-darkening
+        // strength, sat trims the saturation the mosaics were graded with, webb
+        // picks the NIRCam rendering above. The maps still carry the real cloud
+        // features; Webb's look is a re-reading of them.
+        const BODY_LOOK = {
+          Mercury: { map: "mercury.jpg", airless: true },
+          Venus:   { map: "venus.jpg", limb: 0.35 },
+          Mars:    { map: "mars.jpg", limb: 0.1, webb: 5 },
+          Jupiter: { map: "jupiter.jpg", webb: 1 },
+          Saturn:  { map: "saturn.jpg", limb: 0.2, webb: 2 },
+          Uranus:  { map: "uranus.jpg", limb: 0.3, webb: 3 },
+          Neptune: { map: "neptune.jpg", webb: 4 },
+          Moon:    { map: "moon.jpg", airless: true }
+        };
+
+        // Ring radial profiles, in planet radii: [radius, half-width, opacity]
+        // for the narrow ringlets, softened to about Webb's resolution, and
+        // [inner, outer, opacity] for the dusty sheets.
+        function ringProfile(R0, R1, lines, sheets) {
+          const N = 1024, c = document.createElement("canvas");
+          c.width = N; c.height = 1;
+          const g = c.getContext("2d");
+          const img = g.createImageData(N, 1);
+          for (let i = 0; i < N; i++) {
+            const r = R0 + (R1 - R0) * (i + 0.5) / N;
+            let a = 0;
+            sheets.forEach((s) => { if (r >= s[0] && r <= s[1]) a += s[2]; });
+            lines.forEach((l) => { a += l[2] * Math.exp(-Math.pow((r - l[0]) / l[1], 2)); });
+            img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = 255;
+            img.data[i * 4 + 3] = Math.min(255, a * 255);
+          }
+          g.putImageData(img, 0, 0);
+          const tex = new THREE.CanvasTexture(c);
+          if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+          return tex;
+        }
+        const RINGS = {
+          // Inner edge of the C ring to the outer edge of the A ring.
+          Saturn:  { r: [1.239, 2.270], tex: () => planetTexture("saturn_ring.png"), gain: 2.4, sat: 0.3 },
+          // Halo, then the main ring.
+          Jupiter: { r: [1.38, 1.83], gain: 1, sat: 1, tex: () => ringProfile(1.38, 1.83, [],
+                     [[1.40, 1.71, 0.04], [1.72, 1.81, 0.22]]) },
+          // The faint dusty ζ ring, then 6, 5, 4, α, β, η, γ, δ — which blur
+          // into one band at Webb's resolution — and the bright ε ring. They're
+          // coal-dark; they only show because the exposure is long.
+          Uranus:  { r: [1.45, 2.06], gain: 0.55, sat: 1, tex: () => ringProfile(1.45, 2.06, [
+                     [1.637, 0.012, 0.22], [1.652, 0.012, 0.22], [1.666, 0.012, 0.22],
+                     [1.750, 0.012, 0.3], [1.786, 0.012, 0.3], [1.846, 0.012, 0.22],
+                     [1.863, 0.012, 0.25], [1.890, 0.012, 0.32], [2.001, 0.014, 0.8]],
+                     [[1.48, 1.62, 0.05]]) },
+          // Galle, Le Verrier, the Lassell sheet, Arago, Adams.
+          Neptune: { r: [1.62, 2.6], gain: 1.8, sat: 1, tex: () => ringProfile(1.62, 2.6, [
+                     [2.148, 0.008, 0.5], [2.31, 0.008, 0.18], [2.541, 0.009, 0.65]],
+                     [[1.65, 1.73, 0.12], [2.15, 2.31, 0.06]]) }
         };
         const bodies = {};
-        Object.keys(BODY_KIND).forEach((name) => {
-          const mat = bodyMaterial(surfaceTexture(BODY_KIND[name]));
-          const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), mat);
+        Object.keys(BODY_LOOK).forEach((name) => {
+          const look = BODY_LOOK[name];
+          const mat = bodyMaterial(planetTexture(look.map), look);
+          const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), mat);
           mesh.visible = false;
           scene.add(mesh);
           const rec = { mesh: mesh, mat: mat, name: name };
-          if (name === "Saturn") {
-            const RN = 128;
-            const rc = document.createElement("canvas");
-            rc.width = RN; rc.height = 4;
-            const rg2 = rc.getContext("2d");
-            for (let i = 0; i < RN; i++) {
-              const t = i / RN;
-              // Cassini division sits about two thirds of the way out.
-              const gap = Math.abs(t - 0.63) < 0.045 ? 0.12 : 1;
-              const b = (0.55 + 0.45 * Math.sin(t * 34)) * gap * (t < 0.28 ? 0 : 1);
-              rg2.fillStyle = "rgba(226,208,172," + (b * 0.85).toFixed(3) + ")";
-              rg2.fillRect(i, 0, 1, 4);
-            }
-            const rtex = new THREE.CanvasTexture(rc);
+          if (RINGS[name]) {
+            const sys = RINGS[name], R0 = sys.r[0], R1 = sys.r[1];
             const ring = new THREE.Mesh(
-              new THREE.RingGeometry(1.24, 2.27, 96),
-              new THREE.MeshBasicMaterial({ map: rtex, transparent: true, side: THREE.DoubleSide, depthWrite: false })
+              new THREE.RingGeometry(R0, R1, 160, 1),
+              ringMaterial(sys.tex(), sys.gain, sys.sat)
             );
             // Remap the ring UVs so the texture runs radially, not around.
             const pos = ring.geometry.attributes.position, uv = ring.geometry.attributes.uv;
             for (let i = 0; i < pos.count; i++) {
               const r = Math.hypot(pos.getX(i), pos.getY(i));
-              uv.setXY(i, (r - 1.24) / (2.27 - 1.24), 0.5);
+              uv.setXY(i, (r - R0) / (R1 - R0), 0.5);
             }
             uv.needsUpdate = true;
-            ring.rotation.x = Math.PI / 2 - 0.47;           // Saturn's ring plane tilt
+            // Into the equatorial plane; orientBody then tilts the whole system,
+            // so the opening angle seen from Earth is the real one for the date.
+            ring.rotation.x = -Math.PI / 2;
+            ring.renderOrder = 1;                           // over the globe, always
             mesh.add(ring);
             rec.ring = ring;
           }
@@ -1798,10 +1958,35 @@
           }
         });
 
-        // The Sun: no phase, just a hot disc with a corona around it.
+        // The Sun: no phase, but not a flat coin either. Seen in white light the
+        // photosphere is near-white, mottled with granulation and spots, and
+        // darkens and reddens toward the limb.
         const sunMesh = new THREE.Mesh(
-          new THREE.SphereGeometry(1, 48, 32),
-          new THREE.MeshBasicMaterial({ color: 0xfff4e0 })
+          new THREE.SphereGeometry(1, 64, 48),
+          new THREE.ShaderMaterial({
+            transparent: true,
+            uniforms: { map: { value: planetTexture("sun.jpg") }, fade: { value: 0 } },
+            vertexShader: [
+              "varying vec2 vUv; varying vec3 vN; varying vec3 vP;",
+              "void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal);",
+              "  vP = (modelMatrix * vec4(position,1.0)).xyz;",
+              "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }"
+            ].join("\n"),
+            fragmentShader: [
+              "uniform sampler2D map; uniform float fade;",
+              "varying vec2 vUv; varying vec3 vN; varying vec3 vP;",
+              "float lum(vec3 c){ return dot(c, vec3(0.2126, 0.7152, 0.0722)); }",
+              "void main(){",
+              "  float mu = max(dot(normalize(vN), normalize(cameraPosition - vP)), 0.0);",
+              // Detail relative to a blurred mip, so it's contrast, not the map's colour.
+              "  float detail = lum(texture2D(map, vUv).rgb) / max(lum(texture2D(map, vUv, 5.0).rgb), 1e-3);",
+              "  vec3 tint = mix(vec3(1.0, 0.55, 0.22), vec3(1.0, 0.97, 0.92), pow(mu, 0.35));",
+              "  float limb = 1.0 - 0.62 * (1.0 - mu);",
+              "  gl_FragColor = vec4(tint * limb * mix(1.0, detail, 0.12), fade);",
+              "  #include <colorspace_fragment>",
+              "}"
+            ].join("\n")
+          })
         );
         scene.add(sunMesh);
         const coronaTex = (function () {
@@ -1820,14 +2005,16 @@
           new THREE.PlaneGeometry(1, 1),
           new THREE.MeshBasicMaterial({ map: coronaTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false })
         );
-        corona.renderOrder = 2;
+        // Behind the disc, so the glow surrounds the photosphere rather than
+        // washing it out to a flat white coin.
+        corona.renderOrder = -1;
         scene.add(corona);
         targets.push({ name: "Sun", kind: "sun", group: "Solar system", dir: new THREE.Vector3(1, 0, 0), arcmin: 32 });
         targets.push({ name: "Moon", kind: "moon", group: "Solar system", dir: new THREE.Vector3(1, 0, 0), arcmin: 31 });
 
         // Glow sprites for the solar-system bodies, so they read as bright stars
         // before you have the magnification to resolve them.
-        const glowNames = Object.keys(BODY_KIND);
+        const glowNames = Object.keys(BODY_LOOK);
         const gPos = new Float32Array(glowNames.length * 3);
         const gTint = new Float32Array(glowNames.length * 3);
         const gSize = new Float32Array(glowNames.length);
@@ -1863,6 +2050,7 @@
         function update(date, fovDeg, heightPx) {
           const jd = julianDay(date);
           const T = (jd - 2451545.0) / 36525;
+          const days = jd - 2451545.0;
           earthHelio = helioVec("Earth", T);
           const sunGeo = [-earthHelio[0], -earthHelio[1], -earthHelio[2]];
           const sunDist = Math.hypot(sunGeo[0], sunGeo[1], sunGeo[2]);
@@ -1882,9 +2070,10 @@
 
           // Sun
           const sunAng = place(sunMesh, sw, sunDist * AU_KM, BODY_RAD.Sun);
+          orientBody(sunMesh, "Sun", T, days);
           byName.Sun.dir.copy(sunDirWorld);
           byName.Sun.arcmin = sunAng / DEG * 60;
-          const coronaSize = Math.max(SKY_R * Math.tan(sunAng / 2) * 9, SKY_R * Math.tan(fovDeg * DEG / 2) * 0.16);
+          const coronaSize = Math.max(SKY_R * Math.tan(sunAng / 2) * 6, SKY_R * Math.tan(fovDeg * DEG / 2) * 0.16);
           corona.position.copy(sunMesh.position);
           corona.scale.set(coronaSize, coronaSize, 1);
           corona.lookAt(0, 0, 0);
@@ -1893,6 +2082,13 @@
           const mg = moonGeo(T);
           const moonAng = place(bodies.Moon.mesh, mg.dir, mg.distKm, BODY_RAD.Moon);
           bodies.Moon.mesh.visible = true;
+          // Tidally locked: longitude 0 faces the Earth, north stays near
+          // ecliptic north (the Moon's equator is tilted only 1.5° from it).
+          // Libration's few-degree nod is left out.
+          spinX.set(-mg.dir[0], -mg.dir[1], -mg.dir[2]);
+          spinY.set(0, 1, 0).addScaledVector(spinX, -spinX.y).normalize();
+          spinZ.crossVectors(spinX, spinY);
+          bodies.Moon.mesh.quaternion.setFromRotationMatrix(spinBasis.makeBasis(spinX, spinY, spinZ));
           // Lit from wherever the Sun is relative to the Moon, which is what
           // makes the phase come out right.
           scratchA.set(mg.dir[0], mg.dir[1], mg.dir[2]).multiplyScalar(mg.distKm);
@@ -1914,9 +2110,18 @@
               dirArr = astroToWorld(g.map((v) => v / dAU));
               const rec = bodies[name];
               angDiam = place(rec.mesh, dirArr, distKm, BODY_RAD[name]);
+              const pole = orientBody(rec.mesh, name, T, days);
+              rec.mesh.scale.y *= 1 - (FLATTENING[name] || 0);
               rec.mesh.visible = true;
               // Sun as seen from the planet itself — gives Venus its crescent.
               rec.mat.uniforms.sunDir.value.set(-h[0], -h[2], h[1]).normalize();
+              if (rec.ring) {
+                const ru = rec.ring.material.uniforms;
+                ru.sunDir.value.copy(rec.mat.uniforms.sunDir.value);
+                ru.pole.value.copy(pole);
+                ru.center.value.copy(rec.mesh.position);
+                ru.radius.value = rec.mesh.scale.x;
+              }
               byName[name].dir.set(dirArr[0], dirArr[1], dirArr[2]);
               byName[name].arcmin = angDiam / DEG * 60;
             }
@@ -1945,10 +2150,9 @@
             glowMat.uniforms.fade.value = f;
             Object.keys(bodies).forEach((n) => {
               bodies[n].mat.uniforms.fade.value = f;
-              if (bodies[n].ring) bodies[n].ring.material.opacity = f;
+              if (bodies[n].ring) bodies[n].ring.material.uniforms.fade.value = f;
             });
-            sunMesh.material.opacity = f;
-            sunMesh.material.transparent = true;
+            sunMesh.material.uniforms.fade.value = f;
             corona.material.opacity = f;
             fadeables.forEach((m) => (m.opacity = f));
           },
@@ -2199,11 +2403,11 @@
         // ~200 LD, which a linear scale collapses onto the outer ring.
         const ldToR = (ld) => Math.max(1.1, 3 + 6 * Math.log10(Math.max(0.05, ld)));
         [1, 10, 100].forEach((ld) => scene.add(ring(ldToR(ld), ld === 1 ? AMBER : GREEN, ld === 1 ? 0.42 : 0.16)));
-        // The Moon, carrying the same generated lunar surface the contact
-        // stage uses, and lit by the same sun rather than drawn flat.
-        const moon = new THREE.Mesh(keep(new THREE.SphereGeometry(0.185, 32, 24)),
+        // The Moon, carrying the same lunar map the contact stage uses, and lit
+        // by the same sun rather than drawn flat.
+        const moon = new THREE.Mesh(keep(new THREE.SphereGeometry(0.185, 48, 32)),
           keep(new THREE.MeshStandardMaterial({
-            map: surfaceTexture("moon"), roughness: 0.98, metalness: 0.0
+            map: keep(planetTexture("moon.jpg")), roughness: 0.98, metalness: 0.0
           })));
         scene.add(moon);
 
@@ -2412,7 +2616,7 @@
           rockSpin = new Float32Array(items.length * 4);   // axis-ish euler + rate
           rockScale = new Float32Array(items.length * 3);
           const rmat = keep(new THREE.MeshStandardMaterial({
-            map: surfaceTexture("rock"), color: 0xffffff,
+            map: rockTexture(), color: 0xffffff,
             roughness: 0.95, metalness: 0.0,
             // One sun means half of every body faces away from it. A little
             // self-lift keeps those from dropping out of the field entirely.
@@ -2487,7 +2691,7 @@
         const specMesh = new THREE.Mesh(
           keep(rockGeometry(5)),
           keep(new THREE.MeshStandardMaterial({
-            map: surfaceTexture("rock"), roughness: 0.95, metalness: 0.0,
+            map: rockTexture(), roughness: 0.95, metalness: 0.0,
             emissive: 0x1b2740, emissiveIntensity: 0.55
           })));
         specScene.add(specMesh);
@@ -2622,6 +2826,9 @@
           sweep.rotation.y = -t * 0.5;
           const ma = t * 0.08;
           moon.position.set(Math.cos(ma) * ldToR(1), 0, Math.sin(ma) * ldToR(1));
+          // Near side to the Earth: sphere longitude 0 is local +X.
+          moon.lookAt(0, 0, 0);
+          moon.rotateY(-Math.PI / 2);
 
           // Advance the clock and put every object where it actually is.
           simJD = simJD0 + ((t * SIM_RATE) % SIM_SPAN);

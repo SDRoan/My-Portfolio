@@ -35,3 +35,7 @@ This is a simple, fast, static portfolio site built with just **HTML** and **CSS
 - `styles.css` — Modern, responsive styling (dark theme, cards, grid layout).
 - `README.md` — This guide.
 
+
+## Credits
+
+- Planet, Moon, Sun and Saturn ring maps in `textures/` are from [Solar System Scope](https://www.solarsystemscope.com/textures/), based on NASA mission imagery, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
