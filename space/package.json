@@ -1,0 +1,1 @@
+{ "type": "module", "private": true, "description": "Marks the simulator modules as ES modules so the build scripts in scripts/ can import the same code the browser runs." }

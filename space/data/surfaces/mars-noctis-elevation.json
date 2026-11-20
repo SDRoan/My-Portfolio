@@ -1,0 +1,16 @@
+{
+ "file": "mars-noctis-elevation.i16.gz",
+ "width": 1408,
+ "height": 1152,
+ "scale": 1,
+ "bounds": {
+  "west": -106,
+  "east": -95,
+  "north": -3,
+  "south": -12
+ },
+ "lazy": true,
+ "source": "MGS MOLA 463 m (USGS)",
+ "resolutionM": 462,
+ "bytes": 1475849
+}

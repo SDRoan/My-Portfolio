@@ -1,0 +1,242 @@
+{
+ "about": "Reviewed, per-landmark corrections layered on top of the open data, never written back into it. geometry: which open-data features ARE the landmark (Overture building ids, OSM ids), used instead of any nearest-footprint search. authoritativeHeight: a published height that replaces an incomplete or estimated height for exactly those features (in the derived pack only). model: an original, approximate structural model drawn at the real location from published dimensions, where open geometry is missing or a plain extrusion can't represent the structure. Every value carries its source. Read by scripts/earth/build-region.mjs (heights), scripts/earth/build-landmarks.mjs (geometry, models) and, through landmarks.json, the renderer (space/earth/landmark-models.js).",
+ "landmarks": {
+  "Q12495": {
+   "name": "Burj Khalifa",
+   "geometry": {
+    "overture": [
+     "289645fe-e8fe-4e06-bdab-b7c2e8ccb5f6"
+    ],
+    "osm": [
+     "way/446646206"
+    ],
+    "parts": true,
+    "note": "Drawn from its 36 OpenStreetMap building parts (setbacks 15–828 m)."
+   },
+   "authoritativeHeight": {
+    "valueM": 829.8,
+    "applyTo": "tallest-part",
+    "measurement": "architectural height to the top of the spire",
+    "source": "Wikidata Q12495 P2048 (829.8 m; CTBUH architectural height). OpenStreetMap's spire part says 828 m.",
+    "confidence": "high"
+   }
+  },
+  "Q41225": {
+   "name": "Big Ben (Elizabeth Tower)",
+   "geometry": {
+    "overture": [
+     "e8b13135-30b4-49d6-944f-0dca6cd2cd6d"
+    ],
+    "parts": true,
+    "note": "OpenStreetMap's Elizabeth Tower outline says 96 m, but its tallest building part stops at 91 m: the open data disagrees with itself."
+   },
+   "authoritativeHeight": {
+    "valueM": 96,
+    "applyTo": "tallest-part",
+    "measurement": "to the top of the spire finial",
+    "source": "UK Parliament ('The Elizabeth Tower … is 96 m tall'); Wikidata Q41225 P2048 96 m; OSM outline height=96",
+    "confidence": "high"
+   }
+  },
+  "Q402937": {
+   "name": "Ahsan Manzil",
+   "geometry": {
+    "overture": [
+     "43773ae3-251a-4316-bc27-542f670aca36"
+    ],
+    "osm": [
+     "way/624025793"
+    ],
+    "site": "relation/8665455",
+    "note": "OSM way 624025793 (historic=building, name=Ahsan Manzil) — Overture 43773ae3 is the same polygon (17 vertices, 1433 m²). OSM relation 8665455 (museum grounds) carries wikidata=Q402937; Wikidata has no OSM id back."
+   },
+   "authoritativeHeight": {
+    "valueM": 11.8,
+    "applyTo": "building",
+    "measurement": "walls: 1 m platform + 5 m ground floor + 5.8 m first floor",
+    "source": "Banglapedia, 'Ahsan Manzil' (Asiatic Society of Bangladesh)",
+    "confidence": "medium"
+   },
+   "published": {
+    "lengthM": 125.4,
+    "widthM": 28.75,
+    "domeTopM": 27.13,
+    "source": "Banglapedia, 'Ahsan Manzil'"
+   },
+   "partial": "The mapped footprint is 54 × 30 m; the published palace is 125.4 × 28.75 m. The width agrees, so the open data appears to hold only the central (domed) block; the wings aren't mapped as part of it and are not invented here.",
+   "model": {
+    "type": "dome",
+    "baseM": 11.8,
+    "topM": 27.13,
+    "drumM": 13,
+    "drumTopM": 17.5,
+    "colour": [
+     0.62,
+     0.33,
+     0.36
+    ],
+    "note": "Octagonal drum and lotus-bud dome at the centre of the real footprint, to the published 27.13 m; drum size estimated."
+   }
+  },
+  "Q497536": {
+   "name": "Jatiya Sangsad Bhaban",
+   "geometry": {
+    "overture": [
+     "f784d6a0-deec-4c23-9494-4a2317953787"
+    ],
+    "note": "OpenStreetMap's National Parliament House footprint (via Overture), a single multipolygon for the whole assembly building."
+   },
+   "authoritativeHeight": {
+    "valueM": 33.5,
+    "applyTo": "building",
+    "measurement": "the eight peripheral blocks (110 ft); the central octagonal block rises to 155 ft = 47.2 m and is not mapped separately",
+    "source": "Banglapedia, 'Jatiya Sangsad Bhaban'",
+    "confidence": "medium"
+   },
+   "sourceDisagreement": "Wikidata P2048 gives 155 m: the published figure is 155 ft (47.2 m) for the central block — a unit error in Wikidata, not used."
+  },
+  "Q45178": {
+   "name": "Sydney Opera House",
+   "geometry": {
+    "overture": [
+     "50aedfbd-7dfc-4ab7-89a6-f9f4ea7cd58e"
+    ],
+    "osm": [
+     "relation/9596872"
+    ],
+    "replaceSource": true,
+    "note": "OSM relation 9596872 is the outline (135 × 181 m bounding box). Its 12 building parts are fragments (a few shells and glass roofs, no heights), so the outline is used as the podium and the shells are modelled."
+   },
+   "published": {
+    "lengthM": 183,
+    "widthM": 120,
+    "topAslM": 67,
+    "source": "Sydney Opera House Trust / Structurae (183 × 120 m; highest roof point 67 m above sea level)"
+   },
+   "model": {
+    "type": "opera-shells",
+    "podiumM": 10,
+    "topAslM": 67,
+    "note": "Original simplified model: podium on the real outline (height estimated, ~10 m per the OSM mapper's note), two halls of four sail-shaped shells each plus the restaurant pair, the tallest reaching the published 67 m above sea level. Shell positions, sizes and orientation are approximate."
+   }
+  },
+  "Q54495": {
+   "name": "Sydney Harbour Bridge",
+   "published": {
+    "spanM": 503,
+    "archTopAslM": 134,
+    "deckAslM": 49,
+    "widthM": 48.8,
+    "pylonM": 89,
+    "source": "Transport for NSW / Wikipedia (main span 503 m; arch top 134 m above sea level; 49 m clearance; deck 48.8 m wide; pylons 89 m)"
+   },
+   "model": {
+    "type": "arch-bridge",
+    "spanM": 503,
+    "archTopAslM": 134,
+    "deckAslM": 49,
+    "widthM": 48.8,
+    "pylonM": 89,
+    "colour": [
+     0.2,
+     0.21,
+     0.22
+    ],
+    "note": "Steel through-arch: two arch ribs, hangers, deck and the four granite pylons, on the axis of the real bridge roads. Truss detail is simplified."
+   }
+  },
+  "Q125006": {
+   "name": "Brooklyn Bridge",
+   "published": {
+    "mainSpanM": 486.3,
+    "towerAslM": 84.3,
+    "deckAslM": 41,
+    "widthM": 26,
+    "sideSpanM": 283.5,
+    "source": "NYC DOT / Wikipedia (main span 486.3 m; towers 84.3 m above water; 41 m clearance; 26 m wide)"
+   },
+   "model": {
+    "type": "suspension-bridge",
+    "mainSpanM": 486.3,
+    "sideSpanM": 283.5,
+    "towerAslM": 84.3,
+    "deckAslM": 41,
+    "widthM": 26,
+    "towerW": 41,
+    "towerD": 18,
+    "colour": [
+     0.52,
+     0.47,
+     0.4
+    ],
+    "note": "Two masonry towers, deck and four main cables on the axis of the real bridge roads; arches, stays and suspenders simplified."
+   }
+  },
+  "Q83125": {
+   "name": "Tower Bridge",
+   "geometry": {
+    "overture": [
+     "f8578f77-f33f-424b-a1ff-ae508264da9a",
+     "a1dddc3e-0b36-4785-a46f-80baf89bab7e"
+    ],
+    "parts": true,
+    "note": "The two towers, from their OpenStreetMap building parts (piers, tower bodies to 47 m, tops to 65 m)."
+   },
+   "published": {
+    "walkwayM": 42,
+    "source": "Tower Bridge (City of London Corporation): high-level walkways 42 m above the river"
+   },
+   "model": {
+    "type": "walkways",
+    "between": [
+     "f8578f77-f33f-424b-a1ff-ae508264da9a",
+     "a1dddc3e-0b36-4785-a46f-80baf89bab7e"
+    ],
+    "walkwayAslM": 44,
+    "walkwayH": 4,
+    "widthM": 3.5,
+    "colour": [
+     0.3,
+     0.38,
+     0.45
+    ],
+    "note": "The two high-level walkways between the real towers (not in the open data), at the published 42 m above the river (≈ 44 m above datum at high water)."
+   }
+  },
+  "Q79961": {
+   "name": "Christ the Redeemer",
+   "geometry": {
+    "osm": [
+     "node/4919986733"
+    ],
+    "pedestal": "way/105667349",
+    "note": "OSM node 4919986733 (man_made=monument, wikidata=Q79961) is 0.5 m from Wikidata's coordinate. OSM way 105667349 is the chapel inside the pedestal (Capela de Nossa Senhora Aparecida): its chamfered-square outline, ≈ 8 m across with axes at 80.8°/170.8°, is used as the pedestal footprint. OSM tags it fixme: 'outline needs verification'."
+   },
+   "published": {
+    "statueM": 30,
+    "pedestalM": 8,
+    "totalM": 38,
+    "armSpanM": 28,
+    "source": "Wikidata Q79961 (30.1 m statue); Britannica / Santuário Cristo Redentor descriptions (30 m statue, 8 m pedestal, 28 m arms)"
+   },
+   "orientation": {
+    "facingDeg": 80.8,
+    "confidence": "medium-low",
+    "basis": "Facing taken along the pedestal's mapped axis (80.8°), toward the city and Guanabara Bay to the east (Botafogo/Urca), back to the Tijuca forest. No official or open source found gives a measured bearing; the axis is from OSM (fixme-tagged) and the eastward facing from general descriptions."
+   },
+   "model": {
+    "type": "statue",
+    "pedestalM": 8,
+    "statueM": 30,
+    "armSpanM": 28,
+    "facingDeg": 80.8,
+    "colour": [
+     0.64,
+     0.64,
+     0.6
+    ],
+    "note": "Original procedural sculpture to the published dimensions (30 m statue + 8 m pedestal = 38 m; 28 m arms) on the real summit location and the mapped pedestal outline. Silhouette is simplified; facing confidence medium-low."
+   }
+  }
+ }
+}

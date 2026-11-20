@@ -1,0 +1,16 @@
+{
+ "file": "pluto-sputnik-e-elevation.i16.gz",
+ "width": 760,
+ "height": 1901,
+ "scale": 1,
+ "bounds": {
+  "west": -180,
+  "east": -158.01350048216008,
+  "north": 45.014464802314365,
+  "south": -9.980713596914171
+ },
+ "lazy": true,
+ "source": "New Horizons DEM 300 m, every 2nd cell (USGS)",
+ "resolutionM": 600,
+ "bytes": 1961872
+}

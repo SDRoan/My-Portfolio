@@ -1,0 +1,19 @@
+{
+ "file": "mars-jezero-ctx-elevation.i16.gz",
+ "width": 2093,
+ "height": 2789,
+ "scale": 0.5,
+ "bounds": {
+  "west": 77.08276635066946,
+  "east": 77.7960777289993,
+  "north": 18.9001954649021,
+  "south": 17.94968164064891
+ },
+ "lazy": true,
+ "source": "Mars 2020 landing-site CTX stereo DTM 20 m (USGS)",
+ "resolutionM": 20,
+ "bytes": 1944299,
+ "datumOffsetM": 3.5,
+ "coverage": 0.685,
+ "note": "gaps filled from HRSC–MOLA 200 m; feathered over 1000 m"
+}

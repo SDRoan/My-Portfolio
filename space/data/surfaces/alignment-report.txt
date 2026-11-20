@@ -1,0 +1,28 @@
+mercury    map mercury_usgs.jpg           @0.5° best offset   0° r=0.139  (at 0°: 0.139, runner-up 355° 0.008)  ALIGNED ✓
+venus      map venus_usgs.jpg             @0.5° best offset   0° r=0.084  (at 0°: 0.084, runner-up 5° 0.011)  ALIGNED ✓
+mars       map mars_usgs.webp             @0.5° best offset   0° r=0.064  (at 0°: 0.064, runner-up 170° 0.014)  ALIGNED ✓
+pluto      map pluto_newhorizons.jpg      @0.5° best offset   0° r=0.101  (at 0°: 0.101, runner-up 70° 0.011)  ALIGNED ✓
+ceres      map ceres_usgs.jpg             @0.5° best offset   0° r=0.049  (at 0°: 0.049, runner-up 40° 0.023)  ALIGNED ✓
+vesta      map vesta_usgs.jpg             @2° best offset 330° r=0.034  (at 0°: 0.028, runner-up 150° 0.030)  inconclusive
+moon       map moon_usgs.jpg              @0.5° best offset   0° r=0.140  (at 0°: 0.140, runner-up 5° 0.013)  ALIGNED ✓
+phobos     map phobos_usgs.webp           @0.5° best offset   0° FLIPPED r=0.040  (at 0°: 0.022, runner-up 0° 0.022)  MISALIGNED ✗
+enceladus  map enceladus_usgs.jpg         @2° best offset  40° FLIPPED r=0.021  (at 0°: 0.005, runner-up 40° 0.021)  inconclusive
+charon     map charon_newhorizons.jpg     @0.5° best offset   0° r=0.071  (at 0°: 0.071, runner-up 75° 0.019)  ALIGNED ✓
+
+Georeferencing of the sources (build-terrain.mjs):
+Mars_MGS_MOLA_DEM_mosaic_global_463m.tif: simple cylindrical, 46080×23040, west edge −180°, north edge 90°, sphere 3396.3 km ✓
+Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif: simple cylindrical, 106694×53347, west edge −180°, north edge 90° (degrees) ✓
+Mars_Viking_ClrMosaic_global_925m.tif: simple cylindrical, 23059×11530, west edge −180°, north edge 90°, sphere 3396.2 km ✓
+Mercury_Messenger_USGS_DEM_Global_665m_v2.tif: simple cylindrical, 23040×11520, central meridian 180°, column 0 at 0.00°, north edge 90°, sphere 2439.4 km ✓
+Mercury_Messenger_USGS_DEM_Global_665m_v2.tif: simple cylindrical, 23040×11520, central meridian 180°, column 0 at 0.00°, north edge 90°, sphere 2439.4 km ✓
+Mercury_MESSENGER_MDIS_Basemap_EnhancedColor_Mosaic_Global_665m.tif: simple cylindrical, 23040×11520, central meridian 0°, column 0 at -180.00°, north edge 90°, sphere 2439.4 km ✓
+Pluto_NewHorizons_Global_DEM_300m_Jul2017_16bit.tif: simple cylindrical, 24888×12444, central meridian 180°, column 0 at 0.00°, north edge 90°, sphere 1188.3 km ✓
+Pluto_NewHorizons_Global_DEM_300m_Jul2017_16bit.tif: simple cylindrical, 24888×12444, central meridian 180°, column 0 at 0.00°, north edge 90°, sphere 1188.3 km ✓
+Rhea_Cassini_Voyager_mosaic_global_417m.tif: simple cylindrical, 11520×5760, central meridian 180°, column 0 at -180.00°, north edge 90°, sphere 764.1 km ✓
+Iapetus_Cassini_Voyager_mosaic_global_783m.tif: simple cylindrical, 5760×2880, central meridian 0°, column 0 at 180.00°, north edge 90°, sphere 736.0 km ✓
+Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif: simple cylindrical, 14138×7069, central meridian 0°, column 0 at -179.99°, north edge 90°, sphere 1350.1 km ✓
+Phobos_ME_SRC_Mosaic_Global_16ppd.tif: simple cylindrical, 5760×2880, central meridian 0°, column 0 at -180.00°, north edge 90°, sphere 11.1 km ✓
+Vesta_Dawn_HAMO_DTM_DLR_Global_48ppd.tif: simple cylindrical, 17280×8640, central meridian 0°, column 0 at 180.00°, north edge 90°, sphere 255.0 km ✓
+Vesta_Dawn_FC_HAMO_Mosaic_Global_74ppd.tif: simple cylindrical, 26704×13352, central meridian 0°, column 0 at 180.00°, north edge 90°, sphere 255.0 km ✓
+Mercury_MESSENGER_mosaic_global_250m_2013.tif: simple cylindrical, 61324×30662, central meridian 0°, column 0 at -180.00°, north edge 90°, sphere 2440.0 km ✓
+Mimas/Cassini_DLR_Mimas.zip → Cassini_DLR/MI_170630_DLR_basemap_degrees.tif: geographic degrees, column 0 at −180° (Herschel checked at the Gazetteer position) ✓

@@ -1,0 +1,20 @@
+{
+  "file": "mercury-elevation.i16.gz",
+  "width": 1440,
+  "height": 720,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -11024,
+  "maxM": 8318,
+  "bytes": 1563955,
+  "source": "MESSENGER global DEM 665 m (USGS Astrogeology, Becker et al. 2016)",
+  "license": "Public domain (NASA/USGS)",
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mercury_Messenger_USGS_DEM_Global_665m_v2.tif",
+  "reference": "heights re-referenced from the product's 2439.4 km sphere to 2439.7 km",
+  "mappedFraction": 1,
+  "coverage": null,
+  "sourceSize": "23040×11520",
+  "sampling": "every 16th row and column (range requests)",
+  "sourceCentralMeridian": 180,
+  "columnZero": "-180"
+}

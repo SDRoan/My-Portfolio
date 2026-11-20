@@ -1,0 +1,209 @@
+== Landmarks (66 in the registry)
+  location confidence: {"high":42,"medium":15,"single source":7,"low":2}
+  discrepancy: Shanghai Tower — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Mount Kilimanjaro — Wikidata's summit coordinate is 1381 m from OpenStreetMap's peak node; the elevation model is 139 m higher at the OSM node (5882 vs 5743 m), so the marker uses it
+  discrepancy: Mount Fuji — Wikidata point is 390 m from the OSM feature's centroid and outside its extent
+  discrepancy: Jumeirah Burj Al Arab — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Petronas Towers — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Mutianyu — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Badaling — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Port of Rotterdam — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Port of Singapore — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  New York:
+WARN — SOURCE DISAGREEMENT · New York · Empire State Building — Wikidata–OSM 41 m (high) · footprint [inside the OpenStreetMap outline (way/34633854)] 129.5 × 59.8 m, centroid 15 m from Wikidata, 28 m from OSM · drawn 443.2 m (height tag) vs Wikidata 457.2 / 453 m
+PASS · New York · One World Trade Center — Wikidata–OSM 28 m (high) · footprint [inside the OpenStreetMap outline (relation/3599882)] 65.5 × 65.3 m, centroid 29 m from Wikidata, 8 m from OSM · drawn 541 m (height tag) vs Wikidata 541.3 / 386.5 / 546.2 m
+PASS · New York · Statue of Liberty — Wikidata–OSM 18 m (high) · footprint [inside the OpenStreetMap outline (way/32965412)] 96.1 × 94.4 m, centroid 14 m from Wikidata, 6 m from OSM · drawn 46.9 m (height tag) vs Wikidata 46 / 47 m
+PASS · New York · Central Park — Wikidata–OSM 188 m (medium)
+PASS · New York · Brooklyn Bridge — one source (medium) · model suspension-bridge (crosses 570 m of water)
+PASS · New York · Times Square — Wikidata–OSM 26 m (high)
+  Paris:
+PASS · Paris · Eiffel Tower — Wikidata–OSM 4 m (high) · footprint [inside the OpenStreetMap outline (way/5013364)] 124.1 × 123.6 m, centroid 7 m from Wikidata, 8 m from OSM · drawn 330 m (height tag) vs Wikidata 300 / 330 / 324 m
+PASS · Paris · Arc de Triomphe — Wikidata–OSM 2 m (high) · footprint [inside the OpenStreetMap outline (way/226413508)] 50.4 × 28.1 m, centroid 6 m from Wikidata, 5 m from OSM · drawn 50 m (height tag) vs Wikidata 49.5 m
+PASS · Paris · Louvre Museum — Wikidata–OSM 82 m (high) · footprint [contains the Wikidata point] 37.1 × 36.7 m, centroid 10 m from Wikidata, 82 m from OSM · drawn 21.7 m (height tag)
+  London:
+PASS · London · Palace of Westminster — Wikidata–OSM 32 m (high) · footprint [inside the OpenStreetMap outline (relation/1567699)] 273.4 × 102.5 m, centroid 30 m from Wikidata, 11 m from OSM · drawn 96 m (height tag)
+PASS · London · Big Ben — Wikidata–OSM 4 m (high) · footprint [reviewed id] 14 × 13.9 m, centroid 5 m from Wikidata, 2 m from OSM · drawn 96 m = reviewed published height 96 m (to the top of the spire finial)
+PASS · London · Tower Bridge — Wikidata–OSM 9 m (high) · footprint [reviewed id] 56.7 × 21.3 m, centroid 34 m from Wikidata, 25 m from OSM · model walkways · drawn 65 m (height tag) vs Wikidata 65 m
+PASS · London · London Eye — one source (medium) · footprint [contains the Wikidata point] 22.9 × 7.8 m, centroid 3 m from Wikidata · drawn 136.4 m (height tag) vs Wikidata 135 m
+  Tokyo:
+PASS · Tokyo · Tokyo Tower — Wikidata–OSM 20 m (high) · footprint [inside the OpenStreetMap outline (relation/4247312)] 76.7 × 52.7 m, centroid 15 m from Wikidata, 6 m from OSM · drawn 333 m (height tag) vs Wikidata 332.6 m
+PASS · Tokyo · Tokyo Skytree — Wikidata–OSM 1 m (high) · footprint [inside the OpenStreetMap outline (way/288269147)] 56.6 × 56.6 m, centroid 1 m from Wikidata, 0 m from OSM · drawn 634 m (height tag) vs Wikidata 634 m
+  Dubai:
+PASS · Dubai · Burj Khalifa — Wikidata–OSM 4 m (high) · footprint [reviewed id] 162 × 137.6 m, centroid 4 m from Wikidata, 0 m from OSM · drawn 829.8 m = reviewed published height 829.8 m (architectural height to the top of the spire)
+WARN — PARTIAL DATA · Dubai · Jumeirah Burj Al Arab — one source (single source) · one source only · footprint [contains the Wikidata point] 105.2 × 71.3 m, centroid 35 m from Wikidata · drawn 321 m (height tag) vs Wikidata 321 m
+PASS · Dubai · Palm Jumeirah — Wikidata–OSM 257 m (medium)
+  Dhaka:
+WARN — PARTIAL DATA · Dhaka · Ahsan Manzil — Wikidata–OSM 7 m (high) · footprint [reviewed id] 54.1 × 30 m, centroid 7 m from Wikidata, 0 m from OSM · model dome · drawn 11.8 m = reviewed published height 11.8 m (walls: 1 m platform + 5 m ground floor + 5.8 m first floor) · The mapped footprint is 54 × 30 m; the published palace is 125.4 × 28.75 m. The width agrees, so the open data appears to hold only the central (domed) block; the wings aren't mapped as part of it and are not invented here.
+WARN — SOURCE DISAGREEMENT · Dhaka · Jatiya Sangsad Bhaban — one source (medium) · footprint [reviewed id] 147.2 × 139.6 m, centroid 18 m from Wikidata · drawn 33.5 m = reviewed published height 33.5 m (the eight peripheral blocks (110 ft); the central octagonal block rises to 155 ft = 47.2 m and is not mapped separately) · Wikidata P2048 gives 155 m: the published figure is 155 ft (47.2 m) for the central block — a unit error in Wikidata, not used.
+  Cairo / Giza:
+PASS · Cairo / Giza · Great Pyramid of Giza — Wikidata–OSM 25 m (high) · footprint [inside the OpenStreetMap outline (way/4420397)] 232.2 × 224.8 m, centroid 25 m from Wikidata, 0 m from OSM · drawn 138.8 m (height tag) vs Wikidata 137.5 / 146.7 m
+PASS · Cairo / Giza · The Great Sphinx — Wikidata–OSM 2 m (high) · footprint [inside the OpenStreetMap outline (way/540058405)] 75.2 × 19 m, centroid 13 m from Wikidata, 11 m from OSM · drawn 20 m (height tag) vs Wikidata 20.2 m
+  Rio:
+PASS · Rio · Christ the Redeemer — Wikidata–OSM 1 m (high) · model statue
+PASS · Rio · Sugarloaf Mountain — Wikidata–OSM 52 m (high)
+  Sydney:
+PASS · Sydney · Sydney Opera House — Wikidata–OSM 26 m (high) · footprint [reviewed id] 170.3 × 114.2 m, centroid 26 m from Wikidata, 0 m from OSM · model opera-shells
+PASS · Sydney · Sydney Harbour Bridge — Wikidata–OSM 58 m (high) · model arch-bridge (crosses 490 m of water)
+
+== Landmark fixes
+PASS · Ahsan Manzil · structure — matched 43773ae3-251a-4316-bc27-542f670aca36 (OSM way/624025793) · centroid 7 m from Wikidata, 0 m from the OSM feature · 54.1 × 30 m · walls drawn 11.8 m (published landmark height (reviewed override)), dome model to 27.13 m
+WARN — PARTIAL DATA · Ahsan Manzil · extent — The mapped footprint is 54 × 30 m; the published palace is 125.4 × 28.75 m. The width agrees, so the open data appears to hold only the central (domed) block; the wings aren't mapped as part of it and are not invented here.
+PASS · Burj Khalifa · height — top drawn at 829.8 m (published landmark height (reviewed override)) · published 829.8 m · 35 parts · footprint 162 × 137.6 m, 4 m from Wikidata
+PASS · Sydney Opera House · model — podium on the real outline (57 vertices, 170.3 × 114.2 m vs published 183 × 120 m), axis 13°, shells to 67 m above sea level · REAL LOCATION + REAL FOOTPRINT + APPROXIMATE ARCHITECTURAL MODEL
+PASS · Sydney Harbour Bridge · structure — axis 20.01° from the real bridge roads · main span centred on 490 m of water (published span 503 m) · deck 49 m
+PASS · Brooklyn Bridge · structure — axis 142.31° from the real bridge roads · main span centred on 570 m of water (published span 486.3 m) · deck 41 m
+
+== Iconic heights (published vs drawn)
+  Empire State Building    published 457.2 / 453 m · drawn 443.2 m (height tag)
+  One World Trade Center   published 541.3 / 386.5 / 546.2 m · drawn 541 m (height tag)
+  CN Tower                 published 553.3 / 447 m · outside the detailed packs (marker only, nothing drawn)
+  Eiffel Tower             published 300 / 330 / 324 m · drawn 330 m (height tag)
+  Tokyo Tower              published 332.6 m · drawn 333 m (height tag)
+  Tokyo Skytree            published 634 m · drawn 634 m (height tag)
+  Burj Khalifa             published 828 / 829.8 / 584.5 m · drawn 829.8 m (published landmark height (reviewed override))
+  Petronas Towers          published 452 m · outside the detailed packs (marker only, nothing drawn)
+  Shanghai Tower           published 632 m · outside the detailed packs (marker only, nothing drawn)
+  Taipei 101: not in the registry
+  Big Ben                  published 96 m · drawn 96 m (published landmark height (reviewed override))
+  Great Pyramid of Giza    published 137.5 / 146.7 m · drawn 138.8 m (height tag)
+  Jatiya Sangsad Bhaban    published 155 m · drawn 33.5 m (published landmark height (reviewed override))
+
+== Peaks (DEM summit vs published summit; tolerances follow the DEM's cell size and the summit's sharpness)
+WARN — SOURCE RESOLUTION LIMIT · peak Mount Everest — DEM (Copernicus DEM GLO-30, 31 m cells) summit 8736 m · published 8850 m (Δ -114 m) · Wikidata summit 101 m from the DEM maximum, 16 m lower; OpenStreetMap peak node 94 m from the DEM maximum, 13 m lower (tolerance 154 m) · relief within 150 m: 84 m — a 31 m DEM undersamples a sharp summit (-114 m) · marker on Wikidata coordinate, OSM peak node 21 m away
+WARN — SOURCE RESOLUTION LIMIT · peak K2 — DEM (Copernicus DEM GLO-30, 31 m cells) summit 8569 m · published 8611 m (Δ -42 m) · Wikidata summit 115 m from the DEM maximum, 9 m lower; OpenStreetMap peak node 163 m from the DEM maximum, 9 m lower (tolerance 154 m) · relief within 150 m: 90 m — a 31 m DEM undersamples a sharp summit (-42 m) · marker on Wikidata coordinate, OSM peak node 61 m away
+WARN — SOURCE DISAGREEMENT · peak Mount Kilimanjaro — DEM (Copernicus DEM GLO-30, 31 m cells) summit 5886 m · published 5895 m (Δ -9 m) · Wikidata summit 1395 m from the DEM maximum, 143 m lower; OpenStreetMap peak node 34 m from the DEM maximum, 4 m lower (tolerance 100 m) · relief within 150 m: 45 m — the published coordinates are 1381 m apart; the DEM confirms the OpenStreetMap peak node · marker on OpenStreetMap peak node node/32059197 (ele 5895 m)
+PASS · peak Denali — DEM (Copernicus DEM GLO-30, 31 m cells) summit 6179 m · published 6190 m (Δ -11 m) · Wikidata summit 34 m from the DEM maximum, 8 m lower; OpenStreetMap peak node 32 m from the DEM maximum, 8 m lower (tolerance 154 m) · relief within 150 m: 66 m · marker on Wikidata coordinate, OSM peak node 2 m away
+WARN — SOURCE DISAGREEMENT · peak Mount Fuji — DEM (Copernicus DEM GLO-30, 31 m cells) summit 3767 m · published 3777 m (Δ -10 m) · Wikidata summit 18 m from the DEM maximum, 0 m lower; OpenStreetMap peak node 379 m from the DEM maximum, 227 m lower (tolerance 154 m) · relief within 150 m: 77 m — the published coordinates are 393 m apart; the DEM confirms the Wikidata summit · marker on Wikidata highest point (P610)
+PASS · peak Mont Blanc — DEM (Copernicus DEM GLO-30, 31 m cells) summit 4809 m · published 4810 m (Δ -1 m) · Wikidata summit 29 m from the DEM maximum, 4 m lower; OpenStreetMap peak node 43 m from the DEM maximum, 8 m lower (tolerance 154 m) · relief within 150 m: 76 m · marker on Wikidata coordinate, OSM peak node 15 m away
+PASS · peak Matterhorn — DEM (swisstopo swissALTI3D 2 m, 6 m cells) summit 4476 m · published 4478 m (Δ -2 m) · Wikidata summit 8 m from the DEM maximum, 11 m lower; OpenStreetMap peak node 6 m from the DEM maximum, 0 m lower (tolerance 150 m) · relief within 150 m: 235 m · marker on Wikidata coordinate, OSM peak node 4 m away
+WARN — SOURCE RESOLUTION LIMIT · peak Aconcagua — DEM (Copernicus DEM GLO-30, 31 m cells) summit 6912 m · published 6962 m (Δ -50 m) · Wikidata summit 34 m from the DEM maximum, 2 m lower; OpenStreetMap peak node 25 m from the DEM maximum, 17 m lower (tolerance 154 m) · relief within 150 m: 86 m — a 31 m DEM undersamples a sharp summit (-50 m) · marker on Wikidata coordinate, OSM peak node 29 m away
+WARN — SOURCE DISAGREEMENT · peak Mount Rainier — DEM (USGS 3DEP bare-earth DEM, 31 m cells) summit 4391 m · published 4389 m (Δ 2 m) · Wikidata summit 124 m from the DEM maximum, 2 m lower; OpenStreetMap peak node 225 m from the DEM maximum, 63 m lower (tolerance 100 m) · relief within 150 m: 28 m — the published coordinates are 218 m apart; the DEM confirms the Wikidata summit · marker on Wikidata coordinate
+
+== Airports (OurAirports runway thresholds vs runways drawn)
+PASS · airport KJFK runway 04L/22R — OurAirports 3462 m at 30.6° · drawn 3606 m along it, heading within 0.1°
+PASS · airport KJFK runway 04R/22L — OurAirports 2557 m at 30.6° · drawn 2561 m along it, heading within 0.1°
+PASS · airport KJFK runway 13L/31R — OurAirports 3042 m at 121.0° · drawn 3044 m along it, heading within 0.5°
+PASS · airport KJFK runway 13R/31L — OurAirports 4436 m at 120.9° · drawn 4416 m along it, heading within 0.1°
+PASS · airport KLAX runway 6L/24R — OurAirports 2717 m at 83.0° · drawn 2715 m along it, heading within 0.2°
+PASS · airport KLAX runway 6R/24L — OurAirports 3311 m at 83.0° · drawn 3312 m along it, heading within 0.0°
+PASS · airport KLAX runway 7L/25R — OurAirports 3931 m at 83.0° · drawn 3931 m along it, heading within 0.4°
+PASS · airport KLAX runway 7R/25L — OurAirports 3381 m at 83.0° · drawn 3374 m along it, heading within 0.0°
+PASS · airport EGLL runway 09L/27R — OurAirports 3893 m at 89.7° · drawn 3887 m along it, heading within 0.1°
+PASS · airport EGLL runway 09R/27L — OurAirports 3655 m at 89.7° · drawn 3648 m along it, heading within 0.1°
+PASS · airport RJTT runway 04/22 — OurAirports 2502 m at 34.9° · drawn 5119 m along it, heading within 0.4°
+PASS · airport RJTT runway 05/23 — OurAirports 2501 m at 42.4° · drawn 2492 m along it, heading within 0.3°
+PASS · airport RJTT runway 16L/34R — OurAirports 3365 m at 150.0° · drawn 6837 m along it, heading within 0.1°
+PASS · airport RJTT runway 16R/34L — OurAirports 3064 m at 150.0° · drawn 3043 m along it, heading within 0.4°
+PASS · airport OMDB runway 12L/30R — OurAirports 3599 m at 121.5° · drawn 3919 m along it, heading within 0.1°
+PASS · airport OMDB runway 12R/30L — OurAirports 3599 m at 121.5° · drawn 4229 m along it, heading within 0.5°
+
+== Rivers
+PASS · river Seine (paris pack, polygon) — 48/49 Wikidata bridges over the Seine stand on drawn water (±60 m) (pont de Grenelle, Pont Rouelle, pont Saint-Michel, …) · not: pont de Grammont
+PASS · river Seine (paris pack, line) — 3/3 Natural Earth points on drawn water (±300 m)
+PASS · river Thames (london pack, polygon) — 22/23 Wikidata bridges over the Thames stand on drawn water (±60 m) (Tower Bridge, Hungerford Bridge and Golden Jubilee Bridges, Northern line (Charing Cross branch) tunnels, …) · not: Tower Subway
+WARN — SOURCE RESOLUTION LIMIT · river Thames (london pack, line) — 1/2 Natural Earth points on drawn water (±300 m) — Natural Earth's 1:10m line is generalised by more than that here; the detailed polygon check passes
+PASS · river Nile (cairo pack, polygon) — 2/2 Wikidata bridges over the Nile stand on drawn water (±60 m) (6th October Bridge, Qasr al-Nil Bridge)
+  river Nile (cairo pack, line): Natural Earth has no centreline here (too small for its 1:10m scale) — polygon validation used
+WARN — PARTIAL DATA · river Buriganga (dhaka pack, polygon) — only 1 independent reference point(s) in the pack — 1/1 Wikidata places on the Buriganga (P206: ghats, piers, ports) are on or within 100 m of drawn water (Dhaka)
+  river Buriganga (dhaka pack, line): Natural Earth has no centreline here (too small for its 1:10m scale) — polygon validation used
+PASS · river Hudson (nyc pack, polygon) — 7/7 Wikidata bridges over the Hudson stand on drawn water (±60 m) (Holland Tunnel, Lincoln Tunnel, North River Tunnels, …)
+  river Hudson (nyc pack, line): Natural Earth has no centreline here (too small for its 1:10m scale) — polygon validation used
+PASS · river East River (nyc pack, polygon) — 12/14 Wikidata bridges over the East River stand on drawn water (±60 m) (Brooklyn–Battery Tunnel, Joralemon Street Tunnel, Montague Street Tunnel, …) · not: Queensboro Bridge, 60th Street Tunnel
+  river East River (nyc pack, line): Natural Earth has no centreline here (too small for its 1:10m scale) — polygon validation used
+PASS · river Amazon (global land cover) — 644/717 Natural Earth points within one ~925 m cell of land-cover water
+PASS · river Nile (global land cover) — 787/842 Natural Earth points within one ~925 m cell of land-cover water
+PASS · river Mississippi (global land cover) — 1091/1286 Natural Earth points within one ~925 m cell of land-cover water
+PASS · river Ganges (global land cover) — 1098/1601 Natural Earth points within one ~925 m cell of land-cover water
+PASS · river Yangtze (global land cover) — 838/874 Natural Earth points within one ~925 m cell of land-cover water
+WARN — SOURCE RESOLUTION LIMIT · river Thames (global land cover) — 80/271 Natural Earth points within one ~925 m cell of land-cover water — the river is narrower than the global ~925 m cell; inside the detailed pack it validates against vector water (above)
+PASS · river Seine (global land cover) — 255/353 Natural Earth points within one ~925 m cell of land-cover water
+
+== Ports (docks, piers and water drawn)
+PASS · port Port of Los Angeles — 104 piers/docks/quays (Overture infrastructure) · 56% of the pack is tidal water in the elevation · 6 inland water polygons
+PASS · port Port of Rotterdam — 58 piers/docks/quays (Overture infrastructure) · 35% of the pack is tidal water in the elevation · 35 inland water polygons
+PASS · port Port of Singapore (Tanjong Pagar–Pasir Panjang) — 4 piers/docks/quays (Overture infrastructure) · 1% of the pack is tidal water in the elevation · 197 inland water polygons
+
+== Imagery ↔ vector alignment (validate-imagery.py: best shift of the imagery's water/paving against the vector water/runways)
+PASS · imagery cairo · img-s2.jpg — offset 2.5 m (dE 2.5, dN -0.5) against water polygons (Overture) · edges correlation (falls 40% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery dhaka · img-s2.jpg — offset 11 m (dE 0.7, dN -11) against water polygons (Overture) · edges correlation (falls 41% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery dubai · img-s2.jpg — offset 6.8 m (dE 4, dN 5.5) against water polygons (Overture) · edges correlation (falls 52% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery dubai-palm · img-s2.jpg — offset 3.3 m (dE 2.8, dN 1.8) against water polygons (Overture) · edges correlation (falls 42% within 60 m) · limit 20 m (10 m pixels)
+WARN — SOURCE RESOLUTION LIMIT · imagery dxb · img-s2.jpg — offset 21.8 m (dE 19.2, dN -10.2) against runways (Overture) · edges correlation (falls 100% within 60 m) · limit 20 m (10 m pixels)
+WARN — PARTIAL DATA · imagery giza · img-s2.jpg — too little reference water or runway in the box
+PASS · imagery haneda · img-ortho.jpg — offset 1 m (dE 1, dN 0.1) against water polygons (Overture) · edges correlation (falls 70% within 60 m) · limit 10 m (2.69 m pixels) · other estimates: runways area: 2.8 m
+PASS · imagery haneda · img-s2.jpg — offset 4.1 m (dE 1.1, dN -3.9) against runways (Overture) · area correlation (falls 47% within 60 m) · limit 20 m (10 m pixels) · other estimates: water polygons edges: 5.2 m
+PASS · imagery heathrow · img-s2.jpg — offset 17.3 m (dE -17.3, dN -0.8) against runways (Overture) · area correlation (falls 100% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery jfk · img-ortho.jpg — offset 3.3 m (dE -1.5, dN -3) against water polygons (Overture) · edges correlation (falls 45% within 60 m) · limit 10 m (2.51 m pixels) · other estimates: runways area: 3.6 m
+PASS · imagery jfk · img-s2.jpg — offset 2.4 m (dE 0.8, dN 2.3) against runways (Overture) · area correlation (falls 29% within 60 m) · limit 20 m (10 m pixels) · other estimates: water polygons edges: 8.4 m
+WARN — PARTIAL DATA · imagery kilimanjaro · img-s2.jpg — no vector reference in this pack (elevation-only pack): alignment not measurable here
+PASS · imagery lax · img-ortho.jpg — offset 1.2 m (dE -0.9, dN 0.8) against runways (Overture) · area correlation (falls 100% within 60 m) · limit 10 m (2.23 m pixels) · other estimates: water polygons edges: 1.5 m
+PASS · imagery lax · img-s2.jpg — offset 3.7 m (dE -1.6, dN -3.3) against runways (Overture) · area correlation (falls 99% within 60 m) · limit 20 m (10 m pixels) · other estimates: water polygons edges: 51.5 m
+PASS · imagery liberty · img-ortho.jpg — offset 3 m (dE 2, dN -2.1) against water polygons (Overture) · edges correlation (falls 49% within 60 m) · limit 10 m (0.64 m pixels)
+PASS · imagery london · img-s2.jpg — offset 12.4 m (dE 12.1, dN -2.6) against water polygons (Overture) · edges correlation (falls 45% within 60 m) · limit 20 m (10 m pixels)
+WARN — PARTIAL DATA · imagery matterhorn · img-s2.jpg — no vector reference in this pack (elevation-only pack): alignment not measurable here
+PASS · imagery paris · img-ortho.jpg — offset 4.7 m (dE -0.9, dN -4.6) against water polygons (Overture) · edges correlation (falls 100% within 60 m) · limit 10 m (2.45 m pixels) · other estimates: water polygons area: 7.9 m
+PASS · imagery paris · img-s2.jpg — offset 1.8 m (dE 0.9, dN -1.6) against water polygons (Overture) · edges correlation (falls 28% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery port-la · img-ortho.jpg — offset 1.5 m (dE 1.5, dN 0) against water polygons (Overture) · edges correlation (falls 73% within 60 m) · limit 10 m (2.92 m pixels)
+PASS · imagery port-la · img-s2.jpg — offset 9.3 m (dE 3, dN -8.8) against water polygons (Overture) · edges correlation (falls 42% within 60 m) · limit 20 m (10 m pixels)
+WARN — SOURCE RESOLUTION LIMIT · imagery rio · img-s2.jpg — offset 20.4 m (dE 20.3, dN 1.5) against water polygons (Overture) · edges correlation (falls 42% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery rotterdam · img-ortho.jpg — offset 1.2 m (dE -0.5, dN -1.1) against water polygons (Overture) · edges correlation (falls 76% within 60 m) · limit 10 m (2.04 m pixels)
+PASS · imagery rotterdam · img-s2.jpg — offset 6.3 m (dE 6.1, dN -1.3) against water polygons (Overture) · edges correlation (falls 41% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery singapore-port · img-s2.jpg — offset 10.2 m (dE -1.8, dN -10) against water polygons (Overture) · edges correlation (falls 29% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery sydney · img-s2.jpg — offset 9.5 m (dE 3.8, dN 8.7) against water polygons (Overture) · edges correlation (falls 46% within 60 m) · limit 20 m (10 m pixels)
+PASS · imagery tokyo · img-ortho.jpg — offset 2.5 m (dE -2.5, dN -0.4) against water polygons (Overture) · edges correlation (falls 100% within 60 m) · limit 10 m (2.69 m pixels) · other estimates: water polygons area: 4.9 m
+PASS · imagery tokyo · img-s2.jpg — offset 13.1 m (dE 2.7, dN -12.9) against water polygons (Overture) · edges correlation (falls 54% within 60 m) · limit 20 m (10 m pixels)
+
+== Worldwide prototype cells (same pipeline, places outside the original packs)
+PASS · world berlin — Berlin · Mitte · 16864 buildings (675/km²; heights tagged/levels/estimated 2932/10580/3352) · 20796 road pieces · 93 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world chattogram — Chattogram · Agrabad to Patenga Road · 59568 buildings (2383/km²; heights tagged/levels/estimated 6/55/59507) · 4883 road pieces · 259 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world sao-paulo — São Paulo · Centro to Avenida Paulista · 52617 buildings (2105/km²; heights tagged/levels/estimated 48940/212/3465) · 11305 road pieces · 228 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world nairobi — Nairobi · CBD and Upper Hill · 27583 buildings (1103/km²; heights tagged/levels/estimated 130/464/26989) · 7557 road pieces · 107 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world seoul — Seoul · Jongno to Namsan · 25174 buildings (1007/km²; heights tagged/levels/estimated 1198/1305/22671) · 12092 road pieces · 49 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world mexico-city — Mexico City · Centro Histórico · 35268 buildings (1411/km²; heights tagged/levels/estimated 199/583/34486) · 9125 road pieces · 74 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world auckland — Auckland · CBD and Waitematā Harbour · 17355 buildings (694/km²; heights tagged/levels/estimated 514/1187/15654) · 13142 road pieces · 729 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world rural-beauce — Rural · Beauce farmland, France · 513 buildings (32/km²; heights tagged/levels/estimated 134/0/379) · 236 road pieces · 4 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world rural-tefe — Rural · Tefé, Amazonas, Brazil · 14588 buildings (912/km²; heights tagged/levels/estimated 1/3/14584) · 1080 road pieces · 30 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world rural-malawi — Rural · villages near Lilongwe, Malawi · 2125 buildings (133/km²; heights tagged/levels/estimated 0/0/2125) · 134 road pieces · 0 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world rural-gopalganj — Rural · villages in Gopalganj, Bangladesh · 14522 buildings (908/km²; heights tagged/levels/estimated 2/1/14519) · 696 road pieces · 4 water areas · imagery Sentinel-2 · vegetation yes
+PASS · world rural-wagga — Rural · farmland near Wagga Wagga, Australia · 155 buildings (10/km²; heights tagged/levels/estimated 112/0/43) · 34 road pieces · 0 water areas · imagery Sentinel-2 · vegetation yes
+
+== City, airport and port packs
+  auckland        17355 buildings (heights tagged/levels/estimated 514/1187/15654) · 13142 road pieces · 729 water areas · 0.9 MB
+  berlin          16864 buildings (heights tagged/levels/estimated 2932/10580/3352) · 20796 road pieces · 93 water areas · 1.2 MB
+  cairo           10135 buildings (heights tagged/levels/estimated 94/117/9924) · 6194 road pieces · 28 water areas · 1.2 MB
+  chattogram      59568 buildings (heights tagged/levels/estimated 6/55/59507) · 4883 road pieces · 259 water areas · 1.1 MB
+  dhaka           98121 buildings (heights tagged/levels/estimated 399/17178/80541) · 11261 road pieces · 128 water areas · 2.9 MB
+  dubai           5657 buildings (heights tagged/levels/estimated 1373/191/4092) · 5772 road pieces · 37 water areas · 1.1 MB
+  dubai-palm      9117 buildings (heights tagged/levels/estimated 303/719/8095) · 7958 road pieces · 229 water areas · 1.1 MB
+  dxb             14598 buildings (heights tagged/levels/estimated 37/508/14053) · 8905 road pieces · 25 water areas · 1.4 MB
+  everest         628 buildings (heights tagged/levels/estimated 0/0/628) · 542 road pieces · 95 water areas · 0.9 MB
+  giza            5240 buildings (heights tagged/levels/estimated 14/41/5185) · 3788 road pieces · 15 water areas · 0.9 MB
+  grand-canyon    1038 buildings (heights tagged/levels/estimated 1/45/992) · 3463 road pieces · 73 water areas · 5.9 MB
+  haneda          3831 buildings (heights tagged/levels/estimated 23/138/3670) · 2983 road pieces · 171 water areas · 2.0 MB
+  heathrow        5540 buildings (heights tagged/levels/estimated 4014/92/1434) · 7761 road pieces · 27 water areas · 1.1 MB
+  jfk             4503 buildings (heights tagged/levels/estimated 4314/1/188) · 4489 road pieces · 163 water areas · 2.2 MB
+  kennedy         45162 buildings (heights tagged/levels/estimated 46/120/44996) · 24551 road pieces · 365 water areas · 7.1 MB
+  lax             4446 buildings (heights tagged/levels/estimated 4265/15/166) · 5251 road pieces · 137 water areas · 2.1 MB
+  liberty         53 buildings (heights tagged/levels/estimated 50/0/3) · 85 road pieces · 0 water areas · 0.7 MB
+  london          13431 buildings (heights tagged/levels/estimated 4317/4271/4842) · 14096 road pieces · 41 water areas · 1.6 MB
+  mexico-city     35268 buildings (heights tagged/levels/estimated 199/583/34486) · 9125 road pieces · 74 water areas · 0.9 MB
+  nairobi         27583 buildings (heights tagged/levels/estimated 130/464/26989) · 7557 road pieces · 107 water areas · 0.8 MB
+  nyc             189250 buildings (heights tagged/levels/estimated 137831/2417/49002) · 133408 road pieces · 263 water areas · 11.1 MB
+  paris           36853 buildings (heights tagged/levels/estimated 2557/21699/12597) · 32032 road pieces · 187 water areas · 5.1 MB
+  port-la         7179 buildings (heights tagged/levels/estimated 6885/3/291) · 4541 road pieces · 6 water areas · 2.5 MB
+  rainier         85 buildings (heights tagged/levels/estimated 0/18/67) · 1256 road pieces · 216 water areas · 5.6 MB
+  rio             15933 buildings (heights tagged/levels/estimated 10438/503/4992) · 3040 road pieces · 283 water areas · 1.3 MB
+  rotterdam       2171 buildings (heights tagged/levels/estimated 1195/3/973) · 1771 road pieces · 27 water areas · 2.3 MB
+  rural-beauce    513 buildings (heights tagged/levels/estimated 134/0/379) · 236 road pieces · 4 water areas · 0.0 MB
+  rural-gopalganj 14522 buildings (heights tagged/levels/estimated 2/1/14519) · 696 road pieces · 4 water areas · 0.3 MB
+  rural-malawi    2125 buildings (heights tagged/levels/estimated 0/0/2125) · 134 road pieces · 0 water areas · 0.1 MB
+  rural-tefe      14588 buildings (heights tagged/levels/estimated 1/3/14584) · 1080 road pieces · 30 water areas · 0.3 MB
+  rural-wagga     155 buildings (heights tagged/levels/estimated 112/0/43) · 34 road pieces · 0 water areas · 0.0 MB
+  sao-paulo       52617 buildings (heights tagged/levels/estimated 48940/212/3465) · 11305 road pieces · 228 water areas · 2.1 MB
+  seoul           25174 buildings (heights tagged/levels/estimated 1198/1305/22671) · 12092 road pieces · 49 water areas · 0.8 MB
+  singapore-port  4348 buildings (heights tagged/levels/estimated 42/761/3545) · 5531 road pieces · 189 water areas · 0.9 MB
+  sydney          2665 buildings (heights tagged/levels/estimated 434/1523/708) · 4818 road pieces · 135 water areas · 1.0 MB
+  tokyo           100883 buildings (heights tagged/levels/estimated 3747/9012/88124) · 41409 road pieces · 228 water areas · 6.6 MB
+
+115 checks: 96 PASS · 7 WARN — SOURCE RESOLUTION LIMIT · 7 WARN — PARTIAL DATA · 5 WARN — SOURCE DISAGREEMENT · 0 FAIL — INCORRECT IMPLEMENTATION
+PASS 96 / WARN 19 / FAIL 0

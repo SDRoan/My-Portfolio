@@ -1,0 +1,117 @@
+== Landmarks (66 in the registry)
+  location confidence: {"high":41,"medium":16,"single source":7,"low":2}
+  discrepancy: Shanghai Tower — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Mount Kilimanjaro — Wikidata point is 1226 m from the OSM feature's centroid and outside its extent
+  discrepancy: Mount Fuji — Wikidata point is 390 m from the OSM feature's centroid and outside its extent
+  discrepancy: Petronas Towers — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Mutianyu — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Ahsan Manzil — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Badaling — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Port of Rotterdam — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  discrepancy: Port of Singapore — no OpenStreetMap id on Wikidata (or not fetchable): one source only
+  New York:
+PASS New York · Empire State Building — Wikidata–OSM 41 m (high) · pack nyc · no building footprint within 80 m
+PASS New York · One World Trade Center — Wikidata–OSM 28 m (high) · pack nyc · no building footprint within 80 m
+PASS New York · Statue of Liberty — Wikidata–OSM 18 m (high) · pack liberty · no building footprint within 80 m
+PASS New York · Central Park — Wikidata–OSM 188 m (medium) · pack nyc · no building footprint within 80 m
+PASS New York · Brooklyn Bridge — one source · pack nyc · no building footprint within 80 m
+PASS New York · Times Square — Wikidata–OSM 26 m (high) · pack nyc · no building footprint within 80 m
+  Paris:
+PASS Paris · Eiffel Tower — Wikidata–OSM 4 m (high) · pack paris · footprint OpenStreetMap, 330 m (height tag) vs published 330 m
+PASS Paris · Arc de Triomphe — Wikidata–OSM 2 m (high) · pack paris · footprint OpenStreetMap, 50 m (height tag) vs published 49.5 m
+PASS Paris · Louvre Museum — Wikidata–OSM 82 m (high) · pack paris · footprint OpenStreetMap, 21.7 m (height tag)
+  London:
+PASS London · Palace of Westminster — Wikidata–OSM 32 m (high) · pack london · footprint OpenStreetMap, 78 m (height tag)
+PASS London · Big Ben — Wikidata–OSM 4 m (high) · pack london · footprint OpenStreetMap, 91 m (height tag) vs published 96 m
+PASS London · Tower Bridge — Wikidata–OSM 9 m (high) · pack london · footprint OpenStreetMap, 65 m (height tag) vs published 65 m
+PASS London · London Eye — one source · pack london · footprint OpenStreetMap, 136.4 m (height tag) vs published 135 m
+  Tokyo:
+PASS Tokyo · Tokyo Tower — Wikidata–OSM 20 m (high) · pack tokyo · footprint OpenStreetMap, 333 m (height tag) vs published 332.6 m
+PASS Tokyo · Tokyo Skytree — Wikidata–OSM 1 m (high) · pack tokyo · footprint OpenStreetMap, 634 m (height tag) vs published 634 m
+  Dubai:
+PASS Dubai · Burj Khalifa — Wikidata–OSM 4 m (high) · pack dubai · footprint OpenStreetMap, 760 m (height tag) vs published 829.8 m
+PASS Dubai · Jumeirah Burj Al Arab — one source · pack dubai-palm · footprint OpenStreetMap, 321 m (height tag) vs published 321 m
+PASS Dubai · Palm Jumeirah — Wikidata–OSM 257 m (medium) · pack dubai-palm · no building footprint within 80 m
+  Dhaka:
+FAIL Dhaka · Ahsan Manzil — one source · pack dhaka · footprint OpenStreetMap, 21 m (levels × 3 m)
+PASS Dhaka · Jatiya Sangsad Bhaban — one source · pack dhaka · footprint OpenStreetMap, 10 m (estimated from type and footprint) vs published 155 m
+  Cairo / Giza:
+PASS Cairo / Giza · Great Pyramid of Giza — Wikidata–OSM 25 m (high) · pack giza · no building footprint within 80 m
+PASS Cairo / Giza · The Great Sphinx — Wikidata–OSM 2 m (high) · pack giza · no building footprint within 80 m
+  Rio:
+PASS Rio · Christ the Redeemer — Wikidata–OSM 1 m (high) · pack rio · no building footprint within 80 m
+PASS Rio · Sugarloaf Mountain — Wikidata–OSM 52 m (high) · pack rio · no building footprint within 80 m
+  Sydney:
+PASS Sydney · Sydney Opera House — Wikidata–OSM 26 m (high) · pack sydney · no building footprint within 80 m
+PASS Sydney · Sydney Harbour Bridge — Wikidata–OSM 58 m (high) · pack sydney · no building footprint within 80 m
+
+== Peaks (Copernicus GLO-30 elevation in the pack vs Wikidata)
+PASS peak Mount Everest — DEM summit 8736 m, 101 m from the Wikidata point · published 8850 m (Δ -114 m)
+PASS peak K2 — DEM summit 8569 m, 115 m from the Wikidata point · published 8611 m (Δ -42 m)
+FAIL peak Mount Kilimanjaro — DEM summit 5886 m, 1397 m from the Wikidata highest point (P610) · published 5895 m (Δ -9 m)
+PASS peak Denali — DEM summit 6179 m, 34 m from the Wikidata point · published 6190 m (Δ -11 m)
+PASS peak Mount Fuji — DEM summit 3767 m, 18 m from the Wikidata highest point (P610) · published 3777 m (Δ -10 m)
+PASS peak Mont Blanc — DEM summit 4809 m, 29 m from the Wikidata point · published 4810 m (Δ -1 m)
+FAIL peak Matterhorn — DEM summit 4324 m, 155 m from the Wikidata point · published 4478 m (Δ -154 m)
+PASS peak Aconcagua — DEM summit 6912 m, 34 m from the Wikidata point · published 6962 m (Δ -50 m)
+PASS peak Mount Rainier — DEM summit 4391 m, 124 m from the Wikidata point · published 4389 m (Δ 2 m)
+
+== Airports (OurAirports runway thresholds vs runways drawn)
+PASS airport KJFK runway 04L/22R — OurAirports 3462 m at 30.6° · drawn 3606 m along it, heading within 0.1°
+PASS airport KJFK runway 04R/22L — OurAirports 2557 m at 30.6° · drawn 2561 m along it, heading within 0.1°
+PASS airport KJFK runway 13L/31R — OurAirports 3042 m at 121.0° · drawn 3044 m along it, heading within 0.5°
+PASS airport KJFK runway 13R/31L — OurAirports 4436 m at 120.9° · drawn 4416 m along it, heading within 0.1°
+PASS airport KLAX runway 6L/24R — OurAirports 2717 m at 83.0° · drawn 2715 m along it, heading within 0.2°
+PASS airport KLAX runway 6R/24L — OurAirports 3311 m at 83.0° · drawn 3312 m along it, heading within 0.0°
+PASS airport KLAX runway 7L/25R — OurAirports 3931 m at 83.0° · drawn 3931 m along it, heading within 0.4°
+PASS airport KLAX runway 7R/25L — OurAirports 3381 m at 83.0° · drawn 3374 m along it, heading within 0.0°
+PASS airport EGLL runway 09L/27R — OurAirports 3893 m at 89.7° · drawn 3887 m along it, heading within 0.1°
+PASS airport EGLL runway 09R/27L — OurAirports 3655 m at 89.7° · drawn 3648 m along it, heading within 0.1°
+PASS airport RJTT runway 04/22 — OurAirports 2502 m at 34.9° · drawn 5119 m along it, heading within 0.4°
+PASS airport RJTT runway 05/23 — OurAirports 2501 m at 42.4° · drawn 2492 m along it, heading within 0.3°
+PASS airport RJTT runway 16L/34R — OurAirports 3365 m at 150.0° · drawn 6837 m along it, heading within 0.1°
+PASS airport RJTT runway 16R/34L — OurAirports 3064 m at 150.0° · drawn 3043 m along it, heading within 0.4°
+PASS airport OMDB runway 12L/30R — OurAirports 3599 m at 121.5° · drawn 3919 m along it, heading within 0.1°
+PASS airport OMDB runway 12R/30L — OurAirports 3599 m at 121.5° · drawn 4229 m along it, heading within 0.5°
+
+== Rivers (Natural Earth centrelines vs water drawn)
+PASS river Seine (paris pack) — 3/3 Natural Earth points on drawn water (±300 m)
+FAIL river Thames (london pack) — 1/2 Natural Earth points on drawn water (±300 m)
+  river Nile: Natural Earth has no centreline inside the cairo pack (too small a river for its 1:10m scale)
+  river Buriganga: Natural Earth has no centreline inside the dhaka pack (too small a river for its 1:10m scale)
+  river Hudson / East River: Natural Earth has no centreline inside the nyc pack (too small a river for its 1:10m scale)
+PASS river Amazon (global land cover) — 644/717 Natural Earth points within one ~925 m cell of land-cover water
+PASS river Nile (global land cover) — 787/842 Natural Earth points within one ~925 m cell of land-cover water
+PASS river Mississippi (global land cover) — 1091/1286 Natural Earth points within one ~925 m cell of land-cover water
+PASS river Ganges (global land cover) — 1098/1601 Natural Earth points within one ~925 m cell of land-cover water
+PASS river Yangtze (global land cover) — 838/874 Natural Earth points within one ~925 m cell of land-cover water
+FAIL river Thames (global land cover) — 80/271 Natural Earth points within one ~925 m cell of land-cover water
+PASS river Seine (global land cover) — 255/353 Natural Earth points within one ~925 m cell of land-cover water
+
+== City, airport and port packs
+  cairo           10125 buildings (heights tagged/levels/estimated 84/117/9924) · 6194 road pieces · 28 water areas · 0.3 MB
+  dhaka           98121 buildings (heights tagged/levels/estimated 399/17178/80544) · 11261 road pieces · 128 water areas · 2.0 MB
+  dubai           5653 buildings (heights tagged/levels/estimated 1370/191/4092) · 5772 road pieces · 37 water areas · 0.3 MB
+  dubai-palm      9117 buildings (heights tagged/levels/estimated 303/719/8095) · 7958 road pieces · 229 water areas · 0.5 MB
+  dxb             14598 buildings (heights tagged/levels/estimated 37/508/14053) · 8905 road pieces · 25 water areas · 0.6 MB
+  everest         628 buildings (heights tagged/levels/estimated 0/0/628) · 542 road pieces · 95 water areas · 0.9 MB
+  giza            5240 buildings (heights tagged/levels/estimated 14/41/5185) · 3788 road pieces · 15 water areas · 0.2 MB
+  grand-canyon    1038 buildings (heights tagged/levels/estimated 1/45/992) · 3463 road pieces · 73 water areas · 5.9 MB
+  haneda          3831 buildings (heights tagged/levels/estimated 23/138/3670) · 2983 road pieces · 171 water areas · 0.2 MB
+  heathrow        5540 buildings (heights tagged/levels/estimated 4014/92/1434) · 7761 road pieces · 27 water areas · 0.3 MB
+  jfk             4503 buildings (heights tagged/levels/estimated 4314/1/188) · 4489 road pieces · 163 water areas · 0.3 MB
+  kennedy         45162 buildings (heights tagged/levels/estimated 46/120/44996) · 24551 road pieces · 365 water areas · 7.1 MB
+  lax             4446 buildings (heights tagged/levels/estimated 4265/15/166) · 5251 road pieces · 137 water areas · 0.3 MB
+  liberty         53 buildings (heights tagged/levels/estimated 50/0/3) · 85 road pieces · 0 water areas · 0.0 MB
+  london          13034 buildings (heights tagged/levels/estimated 3921/4271/4842) · 14096 road pieces · 41 water areas · 0.7 MB
+  nyc             189250 buildings (heights tagged/levels/estimated 137831/2417/49002) · 133408 road pieces · 263 water areas · 11.1 MB
+  paris           36730 buildings (heights tagged/levels/estimated 2434/21699/12597) · 32032 road pieces · 187 water areas · 2.5 MB
+  port-la         7179 buildings (heights tagged/levels/estimated 6885/3/291) · 4541 road pieces · 6 water areas · 0.4 MB
+  rainier         85 buildings (heights tagged/levels/estimated 0/18/67) · 1256 road pieces · 216 water areas · 5.6 MB
+  rio             15923 buildings (heights tagged/levels/estimated 10428/503/4992) · 3040 road pieces · 284 water areas · 0.6 MB
+  rotterdam       2171 buildings (heights tagged/levels/estimated 1195/3/973) · 1771 road pieces · 27 water areas · 0.2 MB
+  singapore-port  4348 buildings (heights tagged/levels/estimated 42/761/3545) · 5531 road pieces · 189 water areas · 0.3 MB
+  sydney          2751 buildings (heights tagged/levels/estimated 434/1523/794) · 4818 road pieces · 137 water areas · 0.2 MB
+  tokyo           100865 buildings (heights tagged/levels/estimated 3729/9012/88124) · 41409 road pieces · 228 water areas · 2.7 MB
+
+55/60 checks passed

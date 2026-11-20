@@ -1,0 +1,11 @@
+{
+ "file": "enceladus_usgs.jpg",
+ "width": 3960,
+ "height": 1980,
+ "grey": true,
+ "source": "Cassini ISS mosaic 100 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 400,
+ "fill": false,
+ "bytes": 2776987
+}

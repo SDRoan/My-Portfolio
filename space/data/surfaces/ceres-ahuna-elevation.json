@@ -1,0 +1,16 @@
+{
+ "file": "ceres-ahuna-elevation.i16.gz",
+ "width": 390,
+ "height": 360,
+ "scale": 1,
+ "bounds": {
+  "west": -47,
+  "east": -40.5,
+  "north": -7.5,
+  "south": -13.5
+ },
+ "lazy": true,
+ "source": "Dawn HAMO DTM 137 m (DLR/USGS)",
+ "resolutionM": 137,
+ "bytes": 111152
+}

@@ -1,0 +1,20 @@
+{
+  "file": "ceres-elevation.i16.gz",
+  "width": 1440,
+  "height": 720,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -27597,
+  "maxM": 17306,
+  "bytes": 1392805,
+  "source": "Dawn FC HAMO global DTM 60 px/deg (DLR, via USGS Astrogeology)",
+  "license": "Public domain (NASA)",
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Ceres_Dawn_FC_HAMO_DTM_DLR_Global_60ppd_Oct2016.tif",
+  "reference": "heights re-referenced from the product's 470.0 km sphere to 469.7 km",
+  "mappedFraction": 1,
+  "coverage": null,
+  "sourceSize": "21600×10800",
+  "sampling": "every 15th row and column (range requests)",
+  "sourceCentralMeridian": 180,
+  "columnZero": "-180"
+}

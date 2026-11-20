@@ -1,0 +1,11 @@
+{
+ "file": "ceres_usgs.jpg",
+ "width": 3691,
+ "height": 1846,
+ "grey": true,
+ "source": "Dawn FC global mosaic 20 px/deg (DLR/USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 800,
+ "fill": false,
+ "bytes": 1919897
+}

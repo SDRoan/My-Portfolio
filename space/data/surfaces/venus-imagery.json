@@ -1,0 +1,11 @@
+{
+ "file": "venus_usgs.jpg",
+ "width": 3755,
+ "height": 1878,
+ "grey": true,
+ "source": "Magellan C3-MDIR radar mosaic 2025 m (USGS)",
+ "surfaceOnly": true,
+ "resolutionM": 10126,
+ "fill": false,
+ "bytes": 1395112
+}

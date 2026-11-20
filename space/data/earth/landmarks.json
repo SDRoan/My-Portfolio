@@ -1,0 +1,2670 @@
+{
+ "built": "2026-11-18",
+ "sources": "Wikidata (CC0) + OpenStreetMap API (ODbL); region packs (Overture / OSM)",
+ "landmarks": [
+  {
+   "qid": "Q513",
+   "name": "Mount Everest",
+   "description": "Earth's highest mountain above sea level, located in the Mahalangur Himal sub-range of the Himalayas",
+   "type": "mountain",
+   "country": "Nepal",
+   "lat": 27.988056,
+   "lon": 86.925,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 27.988056,
+    "lon": 86.925
+   },
+   "heightM": 4650,
+   "heightValues": [
+    3650,
+    4650
+   ],
+   "elevationM": 8850,
+   "sources": [
+    "Wikidata Q513 (CC0)",
+    "OpenStreetMap node/164979149 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/164979149",
+    "lat": 27.988061,
+    "lon": 86.92521,
+    "extentM": 0,
+    "height": null,
+    "ele": "8848.86"
+   },
+   "distanceM": 21,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (3650, 4650 m); the largest is shown",
+   "pack": "everest",
+   "summitWikidata": {
+    "lat": 27.988056,
+    "lon": 86.925
+   },
+   "summitSource": "Wikidata coordinate, OSM peak node 21 m away",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q583",
+   "name": "Mont Blanc",
+   "description": "highest mountain in the Alps",
+   "type": "main peak, ice dome, highest point",
+   "country": "France",
+   "lat": 45.832778,
+   "lon": 6.865,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 45.832778,
+    "lon": 6.865
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 4810,
+   "sources": [
+    "Wikidata Q583 (CC0)",
+    "OpenStreetMap node/281399025 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/281399025",
+    "lat": 45.832706,
+    "lon": 6.865171,
+    "extentM": 0,
+    "height": null,
+    "ele": "4807.3"
+   },
+   "distanceM": 15,
+   "confidence": "high",
+   "pack": "mont-blanc",
+   "summitWikidata": {
+    "lat": 45.832778,
+    "lon": 6.865
+   },
+   "summitSource": "Wikidata coordinate, OSM peak node 15 m away",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q243",
+   "name": "Eiffel Tower",
+   "description": "tower located on the Champ de Mars in Paris, France",
+   "type": "architectural landmark, lattice tower, observation tower",
+   "country": "France",
+   "lat": 48.858296,
+   "lon": 2.294479,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 330,
+   "heightValues": [
+    300,
+    330,
+    324
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q243 (CC0)",
+    "OpenStreetMap way/5013364 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/5013364",
+    "lat": 48.858269,
+    "lon": 2.294514,
+    "extentM": 246,
+    "height": "330",
+    "ele": null
+   },
+   "distanceM": 4,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (300, 330, 324 m); the largest is shown",
+   "pack": "paris",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/5013364)",
+    "pieces": 29,
+    "heightM": 330,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 124.1,
+    "widthM": 123.6,
+    "centroid": [
+     48.85834,
+     2.294541
+    ],
+    "distanceWikidataM": 7,
+    "distanceOsmM": 8
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q1374",
+   "name": "Matterhorn",
+   "description": "mountain in the Pennine Alps on the border between Switzerland and Italy",
+   "type": "mountain",
+   "country": "Switzerland",
+   "lat": 45.976389,
+   "lon": 7.658611,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 45.976389,
+    "lon": 7.658611
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 4478,
+   "sources": [
+    "Wikidata Q1374 (CC0)",
+    "OpenStreetMap node/26863664 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/26863664",
+    "lat": 45.976426,
+    "lon": 7.658602,
+    "extentM": 0,
+    "height": null,
+    "ele": "4478"
+   },
+   "distanceM": 4,
+   "confidence": "high",
+   "pack": "matterhorn",
+   "summitWikidata": {
+    "lat": 45.976389,
+    "lon": 7.658611
+   },
+   "summitSource": "Wikidata coordinate, OSM peak node 4 m away",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q5317",
+   "name": "Space Needle",
+   "description": "observation tower in Seattle, Washington, United States",
+   "type": "observation tower",
+   "country": "United States",
+   "lat": 47.6204,
+   "lon": -122.3491,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 184,
+   "heightValues": [
+    184
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q5317 (CC0)",
+    "OpenStreetMap way/12903132 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/12903132",
+    "lat": 47.620506,
+    "lon": -122.349297,
+    "extentM": 53,
+    "height": "184",
+    "ele": "40"
+   },
+   "distanceM": 19,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q5788",
+   "name": "Petra",
+   "description": "ancient rock-cut historical city in Jordan",
+   "type": "ancient city, archaeological site, city",
+   "country": "Jordan",
+   "lat": 30.328611,
+   "lon": 35.441944,
+   "wikidataCoords": 2,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 1350,
+   "sources": [
+    "Wikidata Q5788 (CC0)",
+    "OpenStreetMap way/424506592 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/424506592",
+    "lat": 30.350269,
+    "lon": 35.423074,
+    "extentM": 28896,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 3013,
+   "confidence": "medium",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q8685",
+   "name": "John F. Kennedy International Airport",
+   "description": "international airport in New York, United States",
+   "type": "commercial traffic aerodrome, international airport",
+   "country": "United States",
+   "lat": 40.64,
+   "lon": -73.78,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 4,
+   "sources": [
+    "Wikidata Q8685 (CC0)",
+    "OpenStreetMap way/158042008 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/158042008",
+    "lat": 40.645771,
+    "lon": -73.781802,
+    "extentM": 7969,
+    "height": null,
+    "ele": "3"
+   },
+   "distanceM": 659,
+   "confidence": "medium",
+   "pack": "jfk",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q8691",
+   "name": "London Heathrow Airport",
+   "description": "main airport serving London, England, United Kingdom",
+   "type": "commercial traffic aerodrome, international airport",
+   "country": "United Kingdom",
+   "lat": 51.4775,
+   "lon": -0.461389,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 24,
+   "sources": [
+    "Wikidata Q8691 (CC0)",
+    "OpenStreetMap relation/14001268 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/14001268",
+    "lat": 51.467191,
+    "lon": -0.457869,
+    "extentM": 6068,
+    "height": null,
+    "ele": "25"
+   },
+   "distanceM": 1172,
+   "confidence": "medium",
+   "pack": "heathrow",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q8731",
+   "name": "Los Angeles International Airport",
+   "description": "airport serving the Greater Los Angeles Area",
+   "type": "commercial traffic aerodrome, airport, international airport",
+   "country": "United States",
+   "lat": 33.9425,
+   "lon": -118.408056,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 38,
+   "sources": [
+    "Wikidata Q8731 (CC0)",
+    "OpenStreetMap way/649268639 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/649268639",
+    "lat": 33.940544,
+    "lon": -118.404039,
+    "extentM": 6051,
+    "height": null,
+    "ele": "38"
+   },
+   "distanceM": 430,
+   "confidence": "medium",
+   "pack": "lax",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q9141",
+   "name": "Taj Mahal",
+   "description": "marble mausoleum in Agra, India",
+   "type": "tomb, mausoleum",
+   "country": "India",
+   "lat": 27.175,
+   "lon": 78.041944,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 73,
+   "heightValues": [
+    73
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q9141 (CC0)",
+    "OpenStreetMap way/375257537 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/375257537",
+    "lat": 27.174976,
+    "lon": 78.04206,
+    "extentM": 149,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 12,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q9188",
+   "name": "Empire State Building",
+   "description": "skyscraper located in Midtown Manhattan, New York City, USA",
+   "type": "office building, skyscraper",
+   "country": "United States",
+   "lat": 40.748333,
+   "lon": -73.985556,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 457.2,
+   "heightValues": [
+    457.2,
+    453
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q9188 (CC0)",
+    "OpenStreetMap way/34633854 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/34633854",
+    "lat": 40.748529,
+    "lon": -73.985971,
+    "extentM": 183,
+    "height": "443.2",
+    "ele": "15"
+   },
+   "distanceM": 41,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (457.2, 453 m); the largest is shown",
+   "pack": "nyc",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/34633854)",
+    "pieces": 11,
+    "heightM": 443.2,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 129.5,
+    "widthM": 59.8,
+    "centroid": [
+     40.748442,
+     -73.985659
+    ],
+    "distanceWikidataM": 15,
+    "distanceOsmM": 28
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q9202",
+   "name": "Statue of Liberty",
+   "description": "monument in New York",
+   "type": "part of UNESCO World Heritage Site, colossal statue, observation tower",
+   "country": "United States",
+   "lat": 40.689209,
+   "lon": -74.044425,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 47,
+   "heightValues": [
+    46,
+    47
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q9202 (CC0)",
+    "OpenStreetMap way/32965412 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/32965412",
+    "lat": 40.689331,
+    "lon": -74.044574,
+    "extentM": 136,
+    "height": "10",
+    "ele": "2"
+   },
+   "distanceM": 18,
+   "confidence": "high",
+   "pack": "liberty",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/32965412)",
+    "pieces": 22,
+    "heightM": 46.9,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 96.1,
+    "widthM": 94.4,
+    "centroid": [
+     40.689277,
+     -74.044572
+    ],
+    "distanceWikidataM": 14,
+    "distanceOsmM": 6
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q10285",
+   "name": "Colosseum",
+   "description": "ancient Roman amphitheatre, a landmark of Rome, Italy",
+   "type": "roman ruins, Museum of the Italian Ministry of Culture, archaeological artifact museum",
+   "country": "Italy",
+   "lat": 41.890278,
+   "lon": 12.492222,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 48,
+   "heightValues": [
+    48
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q10285 (CC0)",
+    "OpenStreetMap relation/1834818 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/1834818",
+    "lat": 41.890334,
+    "lon": 12.492391,
+    "extentM": 229,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 15,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q11245",
+   "name": "One World Trade Center",
+   "description": "main building of the rebuilt World Trade Center complex in Lower Manhattan, New York City",
+   "type": "office building, skyscraper",
+   "country": "United States",
+   "lat": 40.713,
+   "lon": -74.0135,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 546.2,
+   "heightValues": [
+    541.3,
+    386.5,
+    546.2
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q11245 (CC0)",
+    "OpenStreetMap relation/3599882 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/3599882",
+    "lat": 40.713002,
+    "lon": -74.013173,
+    "extentM": 124,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 28,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (541.3, 386.5, 546.2 m); the largest is shown",
+   "pack": "nyc",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (relation/3599882)",
+    "pieces": 11,
+    "heightM": 541,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 65.5,
+    "widthM": 65.3,
+    "centroid": [
+     40.712934,
+     -74.013162
+    ],
+    "distanceWikidataM": 29,
+    "distanceOsmM": 8
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q11259",
+   "name": "Times Square",
+   "description": "neighborhood and square in Manhattan, New York City, United States",
+   "type": "square, neighborhood",
+   "country": "United States",
+   "lat": 40.7575,
+   "lon": -73.985833,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q11259 (CC0)",
+    "OpenStreetMap relation/14942838 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/14942838",
+    "lat": 40.757289,
+    "lon": -73.985964,
+    "extentM": 426,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 26,
+   "confidence": "high",
+   "pack": "nyc",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q12495",
+   "name": "Burj Khalifa",
+   "description": "skyscraper in Dubai, United Arab Emirates",
+   "type": "architectural landmark, skyscraper",
+   "country": "United Arab Emirates",
+   "lat": 25.197222,
+   "lon": 55.274167,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 829.8,
+   "heightValues": [
+    828,
+    829.8,
+    584.5
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q12495 (CC0)",
+    "OpenStreetMap way/446646206 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/446646206",
+    "lat": 25.197192,
+    "lon": 55.274154,
+    "extentM": 217,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 4,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (828, 829.8, 584.5 m); the largest is shown",
+   "pack": "dubai",
+   "footprint": {
+    "match": "reviewed id",
+    "pieces": 35,
+    "heightM": 829.8,
+    "heightSource": "published landmark height (reviewed override)",
+    "dataset": "OpenStreetMap",
+    "lengthM": 162,
+    "widthM": 137.6,
+    "centroid": [
+     25.197192,
+     55.274154
+    ],
+    "distanceWikidataM": 4,
+    "distanceOsmM": 0,
+    "ids": [
+     "289645fe-e8fe-4e06-bdab-b7c2e8ccb5f6"
+    ]
+   },
+   "authoritativeHeight": {
+    "valueM": 829.8,
+    "applyTo": "tallest-part",
+    "measurement": "architectural height to the top of the spire",
+    "source": "Wikidata Q12495 P2048 (829.8 m; CTBUH architectural height). OpenStreetMap's spire part says 828 m.",
+    "confidence": "high"
+   },
+   "geometryNote": "Drawn from its 36 OpenStreetMap building parts (setbacks 15–828 m).",
+   "accuracy": "REAL FOOTPRINT + PUBLISHED HEIGHT"
+  },
+  {
+   "qid": "Q12506",
+   "name": "Hagia Sophia",
+   "description": "mosque, museum, and former church in Istanbul, Turkey",
+   "type": "museum, mosque",
+   "country": "Turkey",
+   "lat": 41.008333,
+   "lon": 28.98,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 55,
+   "heightValues": [
+    55
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q12506 (CC0)",
+    "OpenStreetMap way/109862851 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/109862851",
+    "lat": 41.008598,
+    "lon": 28.979826,
+    "extentM": 215,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 33,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q18547",
+   "name": "Shanghai Tower",
+   "description": "megatall skyscraper in Lujiazui, Shanghai, China",
+   "type": "skyscraper",
+   "country": "People's Republic of China",
+   "lat": 31.2355,
+   "lon": 121.501,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 632,
+   "heightValues": [
+    632
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q18547 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q19675",
+   "name": "Louvre Museum",
+   "description": "art and archeology museum in Paris, France",
+   "type": "archaeological museum, art museum",
+   "country": "France",
+   "lat": 48.861111,
+   "lon": 2.335833,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 44,
+   "sources": [
+    "Wikidata Q19675 (CC0)",
+    "OpenStreetMap relation/7515426 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/7515426",
+    "lat": 48.860735,
+    "lon": 2.336797,
+    "extentM": 723,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 82,
+   "confidence": "high",
+   "pack": "paris",
+   "footprint": {
+    "match": "contains the Wikidata point",
+    "pieces": 1,
+    "heightM": 21.7,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 37.1,
+    "widthM": 36.7,
+    "centroid": [
+     48.861033,
+     2.335775
+    ],
+    "distanceWikidataM": 10,
+    "distanceOsmM": 82
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q33910",
+   "name": "Uluru",
+   "description": "large sandstone isolated mount in Australia",
+   "type": "inselberg",
+   "country": "Australia",
+   "lat": -25.345,
+   "lon": 131.036111,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 900,
+   "sources": [
+    "Wikidata Q33910 (CC0)",
+    "OpenStreetMap way/32639987 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/32639987",
+    "lat": -25.345553,
+    "lon": 131.036073,
+    "extentM": 3678,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 62,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q37200",
+   "name": "Great Pyramid of Giza",
+   "description": "oldest and largest of the three pyramids in the Giza Necropolis; one of the seven ancient wonders of the world",
+   "type": "Wonder of the Ancient World, smooth-sided pyramid, archaeological site",
+   "country": "Egypt",
+   "lat": 29.97915,
+   "lon": 31.13422,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 146.7,
+   "heightValues": [
+    137.5,
+    146.7
+   ],
+   "elevationM": 95,
+   "sources": [
+    "Wikidata Q37200 (CC0)",
+    "OpenStreetMap way/4420397 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/4420397",
+    "lat": 29.979373,
+    "lon": 31.13422,
+    "extentM": 323,
+    "height": "138.8",
+    "ele": null
+   },
+   "distanceM": 25,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (137.5, 146.7 m); the largest is shown",
+   "pack": "giza",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/4420397)",
+    "pieces": 1,
+    "heightM": 138.8,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 232.2,
+    "widthM": 224.8,
+    "centroid": [
+     29.979373,
+     31.13422
+    ],
+    "distanceWikidataM": 25,
+    "distanceOsmM": 0
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q39054",
+   "name": "Leaning Tower of Pisa",
+   "description": "cathedral bell tower in Pisa, Italy",
+   "type": "church tower, inclined tower",
+   "country": "Italy",
+   "lat": 43.72301,
+   "lon": 10.396624,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 58.4,
+   "heightValues": [
+    58.4
+   ],
+   "elevationM": 210,
+   "sources": [
+    "Wikidata Q39054 (CC0)",
+    "OpenStreetMap relation/12982355 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/12982355",
+    "lat": 43.723003,
+    "lon": 10.396633,
+    "extentM": 23,
+    "height": "56",
+    "ele": null
+   },
+   "distanceM": 1,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q39739",
+   "name": "Aconcagua",
+   "description": "highest mountain in both the Southern and the Western Hemispheres (6967 m)",
+   "type": "mountain",
+   "country": "Argentina",
+   "lat": -32.653056,
+   "lon": -70.011667,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": -32.653056,
+    "lon": -70.011667
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 6962,
+   "sources": [
+    "Wikidata Q39739 (CC0)",
+    "OpenStreetMap node/1504741757 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/1504741757",
+    "lat": -32.653149,
+    "lon": -70.011961,
+    "extentM": 0,
+    "height": null,
+    "ele": "6961"
+   },
+   "distanceM": 29,
+   "confidence": "high",
+   "pack": "aconcagua",
+   "summitWikidata": {
+    "lat": -32.653056,
+    "lon": -70.011667
+   },
+   "summitSource": "Wikidata coordinate, OSM peak node 29 m away",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q41225",
+   "name": "Big Ben",
+   "description": "tower of the Palace of Westminster, London containing the bell Big Ben",
+   "type": "bell, clock bell, steeple",
+   "country": "United Kingdom",
+   "lat": 51.50067,
+   "lon": -0.12457,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 96,
+   "heightValues": [
+    96
+   ],
+   "elevationM": 17,
+   "sources": [
+    "Wikidata Q41225 (CC0)",
+    "OpenStreetMap node/1802652184 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/1802652184",
+    "lat": 51.500704,
+    "lon": -0.124572,
+    "extentM": 0,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 4,
+   "confidence": "high",
+   "pack": "london",
+   "footprint": {
+    "match": "reviewed id",
+    "pieces": 56,
+    "heightM": 96,
+    "heightSource": "published landmark height (reviewed override)",
+    "dataset": "OpenStreetMap",
+    "lengthM": 14,
+    "widthM": 13.9,
+    "centroid": [
+     51.500713,
+     -0.12455
+    ],
+    "distanceWikidataM": 5,
+    "distanceOsmM": 2,
+    "ids": [
+     "e8b13135-30b4-49d6-944f-0dca6cd2cd6d"
+    ]
+   },
+   "authoritativeHeight": {
+    "valueM": 96,
+    "applyTo": "tallest-part",
+    "measurement": "to the top of the spire finial",
+    "source": "UK Parliament ('The Elizabeth Tower … is 96 m tall'); Wikidata Q41225 P2048 96 m; OSM outline height=96",
+    "confidence": "high"
+   },
+   "geometryNote": "OpenStreetMap's Elizabeth Tower outline says 96 m, but its tallest building part stops at 91 m: the open data disagrees with itself.",
+   "accuracy": "REAL FOOTPRINT + PUBLISHED HEIGHT"
+  },
+  {
+   "qid": "Q43473",
+   "name": "Angkor Wat",
+   "description": "Hindu-Buddhist temple complex in Cambodia",
+   "type": "temple complex, Buddhist temple, Hindu temple",
+   "country": "Cambodia",
+   "lat": 13.4125,
+   "lon": 103.866667,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 65,
+   "sources": [
+    "Wikidata Q43473 (CC0)",
+    "OpenStreetMap way/1113380295 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/1113380295",
+    "lat": 13.412107,
+    "lon": 103.86419,
+    "extentM": 1440,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 271,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q7296",
+   "name": "Mount Kilimanjaro",
+   "description": "mountain massif in Kilimanjaro National Park in Tanzania",
+   "type": "dormant volcano, massif",
+   "country": "Tanzania",
+   "lat": -3.066667,
+   "lon": 37.359167,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": -3.076408,
+    "lon": 37.353999
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 5895,
+   "sources": [
+    "Wikidata Q7296 (CC0)",
+    "OpenStreetMap node/32059197 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/32059197",
+    "lat": -3.076408,
+    "lon": 37.353999,
+    "extentM": 0,
+    "height": null,
+    "ele": "5895"
+   },
+   "distanceM": 1226,
+   "confidence": "low",
+   "discrepancy": "Wikidata's summit coordinate is 1381 m from OpenStreetMap's peak node; the elevation model is 139 m higher at the OSM node (5882 vs 5743 m), so the marker uses it",
+   "pack": "kilimanjaro",
+   "summitWikidata": {
+    "lat": -3.065053,
+    "lon": 37.359031
+   },
+   "summitSource": "OpenStreetMap peak node node/32059197 (ele 5895 m)",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q39231",
+   "name": "Mount Fuji",
+   "description": "volcano in Yamanashi and Shizuoka Prefectures, Japan",
+   "type": "shintaisan, isolated peak, highest point",
+   "country": "Japan",
+   "lat": 35.360556,
+   "lon": 138.7275,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 35.360676,
+    "lon": 138.72734
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 3777,
+   "sources": [
+    "Wikidata Q39231 (CC0)",
+    "OpenStreetMap node/714354378 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/714354378",
+    "lat": 35.362838,
+    "lon": 138.730768,
+    "extentM": 0,
+    "height": null,
+    "ele": "3776.2"
+   },
+   "distanceM": 390,
+   "confidence": "low",
+   "discrepancy": "Wikidata point is 390 m from the OSM feature's centroid and outside its extent",
+   "pack": "fuji",
+   "summitWikidata": {
+    "lat": 35.360676,
+    "lon": 138.72734
+   },
+   "summitSource": "Wikidata highest point (P610)",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q48435",
+   "name": "Basilica and Expiatory Church of the Holy Family",
+   "description": "basilica under construction since 1882 in Barcelona, Spain",
+   "type": "expiatory temple, minor basilica",
+   "country": "Spain",
+   "lat": 41.40369,
+   "lon": 2.17433,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 41.403595,
+    "lon": 2.174349
+   },
+   "heightM": 172.5,
+   "heightValues": [
+    162.9,
+    172.5,
+    138
+   ],
+   "elevationM": 46,
+   "sources": [
+    "Wikidata Q48435 (CC0)",
+    "OpenStreetMap relation/9194723 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/9194723",
+    "lat": 41.403537,
+    "lon": 2.174139,
+    "extentM": 157,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 23,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (162.9, 172.5, 138 m); the largest is shown",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q43512",
+   "name": "K2",
+   "description": "2nd-highest mountain on Earth",
+   "type": "mountain",
+   "country": "Pakistan",
+   "lat": 35.881111,
+   "lon": 76.513333,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 35.881111,
+    "lon": 76.513333
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 8611,
+   "sources": [
+    "Wikidata Q43512 (CC0)",
+    "OpenStreetMap node/13681846534 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/13681846534",
+    "lat": 35.881653,
+    "lon": 76.513467,
+    "extentM": 0,
+    "height": null,
+    "ele": "8611"
+   },
+   "distanceM": 61,
+   "confidence": "high",
+   "pack": "k2",
+   "summitWikidata": {
+    "lat": 35.881111,
+    "lon": 76.513333
+   },
+   "summitSource": "Wikidata coordinate, OSM peak node 61 m away",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q44440",
+   "name": "Golden Gate Bridge",
+   "description": "suspension bridge on the San Francisco Bay",
+   "type": "steel bridge, toll bridge, road bridge",
+   "country": "United States",
+   "lat": 37.819722,
+   "lon": -122.478611,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 227.4,
+   "heightValues": [
+    227.4
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q44440 (CC0)",
+    "OpenStreetMap relation/451971 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/451971",
+    "lat": 37.819457,
+    "lon": -122.478485,
+    "extentM": 2955,
+    "height": null,
+    "ele": "75"
+   },
+   "distanceM": 32,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q45178",
+   "name": "Sydney Opera House",
+   "description": "multi-venue performing arts centre in Sydney, New South Wales, Australia",
+   "type": "historical cultural heritage site, architectural landmark, opera house",
+   "country": "Australia",
+   "lat": -33.857058,
+   "lon": 151.214897,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 67,
+   "heightValues": [
+    67
+   ],
+   "elevationM": 15,
+   "sources": [
+    "Wikidata Q45178 (CC0)",
+    "OpenStreetMap relation/9596872 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/9596872",
+    "lat": -33.856876,
+    "lon": 151.21508,
+    "extentM": 226,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 26,
+   "confidence": "high",
+   "pack": "sydney",
+   "footprint": {
+    "match": "reviewed id",
+    "pieces": 0,
+    "heightM": null,
+    "heightSource": null,
+    "dataset": "OpenStreetMap (via Overture)",
+    "lengthM": 170.3,
+    "widthM": 114.2,
+    "centroid": [
+     -33.856876,
+     151.21508
+    ],
+    "distanceWikidataM": 26,
+    "distanceOsmM": 0,
+    "ids": [
+     "50aedfbd-7dfc-4ab7-89a6-f9f4ea7cd58e"
+    ],
+    "replacedByModel": true
+   },
+   "published": {
+    "lengthM": 183,
+    "widthM": 120,
+    "topAslM": 67,
+    "source": "Sydney Opera House Trust / Structurae (183 × 120 m; highest roof point 67 m above sea level)"
+   },
+   "geometryNote": "OSM relation 9596872 is the outline (135 × 181 m bounding box). Its 12 building parts are fragments (a few shells and glass roofs, no heights), so the outline is used as the podium and the shells are modelled.",
+   "model": {
+    "type": "opera-shells",
+    "podiumM": 10,
+    "topAslM": 67,
+    "anchor": {
+     "lat": -33.8568761,
+     "lon": 151.2150804
+    },
+    "bearing": 13,
+    "lengthM": 170.3,
+    "widthM": 114.2,
+    "ring": [
+     -33.8573473,
+     151.2145451,
+     -33.8574179,
+     151.2145248,
+     -33.8575261,
+     151.2144928,
+     -33.8576931,
+     151.2144449,
+     -33.8577523,
+     151.214428,
+     -33.8577603,
+     151.2144681,
+     -33.8578268,
+     151.2148088,
+     -33.8578451,
+     151.2149045,
+     -33.8579291,
+     151.2153359,
+     -33.8578606,
+     151.2153574,
+     -33.8577272,
+     151.2153951,
+     -33.857747,
+     151.2154971,
+     -33.8576809,
+     151.2155167,
+     -33.8576481,
+     151.2155271,
+     -33.8575441,
+     151.2155602,
+     -33.8570088,
+     151.2157143,
+     -33.8568897,
+     151.2158163,
+     -33.8566319,
+     151.2158894,
+     -33.8565979,
+     151.2158532,
+     -33.8565767,
+     151.2158156,
+     -33.8565533,
+     151.2157707,
+     -33.8565327,
+     151.2157177,
+     -33.8565155,
+     151.2156654,
+     -33.8565027,
+     151.2155963,
+     -33.856501,
+     151.2155481,
+     -33.8564971,
+     151.2155125,
+     -33.8566742,
+     151.2153509,
+     -33.856663,
+     151.2153026,
+     -33.8566008,
+     151.2152924,
+     -33.8565366,
+     151.2152819,
+     -33.8565322,
+     151.2153194,
+     -33.8564559,
+     151.215312,
+     -33.8563946,
+     151.2152993,
+     -33.8563607,
+     151.2152919,
+     -33.8563345,
+     151.2152034,
+     -33.8563128,
+     151.2150934,
+     -33.8563072,
+     151.2150257,
+     -33.856305,
+     151.2149526,
+     -33.8563094,
+     151.2148815,
+     -33.8563178,
+     151.2148205,
+     -33.8563295,
+     151.2147468,
+     -33.8563428,
+     151.2147018,
+     -33.8564187,
+     151.2146808,
+     -33.8564282,
+     151.2146782,
+     -33.8564388,
+     151.2146753,
+     -33.8565099,
+     151.2146556,
+     -33.8565199,
+     151.2147119,
+     -33.8565794,
+     151.2146934,
+     -33.8566853,
+     151.2146596,
+     -33.8567719,
+     151.2146796,
+     -33.856793,
+     151.2146845,
+     -33.8568147,
+     151.2146895,
+     -33.8568273,
+     151.2146924,
+     -33.8569151,
+     151.2146675,
+     -33.8569484,
+     151.2146577,
+     -33.8570952,
+     151.2146162,
+     -33.8573009,
+     151.2145577
+    ]
+   },
+   "modelNote": "Original simplified model: podium on the real outline (height estimated, ~10 m per the OSM mapper's note), two halls of four sail-shaped shells each plus the restaurant pair, the tallest reaching the published 67 m above sea level. Shell positions, sizes and orientation are approximate.",
+   "accuracy": "REAL LOCATION + REAL FOOTPRINT + APPROXIMATE ARCHITECTURAL MODEL"
+  },
+  {
+   "qid": "Q54495",
+   "name": "Sydney Harbour Bridge",
+   "description": "bridge crossing Sydney Harbour in Australia",
+   "type": "historical cultural heritage site, tram bridge, steel bridge",
+   "country": "Australia",
+   "lat": -33.852232,
+   "lon": 151.210684,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 134,
+   "heightValues": [
+    134
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q54495 (CC0)",
+    "OpenStreetMap relation/3178788 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/3178788",
+    "lat": -33.851726,
+    "lon": 151.210534,
+    "extentM": 1525,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 58,
+   "confidence": "high",
+   "pack": "sydney",
+   "published": {
+    "spanM": 503,
+    "archTopAslM": 134,
+    "deckAslM": 49,
+    "widthM": 48.8,
+    "pylonM": 89,
+    "source": "Transport for NSW / Wikipedia (main span 503 m; arch top 134 m above sea level; 49 m clearance; deck 48.8 m wide; pylons 89 m)"
+   },
+   "model": {
+    "type": "arch-bridge",
+    "spanM": 503,
+    "archTopAslM": 134,
+    "deckAslM": 49,
+    "widthM": 48.8,
+    "pylonM": 89,
+    "colour": [
+     0.2,
+     0.21,
+     0.22
+    ],
+    "anchor": {
+     "lat": -33.8520936,
+     "lon": 151.2105426
+    },
+    "bearing": 20.01,
+    "waterCrossedM": 490
+   },
+   "modelNote": "Steel through-arch: two arch ribs, hangers, deck and the four granite pylons, on the axis of the real bridge roads. Truss detail is simplified.",
+   "accuracy": "REAL LOCATION + APPROXIMATE STRUCTURE"
+  },
+  {
+   "qid": "Q57965",
+   "name": "Tokyo Skytree",
+   "description": "tower in Tokyo, Japan",
+   "type": "television tower, communication tower, observation tower",
+   "country": "Japan",
+   "lat": 35.710056,
+   "lon": 139.810722,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 634,
+   "heightValues": [
+    634
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q57965 (CC0)",
+    "OpenStreetMap way/288269147 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/288269147",
+    "lat": 35.710046,
+    "lon": 139.810714,
+    "extentM": 80,
+    "height": "634",
+    "ele": null
+   },
+   "distanceM": 1,
+   "confidence": "high",
+   "pack": "tokyo",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/288269147)",
+    "pieces": 3,
+    "heightM": 634,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 56.6,
+    "widthM": 56.6,
+    "centroid": [
+     35.710046,
+     139.810714
+    ],
+    "distanceWikidataM": 1,
+    "distanceOsmM": 0
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q62408",
+   "name": "Palace of Westminster",
+   "description": "meeting place of the Parliament of the United Kingdom, located in London, England, UK",
+   "type": "parliament building",
+   "country": "United Kingdom",
+   "lat": 51.499444,
+   "lon": -0.124167,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q62408 (CC0)",
+    "OpenStreetMap relation/1567699 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/1567699",
+    "lat": 51.499299,
+    "lon": -0.124564,
+    "extentM": 307,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 32,
+   "confidence": "high",
+   "pack": "london",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (relation/1567699)",
+    "pieces": 255,
+    "heightM": 96,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 273.4,
+    "widthM": 102.5,
+    "centroid": [
+     51.499393,
+     -0.124598
+    ],
+    "distanceWikidataM": 30,
+    "distanceOsmM": 11
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q62939",
+   "name": "Jumeirah Burj Al Arab",
+   "description": "luxury hotel in Dubai, United Arab Emirates",
+   "type": "hotel, tower block",
+   "country": "United Arab Emirates",
+   "lat": 25.141389,
+   "lon": 55.185278,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 321,
+   "heightValues": [
+    321
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q62939 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "pack": "dubai-palm",
+   "footprint": {
+    "match": "contains the Wikidata point",
+    "pieces": 2,
+    "heightM": 321,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 105.2,
+    "widthM": 71.3,
+    "centroid": [
+     25.141175,
+     55.185536
+    ],
+    "distanceWikidataM": 35,
+    "distanceOsmM": null
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q64436",
+   "name": "Arc de Triomphe",
+   "description": "triumphal arch in Paris",
+   "type": "triumphal arch",
+   "country": "France",
+   "lat": 48.87378,
+   "lon": 2.29504,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 49.5,
+   "heightValues": [
+    49.5
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q64436 (CC0)",
+    "OpenStreetMap way/226413508 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/226413508",
+    "lat": 48.873763,
+    "lon": 2.295026,
+    "extentM": 74,
+    "height": "50",
+    "ele": null
+   },
+   "distanceM": 2,
+   "confidence": "high",
+   "pack": "paris",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/226413508)",
+    "pieces": 15,
+    "heightM": 50,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 50.4,
+    "widthM": 28.1,
+    "centroid": [
+     48.873747,
+     2.294967
+    ],
+    "distanceWikidataM": 6,
+    "distanceOsmM": 5
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q79961",
+   "name": "Christ the Redeemer",
+   "description": "colossal statue of Jesus in Rio de Janeiro, Brazil",
+   "type": "colossal statue of Jesus, pilgrimage site, monument",
+   "country": "Brazil",
+   "lat": -22.951916,
+   "lon": -43.210464,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 30.1,
+   "heightValues": [
+    30.1,
+    8
+   ],
+   "elevationM": 710,
+   "sources": [
+    "Wikidata Q79961 (CC0)",
+    "OpenStreetMap node/4919986733 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/4919986733",
+    "lat": -22.951917,
+    "lon": -43.210459,
+    "extentM": 0,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 1,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (30.1, 8 m); the largest is shown",
+   "pack": "rio",
+   "published": {
+    "statueM": 30,
+    "pedestalM": 8,
+    "totalM": 38,
+    "armSpanM": 28,
+    "source": "Wikidata Q79961 (30.1 m statue); Britannica / Santuário Cristo Redentor descriptions (30 m statue, 8 m pedestal, 28 m arms)"
+   },
+   "orientation": {
+    "facingDeg": 80.8,
+    "confidence": "medium-low",
+    "basis": "Facing taken along the pedestal's mapped axis (80.8°), toward the city and Guanabara Bay to the east (Botafogo/Urca), back to the Tijuca forest. No official or open source found gives a measured bearing; the axis is from OSM (fixme-tagged) and the eastward facing from general descriptions."
+   },
+   "geometryNote": "OSM node 4919986733 (man_made=monument, wikidata=Q79961) is 0.5 m from Wikidata's coordinate. OSM way 105667349 is the chapel inside the pedestal (Capela de Nossa Senhora Aparecida): its chamfered-square outline, ≈ 8 m across with axes at 80.8°/170.8°, is used as the pedestal footprint. OSM tags it fixme: 'outline needs verification'.",
+   "model": {
+    "type": "statue",
+    "pedestalM": 8,
+    "statueM": 30,
+    "armSpanM": 28,
+    "facingDeg": 80.8,
+    "colour": [
+     0.64,
+     0.64,
+     0.6
+    ],
+    "anchor": {
+     "lat": -22.951917,
+     "lon": -43.2104631
+    },
+    "bearing": 80.8,
+    "ring": [
+     -22.9518996,
+     -43.2105052,
+     -22.9519434,
+     -43.2104976,
+     -22.9519557,
+     -43.2104791,
+     -22.9519488,
+     -43.2104325,
+     -22.9519348,
+     -43.2104214,
+     -22.9518885,
+     -43.2104295,
+     -22.9518787,
+     -43.2104447,
+     -22.9518861,
+     -43.2104945
+    ]
+   },
+   "modelNote": "Original procedural sculpture to the published dimensions (30 m statue + 8 m pedestal = 38 m; 28 m arms) on the real summit location and the mapped pedestal outline. Silhouette is simplified; facing confidence medium-low.",
+   "accuracy": "REAL LOCATION + APPROXIMATE PROCEDURAL SCULPTURE"
+  },
+  {
+   "qid": "Q80290",
+   "name": "Forbidden City",
+   "description": "Chinese imperial palace in Beijing",
+   "type": "Chinese AAAAA-rated tourist attraction, building complex, museum",
+   "country": "People's Republic of China",
+   "lat": 39.915833,
+   "lon": 116.390833,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q80290 (CC0)",
+    "OpenStreetMap relation/15716134 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/15716134",
+    "lat": 39.910633,
+    "lon": 116.395116,
+    "extentM": 3525,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 684,
+   "confidence": "medium",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q82425",
+   "name": "Brandenburg Gate",
+   "description": "triumphal arch in Berlin, Germany",
+   "type": "architectural landmark, national symbol, border checkpoint",
+   "country": "Germany",
+   "lat": 52.516272,
+   "lon": 13.377722,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 26,
+   "heightValues": [
+    26
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q82425 (CC0)",
+    "OpenStreetMap way/518071791 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/518071791",
+    "lat": 52.516272,
+    "lon": 13.377703,
+    "extentM": 39,
+    "height": "26",
+    "ele": null
+   },
+   "distanceM": 1,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q83063",
+   "name": "Petronas Towers",
+   "description": "twin skyscrapers in Kuala Lumpur, Malaysia",
+   "type": "twin towers, skyscraper",
+   "country": "Malaysia",
+   "lat": 3.157778,
+   "lon": 101.711667,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 452,
+   "heightValues": [
+    452
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q83063 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q83125",
+   "name": "Tower Bridge",
+   "description": "bascule and suspension bridge in London",
+   "type": "gothic revival bridge, steel bridge, bascule bridge",
+   "country": "United Kingdom",
+   "lat": 51.505556,
+   "lon": -0.075278,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 65,
+   "heightValues": [
+    65
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q83125 (CC0)",
+    "OpenStreetMap way/378541210 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/378541210",
+    "lat": 51.505633,
+    "lon": -0.075247,
+    "extentM": 334,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 9,
+   "confidence": "high",
+   "pack": "london",
+   "footprint": {
+    "match": "reviewed id",
+    "pieces": 19,
+    "heightM": 65,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 56.7,
+    "widthM": 21.3,
+    "centroid": [
+     51.505847,
+     -0.075135
+    ],
+    "distanceWikidataM": 34,
+    "distanceOsmM": 25,
+    "ids": [
+     "f8578f77-f33f-424b-a1ff-ae508264da9a",
+     "a1dddc3e-0b36-4785-a46f-80baf89bab7e"
+    ]
+   },
+   "published": {
+    "walkwayM": 42,
+    "source": "Tower Bridge (City of London Corporation): high-level walkways 42 m above the river"
+   },
+   "geometryNote": "The two towers, from their OpenStreetMap building parts (piers, tower bodies to 47 m, tops to 65 m).",
+   "model": {
+    "type": "walkways",
+    "between": [
+     "f8578f77-f33f-424b-a1ff-ae508264da9a",
+     "a1dddc3e-0b36-4785-a46f-80baf89bab7e"
+    ],
+    "walkwayAslM": 44,
+    "walkwayH": 4,
+    "widthM": 3.5,
+    "colour": [
+     0.3,
+     0.38,
+     0.45
+    ],
+    "anchor": {
+     "lat": 51.505514054579585,
+     "lon": -0.07536014418168169
+    },
+    "lengthM": 80,
+    "bearing": 202.85
+   },
+   "modelNote": "The two high-level walkways between the real towers (not in the open data), at the published 42 m above the river (≈ 44 m above datum at high water).",
+   "accuracy": "EXACT OPEN-DATA TOWERS + APPROXIMATE WALKWAYS"
+  },
+  {
+   "qid": "Q125006",
+   "name": "Brooklyn Bridge",
+   "description": "bridge in New York City, crossing the East River",
+   "type": "steel bridge, multi-level bridge, railway bridge",
+   "country": "United States",
+   "lat": 40.705667,
+   "lon": -73.996333,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 84,
+   "heightValues": [
+    84
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q125006 (CC0)",
+    "bridge-flagged road 6 m away in pack nyc (OpenStreetMap)"
+   ],
+   "confidence": "medium",
+   "pack": "nyc",
+   "published": {
+    "mainSpanM": 486.3,
+    "towerAslM": 84.3,
+    "deckAslM": 41,
+    "widthM": 26,
+    "sideSpanM": 283.5,
+    "source": "NYC DOT / Wikipedia (main span 486.3 m; towers 84.3 m above water; 41 m clearance; 26 m wide)"
+   },
+   "model": {
+    "type": "suspension-bridge",
+    "mainSpanM": 486.3,
+    "sideSpanM": 283.5,
+    "towerAslM": 84.3,
+    "deckAslM": 41,
+    "widthM": 26,
+    "towerW": 41,
+    "towerD": 18,
+    "colour": [
+     0.52,
+     0.47,
+     0.4
+    ],
+    "anchor": {
+     "lat": 40.7062669,
+     "lon": -73.9966653
+    },
+    "bearing": 142.31,
+    "waterCrossedM": 570
+   },
+   "modelNote": "Two masonry towers, deck and four main cables on the axis of the real bridge roads; arches, stays and suspenders simplified.",
+   "accuracy": "REAL LOCATION + APPROXIMATE STRUCTURE"
+  },
+  {
+   "qid": "Q129846",
+   "name": "St. Basil's Cathedral",
+   "description": "church in Moscow",
+   "type": "architectural landmark, Eastern Orthodox church building",
+   "country": "Russia",
+   "lat": 55.7525,
+   "lon": 37.623056,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 47.5,
+   "heightValues": [
+    47.5
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q129846 (CC0)",
+    "OpenStreetMap relation/3224486 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/3224486",
+    "lat": 55.752488,
+    "lon": 37.623092,
+    "extentM": 76,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 3,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q130018",
+   "name": "Denali",
+   "description": "highest mountain in North America, located in Alaska",
+   "type": "mountain",
+   "country": "United States",
+   "lat": 63.069103,
+   "lon": -151.006261,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 63.069103,
+    "lon": -151.006261
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 6190,
+   "sources": [
+    "Wikidata Q130018 (CC0)",
+    "OpenStreetMap node/2748929230 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/2748929230",
+    "lat": 63.069115,
+    "lon": -151.006239,
+    "extentM": 0,
+    "height": null,
+    "ele": "6190"
+   },
+   "distanceM": 2,
+   "confidence": "high",
+   "pack": "denali",
+   "summitWikidata": {
+    "lat": 63.069103,
+    "lon": -151.006261
+   },
+   "summitSource": "Wikidata coordinate, OSM peak node 2 m away",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q130958",
+   "name": "The Great Sphinx",
+   "description": "ancient Egyptian monumental sculpture",
+   "type": "sphinx statue, archaeological site",
+   "country": "Egypt",
+   "lat": 29.97527,
+   "lon": 31.13768,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 20.2,
+   "heightValues": [
+    20.2
+   ],
+   "elevationM": 23,
+   "sources": [
+    "Wikidata Q130958 (CC0)",
+    "OpenStreetMap way/540058405 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/540058405",
+    "lat": 29.975281,
+    "lon": 31.13766,
+    "extentM": 77,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 2,
+   "confidence": "high",
+   "pack": "giza",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (way/540058405)",
+    "pieces": 3,
+    "heightM": 20,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 75.2,
+    "widthM": 19,
+    "centroid": [
+     29.975279,
+     31.137548
+    ],
+    "distanceWikidataM": 13,
+    "distanceOsmM": 11
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q131013",
+   "name": "Acropolis of Athens",
+   "description": "ancient citadel above the city of Athens",
+   "type": "Ancient Greek archaeological site, acropolis",
+   "country": "Greece",
+   "lat": 37.971667,
+   "lon": 23.726111,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q131013 (CC0)",
+    "OpenStreetMap relation/4423249 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/4423249",
+    "lat": 37.971582,
+    "lon": 23.726453,
+    "extentM": 362,
+    "height": null,
+    "ele": "156"
+   },
+   "distanceM": 31,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q133274",
+   "name": "Kremlin",
+   "description": "fortified complex in Moscow, Russia",
+   "type": "government building, historic district, architectural landmark",
+   "country": "Russia",
+   "lat": 55.751667,
+   "lon": 37.617778,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q133274 (CC0)",
+    "OpenStreetMap relation/1360641 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/1360641",
+    "lat": 55.749471,
+    "lon": 37.616074,
+    "extentM": 1050,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 266,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q134883",
+   "name": "CN Tower",
+   "description": "communications and observation tower in Toronto, Canada",
+   "type": "television tower, architectural landmark, observation tower",
+   "country": "Canada",
+   "lat": 43.642753,
+   "lon": -79.387147,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 553.3,
+   "heightValues": [
+    553.3,
+    447
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q134883 (CC0)",
+    "OpenStreetMap node/368385388 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/368385388",
+    "lat": 43.642501,
+    "lon": -79.387115,
+    "extentM": 0,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 28,
+   "confidence": "high",
+   "heightNote": "Wikidata lists several heights (553.3, 447 m); the largest is shown",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q160409",
+   "name": "Central Park",
+   "description": "public park at the center of Manhattan in New York City, New York, United States",
+   "type": "urban park",
+   "country": "United States",
+   "lat": 40.7825,
+   "lon": -73.966111,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q160409 (CC0)",
+    "OpenStreetMap way/427818536 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/427818536",
+    "lat": 40.783837,
+    "lon": -73.964753,
+    "extentM": 4778,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 188,
+   "confidence": "medium",
+   "pack": "nyc",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q160659",
+   "name": "London Eye",
+   "description": "observation wheel in London, England",
+   "type": "tourist attraction, Ferris wheel",
+   "country": "United Kingdom",
+   "lat": 51.503333,
+   "lon": -0.119722,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 135,
+   "heightValues": [
+    135
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q160659 (CC0)",
+    "OpenStreetMap footprint 3 m away (pack london)"
+   ],
+   "confidence": "medium",
+   "pack": "london",
+   "footprint": {
+    "match": "contains the Wikidata point",
+    "pieces": 41,
+    "heightM": 136.4,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 22.9,
+    "widthM": 7.8,
+    "centroid": [
+     51.503341,
+     -0.119677
+    ],
+    "distanceWikidataM": 3,
+    "distanceOsmM": null
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q183536",
+   "name": "Tokyo Tower",
+   "description": "tower in Tokyo, Japan",
+   "type": "architectural landmark, lattice tower, observation tower",
+   "country": "Japan",
+   "lat": 35.658611,
+   "lon": 139.745556,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 332.6,
+   "heightValues": [
+    332.6
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q183536 (CC0)",
+    "OpenStreetMap relation/4247312 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/4247312",
+    "lat": 35.658458,
+    "lon": 139.745435,
+    "extentM": 124,
+    "height": "21",
+    "ele": null
+   },
+   "distanceM": 20,
+   "confidence": "high",
+   "pack": "tokyo",
+   "footprint": {
+    "match": "inside the OpenStreetMap outline (relation/4247312)",
+    "pieces": 20,
+    "heightM": 333,
+    "heightSource": "height tag",
+    "dataset": "OpenStreetMap",
+    "lengthM": 76.7,
+    "widthM": 52.7,
+    "centroid": [
+     35.658514,
+     139.745433
+    ],
+    "distanceWikidataM": 15,
+    "distanceOsmM": 6
+   },
+   "accuracy": "EXACT OPEN-DATA GEOMETRY"
+  },
+  {
+   "qid": "Q193439",
+   "name": "Dubai International Airport",
+   "description": "international airport in Dubai, United Arab Emirates",
+   "type": "commercial traffic aerodrome, airbase, international airport",
+   "country": "United Arab Emirates",
+   "lat": 25.252778,
+   "lon": 55.364444,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 19,
+   "sources": [
+    "Wikidata Q193439 (CC0)",
+    "OpenStreetMap relation/18471754 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/18471754",
+    "lat": 25.251062,
+    "lon": 55.366117,
+    "extentM": 8407,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 254,
+   "confidence": "medium",
+   "pack": "dxb",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q194057",
+   "name": "Mount Rainier",
+   "description": "stratovolcano in the U.S. state of Washington",
+   "type": "sacred mountain, stratovolcano, mountain",
+   "country": "United States",
+   "lat": 46.851667,
+   "lon": -121.760278,
+   "wikidataCoords": 1,
+   "summit": {
+    "lat": 46.851667,
+    "lon": -121.760278
+   },
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 4389,
+   "sources": [
+    "Wikidata Q194057 (CC0)",
+    "OpenStreetMap node/1744903493 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/1744903493",
+    "lat": 46.852203,
+    "lon": -121.757516,
+    "extentM": 0,
+    "height": null,
+    "ele": "4392"
+   },
+   "distanceM": 218,
+   "confidence": "medium",
+   "pack": "rainier",
+   "summitWikidata": {
+    "lat": 46.851667,
+    "lon": -121.760278
+   },
+   "summitSource": "Wikidata coordinate",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q204853",
+   "name": "Tokyo International Airport",
+   "description": "international airport serving Tokyo, Japan",
+   "type": "commercial traffic aerodrome, airport, international airport",
+   "country": "Japan",
+   "lat": 35.553333,
+   "lon": 139.781111,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 6,
+   "sources": [
+    "Wikidata Q204853 (CC0)",
+    "OpenStreetMap relation/17864987 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/17864987",
+    "lat": 35.546813,
+    "lon": 139.776783,
+    "extentM": 8509,
+    "height": null,
+    "ele": "6"
+   },
+   "distanceM": 824,
+   "confidence": "medium",
+   "pack": "haneda",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q210722",
+   "name": "Sugarloaf Mountain",
+   "description": "peak situated in Rio de Janeiro, Brazil",
+   "type": "inselberg, natural heritage, cliff",
+   "country": "Brazil",
+   "lat": -22.949444,
+   "lon": -43.156667,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 395,
+   "sources": [
+    "Wikidata Q210722 (CC0)",
+    "OpenStreetMap node/34582421 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/34582421",
+    "lat": -22.949489,
+    "lon": -43.156157,
+    "extentM": 0,
+    "height": null,
+    "ele": "392"
+   },
+   "distanceM": 52,
+   "confidence": "high",
+   "pack": "rio",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q212610",
+   "name": "Mutianyu",
+   "description": "section of the Great Wall of China",
+   "type": "park",
+   "country": "People's Republic of China",
+   "lat": 40.438017,
+   "lon": 116.5619,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q212610 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q245347",
+   "name": "India Gate",
+   "description": "Triumphal arch in New Delhi",
+   "type": "Commonwealth War Graves Commission maintained memorial, triumphal arch",
+   "country": "India",
+   "lat": 28.612864,
+   "lon": 77.229306,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 42,
+   "heightValues": [
+    42
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q245347 (CC0)",
+    "OpenStreetMap way/361709652 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/361709652",
+    "lat": 28.612932,
+    "lon": 77.229492,
+    "extentM": 34,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 20,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q277294",
+   "name": "Palm Jumeirah",
+   "description": "artificial archipelago in Dubai, United Arab Emirates",
+   "type": "land reclamation, archipelago, artificial island",
+   "country": "United Arab Emirates",
+   "lat": 25.117222,
+   "lon": 55.134444,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q277294 (CC0)",
+    "OpenStreetMap relation/1297972 (ODbL)"
+   ],
+   "osm": {
+    "ref": "relation/1297972",
+    "lat": 25.118166,
+    "lon": 55.132114,
+    "extentM": 6697,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 257,
+   "confidence": "medium",
+   "pack": "dubai-palm",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q402937",
+   "name": "Ahsan Manzil",
+   "description": "National museum in Bangladesh",
+   "type": "museum building, palace",
+   "country": "Bangladesh",
+   "lat": 23.708611,
+   "lon": 90.406111,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q402937 (CC0)",
+    "OpenStreetMap way/624025793 (ODbL) — id from the reviewed override; OSM relation/8665455 carries wikidata=Q402937"
+   ],
+   "osm": {
+    "ref": "way/624025793",
+    "lat": 23.708587,
+    "lon": 90.40605,
+    "extentM": 71,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 7,
+   "confidence": "high",
+   "pack": "dhaka",
+   "footprint": {
+    "match": "reviewed id",
+    "pieces": 1,
+    "heightM": 11.8,
+    "heightSource": "published landmark height (reviewed override)",
+    "dataset": "OpenStreetMap",
+    "lengthM": 54.1,
+    "widthM": 30,
+    "centroid": [
+     23.708587,
+     90.40605
+    ],
+    "distanceWikidataM": 7,
+    "distanceOsmM": 0,
+    "ids": [
+     "43773ae3-251a-4316-bc27-542f670aca36"
+    ]
+   },
+   "authoritativeHeight": {
+    "valueM": 11.8,
+    "applyTo": "building",
+    "measurement": "walls: 1 m platform + 5 m ground floor + 5.8 m first floor",
+    "source": "Banglapedia, 'Ahsan Manzil' (Asiatic Society of Bangladesh)",
+    "confidence": "medium"
+   },
+   "published": {
+    "lengthM": 125.4,
+    "widthM": 28.75,
+    "domeTopM": 27.13,
+    "source": "Banglapedia, 'Ahsan Manzil'"
+   },
+   "partial": "The mapped footprint is 54 × 30 m; the published palace is 125.4 × 28.75 m. The width agrees, so the open data appears to hold only the central (domed) block; the wings aren't mapped as part of it and are not invented here.",
+   "geometryNote": "OSM way 624025793 (historic=building, name=Ahsan Manzil) — Overture 43773ae3 is the same polygon (17 vertices, 1433 m²). OSM relation 8665455 (museum grounds) carries wikidata=Q402937; Wikidata has no OSM id back.",
+   "model": {
+    "type": "dome",
+    "baseM": 11.8,
+    "topM": 27.13,
+    "drumM": 13,
+    "drumTopM": 17.5,
+    "colour": [
+     0.62,
+     0.33,
+     0.36
+    ],
+    "anchor": {
+     "lat": 23.708587,
+     "lon": 90.40605
+    },
+    "bearing": 0
+   },
+   "modelNote": "Octagonal drum and lotus-bud dome at the centre of the real footprint, to the published 27.13 m; drum size estimated.",
+   "accuracy": "REAL FOOTPRINT (PARTIAL) + PUBLISHED HEIGHT + APPROXIMATE DOME MODEL"
+  },
+  {
+   "qid": "Q497536",
+   "name": "Jatiya Sangsad Bhaban",
+   "description": "national assembly building of Bangladesh",
+   "type": "parliament building",
+   "country": "Bangladesh",
+   "lat": 23.762222,
+   "lon": 90.378611,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": 155,
+   "heightValues": [
+    155
+   ],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q497536 (CC0)",
+    "OpenStreetMap footprint 18 m away (pack dhaka)"
+   ],
+   "confidence": "medium",
+   "pack": "dhaka",
+   "footprint": {
+    "match": "reviewed id",
+    "pieces": 1,
+    "heightM": 33.5,
+    "heightSource": "published landmark height (reviewed override)",
+    "dataset": "OpenStreetMap",
+    "lengthM": 147.2,
+    "widthM": 139.6,
+    "centroid": [
+     23.762096,
+     90.378504
+    ],
+    "distanceWikidataM": 18,
+    "distanceOsmM": null,
+    "ids": [
+     "f784d6a0-deec-4c23-9494-4a2317953787"
+    ]
+   },
+   "authoritativeHeight": {
+    "valueM": 33.5,
+    "applyTo": "building",
+    "measurement": "the eight peripheral blocks (110 ft); the central octagonal block rises to 155 ft = 47.2 m and is not mapped separately",
+    "source": "Banglapedia, 'Jatiya Sangsad Bhaban'",
+    "confidence": "medium"
+   },
+   "sourceDisagreement": "Wikidata P2048 gives 155 m: the published figure is 155 ft (47.2 m) for the central block — a unit error in Wikidata, not used.",
+   "geometryNote": "OpenStreetMap's National Parliament House footprint (via Overture), a single multipolygon for the whole assembly building.",
+   "accuracy": "REAL FOOTPRINT + PUBLISHED HEIGHT"
+  },
+  {
+   "qid": "Q548679",
+   "name": "Marina Bay Sands",
+   "description": "integrated resort in Singapore",
+   "type": "casino hotel, hotel, tower block",
+   "country": "Singapore",
+   "lat": 1.2825,
+   "lon": 103.86,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q548679 (CC0)",
+    "OpenStreetMap node/4302905987 (ODbL)"
+   ],
+   "osm": {
+    "ref": "node/4302905987",
+    "lat": 1.283697,
+    "lon": 103.860723,
+    "extentM": 0,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 155,
+   "confidence": "medium",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q676203",
+   "name": "Machu Picchu",
+   "description": "15th-century Inca citadel in the Peruvian Andes and UNESCO World Heritage Site",
+   "type": "ancient city, archaeological site, World Heritage Site",
+   "country": "Peru",
+   "lat": -13.163333,
+   "lon": -72.545556,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": 2430,
+   "sources": [
+    "Wikidata Q676203 (CC0)",
+    "OpenStreetMap way/157376572 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/157376572",
+    "lat": -13.164009,
+    "lon": -72.545264,
+    "extentM": 771,
+    "height": null,
+    "ele": "2350"
+   },
+   "distanceM": 82,
+   "confidence": "high",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q798826",
+   "name": "Badaling",
+   "description": "section of the Great Wall of China",
+   "type": "cultural heritage of China, human settlement",
+   "country": "People's Republic of China",
+   "lat": 40.35428,
+   "lon": 116.00649,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q798826 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q1027807",
+   "name": "Port of Rotterdam",
+   "description": "largest port in Europe, located in the city of Rotterdam, Netherlands",
+   "type": "seaport, organization",
+   "country": "Netherlands",
+   "lat": 51.885,
+   "lon": 4.2867,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q1027807 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  },
+  {
+   "qid": "Q1308991",
+   "name": "Port of Los Angeles",
+   "description": "harbor in Los Angeles, California",
+   "type": "seaport, harbor",
+   "country": "United States",
+   "lat": 33.729186,
+   "lon": -118.262015,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q1308991 (CC0)",
+    "OpenStreetMap way/703209962 (ODbL)"
+   ],
+   "osm": {
+    "ref": "way/703209962",
+    "lat": 33.747686,
+    "lon": -118.273729,
+    "extentM": 10173,
+    "height": null,
+    "ele": null
+   },
+   "distanceM": 2325,
+   "confidence": "medium",
+   "pack": "port-la",
+   "accuracy": "REAL LOCATION + OPEN-DATA SURROUNDINGS"
+  },
+  {
+   "qid": "Q1421994",
+   "name": "Port of Singapore",
+   "description": "Major port in Asia",
+   "type": "port",
+   "country": "Singapore",
+   "lat": 1.265556,
+   "lon": 103.835,
+   "wikidataCoords": 1,
+   "summit": null,
+   "heightM": null,
+   "heightValues": [],
+   "elevationM": null,
+   "sources": [
+    "Wikidata Q1421994 (CC0)"
+   ],
+   "confidence": "single source",
+   "discrepancy": "no OpenStreetMap id on Wikidata (or not fetchable): one source only",
+   "accuracy": "REAL LOCATION (marker; global base surroundings)"
+  }
+ ]
+}

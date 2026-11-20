@@ -1,0 +1,16 @@
+{
+ "file": "mercury-rembrandt-elevation.i16.gz",
+ "width": 576,
+ "height": 512,
+ "scale": 1,
+ "bounds": {
+  "west": 79,
+  "east": 97,
+  "north": -25,
+  "south": -41
+ },
+ "lazy": true,
+ "source": "MESSENGER DEM 665 m, every 2nd cell (USGS)",
+ "resolutionM": 1331,
+ "bytes": 343540
+}

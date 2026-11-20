@@ -1,0 +1,17 @@
+{
+ "about": "Worldwide open-data Earth: cells built by the same pipeline as every Overture pack (scripts/earth/regions.mjs turns each into a region). A cell is a box of sizeKm around lat/lon. Add cells (or generate them for a country with scripts/earth/world-grid.mjs) and run build-region.mjs <id …>.",
+ "cells": [
+  { "id": "berlin", "name": "Berlin · Mitte", "lat": 52.517, "lon": 13.395, "sizeKm": 5, "kind": "city" },
+  { "id": "chattogram", "name": "Chattogram · Agrabad to Patenga Road", "lat": 22.333, "lon": 91.818, "sizeKm": 5, "kind": "city" },
+  { "id": "sao-paulo", "name": "São Paulo · Centro to Avenida Paulista", "lat": -23.555, "lon": -46.645, "sizeKm": 5, "kind": "city" },
+  { "id": "nairobi", "name": "Nairobi · CBD and Upper Hill", "lat": -1.288, "lon": 36.818, "sizeKm": 5, "kind": "city" },
+  { "id": "seoul", "name": "Seoul · Jongno to Namsan", "lat": 37.566, "lon": 126.983, "sizeKm": 5, "kind": "city" },
+  { "id": "mexico-city", "name": "Mexico City · Centro Histórico", "lat": 19.432, "lon": -99.137, "sizeKm": 5, "kind": "city" },
+  { "id": "auckland", "name": "Auckland · CBD and Waitematā Harbour", "lat": -36.848, "lon": 174.765, "sizeKm": 5, "kind": "city" },
+  { "id": "rural-beauce", "name": "Rural · Beauce farmland, France", "lat": 48.25, "lon": 1.65, "sizeKm": 4, "kind": "rural" },
+  { "id": "rural-tefe", "name": "Rural · Tefé, Amazonas, Brazil", "lat": -3.354, "lon": -64.711, "sizeKm": 4, "kind": "rural" },
+  { "id": "rural-malawi", "name": "Rural · villages near Lilongwe, Malawi", "lat": -13.85, "lon": 33.65, "sizeKm": 4, "kind": "rural" },
+  { "id": "rural-gopalganj", "name": "Rural · villages in Gopalganj, Bangladesh", "lat": 23.005, "lon": 89.83, "sizeKm": 4, "kind": "rural" },
+  { "id": "rural-wagga", "name": "Rural · farmland near Wagga Wagga, Australia", "lat": -35.05, "lon": 147.3, "sizeKm": 4, "kind": "rural" }
+ ]
+}

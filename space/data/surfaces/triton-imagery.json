@@ -1,0 +1,11 @@
+{
+ "file": "triton_usgs.webp",
+ "width": 4712,
+ "height": 2357,
+ "grey": false,
+ "source": "Voyager 2 colour mosaic 600 m, unimaged areas filled by USGS (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 1805,
+ "fill": false,
+ "bytes": 688328
+}

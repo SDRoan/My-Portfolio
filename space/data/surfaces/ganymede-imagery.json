@@ -1,0 +1,11 @@
+{
+ "file": "ganymede_usgs.jpg",
+ "width": 3840,
+ "height": 1920,
+ "grey": false,
+ "source": "Voyager / Galileo SSI colour mosaic 1435 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 4310,
+ "fill": false,
+ "bytes": 1547369
+}

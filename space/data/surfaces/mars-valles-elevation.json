@@ -1,0 +1,16 @@
+{
+ "file": "mars-valles-elevation.i16.gz",
+ "width": 3520,
+ "height": 1024,
+ "scale": 1,
+ "bounds": {
+  "west": -95,
+  "east": -40,
+  "north": -2,
+  "south": -18
+ },
+ "lazy": true,
+ "source": "MGS MOLA 463 m, every 2nd cell (USGS)",
+ "resolutionM": 924,
+ "bytes": 3957416
+}

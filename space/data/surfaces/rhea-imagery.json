@@ -1,0 +1,11 @@
+{
+ "file": "rhea_usgs.jpg",
+ "width": 3840,
+ "height": 1920,
+ "grey": true,
+ "source": "Cassini / Voyager mosaic 417 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 1250,
+ "fill": false,
+ "bytes": 1323098
+}

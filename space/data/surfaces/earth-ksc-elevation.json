@@ -1,0 +1,21 @@
+{
+  "file": "earth-ksc-elevation.i16.gz",
+  "width": 240,
+  "height": 240,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -965,
+  "maxM": 76,
+  "bytes": 42133,
+  "source": "NOAA NCEI ETOPO 2022 v1, 60 arc-second surface elevation (full resolution)",
+  "url": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+  "reference": "metres relative to mean sea level (EGM2008 geoid)",
+  "license": "Public domain (US Government work, NOAA)",
+  "bounds": {
+    "north": 30.5,
+    "south": 26.5,
+    "west": -82.5,
+    "east": -78.5
+  },
+  "note": "Detail patch around Cape Canaveral; cell-centred grid"
+}

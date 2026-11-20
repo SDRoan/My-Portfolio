@@ -1,0 +1,11 @@
+{
+ "file": "titan_usgs.webp",
+ "width": 4040,
+ "height": 2020,
+ "grey": true,
+ "source": "Cassini ISS 938 nm mosaic 4 km (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 4004,
+ "fill": false,
+ "bytes": 854320
+}

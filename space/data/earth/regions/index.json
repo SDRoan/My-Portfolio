@@ -1,0 +1,3050 @@
+{
+ "tileDeg": 0.01,
+ "regions": [
+  {
+   "id": "aconcagua",
+   "name": "Aconcagua",
+   "bbox": {
+    "south": -32.773,
+    "north": -32.533,
+    "west": -70.131,
+    "east": -69.891
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 653363,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "auckland",
+   "name": "Auckland · CBD and Waitematā Harbour",
+   "bbox": {
+    "south": -36.87046,
+    "north": -36.82554,
+    "west": 174.73694,
+    "east": 174.79306
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 926869,
+   "buildings": 17355,
+   "places": [],
+   "vegBytes": 19732
+  },
+  {
+   "id": "berlin",
+   "name": "Berlin · Mitte",
+   "bbox": {
+    "south": 52.49454,
+    "north": 52.53946,
+    "west": 13.35809,
+    "east": 13.43191
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1239748,
+   "buildings": 16864,
+   "places": [],
+   "vegBytes": 35016
+  },
+  {
+   "id": "cairo",
+   "name": "Cairo · Nile, Downtown",
+   "bbox": {
+    "south": 30.03,
+    "north": 30.06,
+    "west": 31.215,
+    "east": 31.25
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1229716,
+   "buildings": 10135,
+   "places": []
+  },
+  {
+   "id": "chattogram",
+   "name": "Chattogram · Agrabad to Patenga Road",
+   "bbox": {
+    "south": 22.31054,
+    "north": 22.35546,
+    "west": 91.79372,
+    "east": 91.84228
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1191532,
+   "buildings": 59568,
+   "places": [],
+   "vegBytes": 18016
+  },
+  {
+   "id": "denali",
+   "name": "Denali",
+   "bbox": {
+    "south": 62.949,
+    "north": 63.189,
+    "west": -151.127,
+    "east": -150.887
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 569852,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "dhaka",
+   "name": "Dhaka · Old Dhaka to Sher-e-Bangla Nagar",
+   "bbox": {
+    "south": 23.7,
+    "north": 23.77,
+    "west": 90.37,
+    "east": 90.42
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 3012533,
+   "buildings": 98121,
+   "places": []
+  },
+  {
+   "id": "dubai",
+   "name": "Dubai · Downtown",
+   "bbox": {
+    "south": 25.18,
+    "north": 25.215,
+    "west": 55.255,
+    "east": 55.295
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1107556,
+   "buildings": 5657,
+   "places": []
+  },
+  {
+   "id": "dubai-palm",
+   "name": "Dubai · Palm Jumeirah and Burj Al Arab",
+   "bbox": {
+    "south": 25.095,
+    "north": 25.15,
+    "west": 55.105,
+    "east": 55.195
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1203110,
+   "buildings": 9117,
+   "places": []
+  },
+  {
+   "id": "dxb",
+   "name": "Dubai International Airport",
+   "bbox": {
+    "south": 25.232,
+    "north": 25.27,
+    "west": 55.33,
+    "east": 55.4
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "airport",
+   "bytes": 1437678,
+   "buildings": 14598,
+   "places": []
+  },
+  {
+   "id": "everest",
+   "name": "Mount Everest · Khumbu",
+   "bbox": {
+    "south": 27.85,
+    "north": 28.1,
+    "west": 86.75,
+    "east": 87.05
+   },
+   "startup": false,
+   "source": "osm",
+   "kind": "",
+   "bytes": 952163,
+   "buildings": 628,
+   "places": [
+    {
+     "name": "珠穆朗玛峰 ཇོ་མོ་གླང་མ། सगरमाथा",
+     "lat": 27.988061400000003,
+     "lon": 86.92521,
+     "kind": "Peak"
+    },
+    {
+     "name": "洛子峰 ལྷོ་རྩེ ल्होत्से",
+     "lat": 27.9619855,
+     "lon": 86.93250450000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "इम्जा छे",
+     "lat": 27.9200139,
+     "lon": 86.93464630000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Ama Dablam",
+     "lat": 27.862100100000003,
+     "lon": 86.8604289,
+     "kind": "Peak"
+    },
+    {
+     "name": "Kala Patthar",
+     "lat": 27.995800000000003,
+     "lon": 86.8284407,
+     "kind": "Peak"
+    },
+    {
+     "name": "珠穆朗玛南峰",
+     "lat": 27.9850323,
+     "lon": 86.9251632,
+     "kind": "Peak"
+    },
+    {
+     "name": "Chukhung Ri",
+     "lat": 27.9253341,
+     "lon": 86.87920240000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "夏子二峰 ཤར་རྩེ་༢ शारत्से २",
+     "lat": 27.949673800000003,
+     "lon": 86.9833813,
+     "kind": "Peak"
+    },
+    {
+     "name": "洛子北一峰 ལྷོ་རྩེ་བྱང་༡",
+     "lat": 27.964275,
+     "lon": 86.9322989,
+     "kind": "Peak"
+    },
+    {
+     "name": "洛子北二峰 ལྷོ་རྩེ་བྱང་༢",
+     "lat": 27.9680095,
+     "lon": 86.9326087,
+     "kind": "Peak"
+    },
+    {
+     "name": "康里东峰",
+     "lat": 28.0197274,
+     "lon": 86.8150773,
+     "kind": "Peak"
+    },
+    {
+     "name": "林禅峰 लिंगट्रेन",
+     "lat": 28.028133200000003,
+     "lon": 86.85449340000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Cholatse",
+     "lat": 27.9196156,
+     "lon": 86.76517580000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Taboche",
+     "lat": 27.897313800000003,
+     "lon": 86.7793702,
+     "kind": "Peak"
+    },
+    {
+     "name": "चोपुलु",
+     "lat": 27.9194539,
+     "lon": 86.9819868,
+     "kind": "Peak"
+    },
+    {
+     "name": "孔布则峰 ཁུམ་བུ།་རྩེ खुम्बुत्से",
+     "lat": 28.021905200000003,
+     "lon": 86.87219300000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "洛子东峰 ལྷོ་རྩེ་ཤར ल्होत्से शार",
+     "lat": 27.9587526,
+     "lon": 86.943763,
+     "kind": "Peak"
+    },
+    {
+     "name": "夏子一峰 ཤར་རྩེ་༡ शारत्से १",
+     "lat": 27.955629000000002,
+     "lon": 86.9651422,
+     "kind": "Peak"
+    },
+    {
+     "name": "普莫里峰",
+     "lat": 28.015852300000002,
+     "lon": 86.82735050000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Chumbu",
+     "lat": 28.0136395,
+     "lon": 86.7878294,
+     "kind": "Peak"
+    },
+    {
+     "name": "Lobuche West",
+     "lat": 27.969659900000003,
+     "lon": 86.78172470000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Kali Himal",
+     "lat": 27.8778307,
+     "lon": 86.9735934,
+     "kind": "Peak"
+    },
+    {
+     "name": "红旗峰",
+     "lat": 28.034623300000003,
+     "lon": 86.75957100000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "红旗东峰 / 布尔克岗",
+     "lat": 28.0376525,
+     "lon": 86.7725506,
+     "kind": "Peak"
+    },
+    {
+     "name": "努普拉岗峰",
+     "lat": 28.0750096,
+     "lon": 86.76504130000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "洛子中一峰 ལྷོ་རྩེ་ཀྱི་༡ ल्होत्से मध्य १",
+     "lat": 27.9606819,
+     "lon": 86.93758940000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "ल्होत्से नुप १",
+     "lat": 27.9609424,
+     "lon": 86.93097150000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "白当策 པེ་ཐང་རྩེ पेथाङ्त्से",
+     "lat": 27.957236,
+     "lon": 87.0152042,
+     "kind": "Peak"
+    },
+    {
+     "name": "拉克巴日 ལྷག་པ་རི",
+     "lat": 28.038097800000003,
+     "lon": 86.9697483,
+     "kind": "Peak"
+    },
+    {
+     "name": "Nangkartshang",
+     "lat": 27.9054758,
+     "lon": 86.8354796,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pokalde",
+     "lat": 27.924768200000003,
+     "lon": 86.8331902,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से शार ३",
+     "lat": 27.960213000000003,
+     "lon": 86.9134353,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से १",
+     "lat": 27.9673711,
+     "lon": 86.88696300000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से २",
+     "lat": 27.9661046,
+     "lon": 86.8890915,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से नुप १",
+     "lat": 27.969143000000003,
+     "lon": 86.88189410000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से नुप २",
+     "lat": 27.972798,
+     "lon": 86.87569380000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से शार १",
+     "lat": 27.964395500000002,
+     "lon": 86.891036,
+     "kind": "Peak"
+    },
+    {
+     "name": "नुप्त्से शार २",
+     "lat": 27.962583900000002,
+     "lon": 86.8938459,
+     "kind": "Peak"
+    },
+    {
+     "name": "Num Ri",
+     "lat": 27.8958288,
+     "lon": 86.9733542,
+     "kind": "Peak"
+    },
+    {
+     "name": "长征峰",
+     "lat": 28.069127,
+     "lon": 86.89776300000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "卡达普峰",
+     "lat": 28.063899000000003,
+     "lon": 86.9770979,
+     "kind": "Peak"
+    },
+    {
+     "name": "Chukhung Tse",
+     "lat": 27.9391663,
+     "lon": 86.8750005,
+     "kind": "Peak"
+    },
+    {
+     "name": "Ombigaichen",
+     "lat": 27.853078200000002,
+     "lon": 86.882962,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pema Dablam",
+     "lat": 27.858869700000003,
+     "lon": 86.8947021,
+     "kind": "Peak"
+    },
+    {
+     "name": "Baruntse",
+     "lat": 27.8720615,
+     "lon": 86.9796489,
+     "kind": "Peak"
+    },
+    {
+     "name": "Amphu Gyabjen",
+     "lat": 27.881221200000002,
+     "lon": 86.86878970000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "尖兵峰",
+     "lat": 28.0540854,
+     "lon": 86.9044339,
+     "kind": "Peak"
+    },
+    {
+     "name": "康里峰",
+     "lat": 28.019947900000002,
+     "lon": 86.80973870000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Kongma Tse",
+     "lat": 27.943933800000003,
+     "lon": 86.8383086,
+     "kind": "Peak"
+    },
+    {
+     "name": "向阳峰",
+     "lat": 28.035865,
+     "lon": 86.8608487,
+     "kind": "Peak"
+    },
+    {
+     "name": "琼布北峰",
+     "lat": 28.0190339,
+     "lon": 86.7898112,
+     "kind": "Peak"
+    },
+    {
+     "name": "西林禅峰",
+     "lat": 28.0348067,
+     "lon": 86.8082299,
+     "kind": "Peak"
+    },
+    {
+     "name": "Changri",
+     "lat": 27.9932726,
+     "lon": 86.79100190000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "康里西峰",
+     "lat": 28.024295600000002,
+     "lon": 86.79991000000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "洛子中二峰 ལྷོ་རྩེ་ཀྱི་༢",
+     "lat": 27.959919300000003,
+     "lon": 86.9399794,
+     "kind": "Peak"
+    },
+    {
+     "name": "ल्होत्से नुप २",
+     "lat": 27.959204300000003,
+     "lon": 86.9230454,
+     "kind": "Peak"
+    },
+    {
+     "name": "Nirekha",
+     "lat": 27.9775114,
+     "lon": 86.7629029,
+     "kind": "Peak"
+    },
+    {
+     "name": "Taboche North",
+     "lat": 27.902962400000003,
+     "lon": 86.7687987,
+     "kind": "Peak"
+    },
+    {
+     "name": "Lobuche East",
+     "lat": 27.959357200000003,
+     "lon": 86.79174040000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Arakam Tse",
+     "lat": 27.943232400000003,
+     "lon": 86.75165170000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Luri Peak",
+     "lat": 27.862272100000002,
+     "lon": 86.76564690000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Amphu I",
+     "lat": 27.871209200000003,
+     "lon": 86.9561012,
+     "kind": "Peak"
+    },
+    {
+     "name": "莫哈冷古尔康日",
+     "lat": 28.024913700000003,
+     "lon": 86.867165,
+     "kind": "Peak"
+    },
+    {
+     "name": "Kongma La Pass",
+     "lat": 27.9297049,
+     "lon": 86.83621910000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Cho La",
+     "lat": 27.9617246,
+     "lon": 86.7516374,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Everest Viewpoint",
+     "lat": 27.9959354,
+     "lon": 86.82837880000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "First View of EBC @5000",
+     "lat": 27.950741500000003,
+     "lon": 86.8161173,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Pangboche",
+     "lat": 27.855783000000002,
+     "lon": 86.790169,
+     "kind": "Place"
+    },
+    {
+     "name": "Shomare",
+     "lat": 27.8677387,
+     "lon": 86.80539440000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Chukhung",
+     "lat": 27.904665,
+     "lon": 86.8713664,
+     "kind": "Place"
+    }
+   ]
+  },
+  {
+   "id": "fuji",
+   "name": "Mount Fuji",
+   "bbox": {
+    "south": 35.241,
+    "north": 35.481,
+    "west": 138.607,
+    "east": 138.847
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 759294,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "giza",
+   "name": "Giza Pyramids",
+   "bbox": {
+    "south": 29.965,
+    "north": 29.995,
+    "west": 31.115,
+    "east": 31.15
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 982773,
+   "buildings": 5240,
+   "places": []
+  },
+  {
+   "id": "grand-canyon",
+   "name": "Grand Canyon",
+   "bbox": {
+    "south": 35.95,
+    "north": 36.3,
+    "west": -112.35,
+    "east": -111.95
+   },
+   "startup": false,
+   "source": "osm",
+   "kind": "",
+   "bytes": 6223518,
+   "buildings": 1038,
+   "places": [
+    {
+     "name": "Madison Aviation Airport",
+     "lat": 35.9749842,
+     "lon": -112.13127940000001,
+     "kind": "Airport"
+    },
+    {
+     "name": "The Ranch Airport (historical)",
+     "lat": 36.010261,
+     "lon": -112.29239500000001,
+     "kind": "Airport"
+    },
+    {
+     "name": "Tusayan Airport (historical)",
+     "lat": 35.9755398,
+     "lon": -112.1260014,
+     "kind": "Airport"
+    },
+    {
+     "name": "Grand Canyon National Park Airport",
+     "lat": 35.95407587469878,
+     "lon": -112.1430160951808,
+     "kind": "Airport"
+    },
+    {
+     "name": "Angels Gate",
+     "lat": 36.091928,
+     "lon": -111.989332,
+     "kind": "Peak"
+    },
+    {
+     "name": "Brady Peak",
+     "lat": 36.2430393,
+     "lon": -111.96377770000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Brahma Temple",
+     "lat": 36.1302609,
+     "lon": -112.0387786,
+     "kind": "Peak"
+    },
+    {
+     "name": "Buddha Temple",
+     "lat": 36.152482500000005,
+     "lon": -112.09933600000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Buggeln Hill",
+     "lat": 35.9819295,
+     "lon": -111.9501621,
+     "kind": "Peak"
+    },
+    {
+     "name": "Castor Temple",
+     "lat": 36.1263706,
+     "lon": -112.32156450000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Cheops Pyramid",
+     "lat": 36.1202394,
+     "lon": -112.11994680000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Clement Powell Butte",
+     "lat": 36.1497048,
+     "lon": -112.08378010000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Confucius Temple",
+     "lat": 36.180258900000005,
+     "lon": -112.22183940000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Cope Butte",
+     "lat": 36.0876727,
+     "lon": -112.19737210000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Dana Butte",
+     "lat": 36.0913715,
+     "lon": -112.15044780000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Deva Temple",
+     "lat": 36.1519275,
+     "lon": -112.03211200000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Diana Temple",
+     "lat": 36.105259700000005,
+     "lon": -112.28211850000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Dragon Head",
+     "lat": 36.1974814,
+     "lon": -112.18072740000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Dunn Butte",
+     "lat": 36.083872400000004,
+     "lon": -111.99294320000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Eremita Mesa",
+     "lat": 36.0727601,
+     "lon": -112.2454503,
+     "kind": "Peak"
+    },
+    {
+     "name": "Excalibur",
+     "lat": 36.2624802,
+     "lon": -112.2548965,
+     "kind": "Peak"
+    },
+    {
+     "name": "Geikie Peak",
+     "lat": 36.1330371,
+     "lon": -112.2696183,
+     "kind": "Peak"
+    },
+    {
+     "name": "Grandeur Point",
+     "lat": 36.064427300000006,
+     "lon": -112.1210023,
+     "kind": "Peak"
+    },
+    {
+     "name": "Guinevere Castle",
+     "lat": 36.2594246,
+     "lon": -112.2654524,
+     "kind": "Peak"
+    },
+    {
+     "name": "Hall Butte",
+     "lat": 36.0802616,
+     "lon": -111.9771091,
+     "kind": "Peak"
+    },
+    {
+     "name": "Hancock Butte",
+     "lat": 36.2613725,
+     "lon": -111.97461170000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Hattan Butte",
+     "lat": 36.1355385,
+     "lon": -112.05266780000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Hawkins Butte",
+     "lat": 36.0788723,
+     "lon": -112.0015546,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Hayden",
+     "lat": 36.272206000000004,
+     "lon": -111.9690561,
+     "kind": "Peak"
+    },
+    {
+     "name": "Hillers Butte",
+     "lat": 36.1422612,
+     "lon": -112.08890260000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Holy Grail Temple",
+     "lat": 36.2747027,
+     "lon": -112.30434290000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Horseshoe Mesa",
+     "lat": 36.0241027,
+     "lon": -111.9756837,
+     "kind": "Peak"
+    },
+    {
+     "name": "Horus Temple",
+     "lat": 36.132204200000004,
+     "lon": -112.1798935,
+     "kind": "Peak"
+    },
+    {
+     "name": "Isis Temple",
+     "lat": 36.1410495,
+     "lon": -112.13737400000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Kibbey Butte",
+     "lat": 36.2494279,
+     "lon": -111.97877840000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "King Arthur Castle",
+     "lat": 36.264147,
+     "lon": -112.2710083,
+     "kind": "Peak"
+    },
+    {
+     "name": "Lindbergh Hill",
+     "lat": 36.295816,
+     "lon": -112.08239300000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Lyell Butte",
+     "lat": 36.0460945,
+     "lon": -112.02933270000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Manu Temple",
+     "lat": 36.1666492,
+     "lon": -112.08461360000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Marsh Butte",
+     "lat": 36.1205373,
+     "lon": -112.2451729,
+     "kind": "Peak"
+    },
+    {
+     "name": "Masonic Temple",
+     "lat": 36.275258400000006,
+     "lon": -112.3451778,
+     "kind": "Peak"
+    },
+    {
+     "name": "Newberry Butte",
+     "lat": 36.062206100000004,
+     "lon": -111.97266420000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Newton Butte",
+     "lat": 36.060261000000004,
+     "lon": -112.05294470000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "O'Neill Butte",
+     "lat": 36.0713719,
+     "lon": -112.0904459,
+     "kind": "Peak"
+    },
+    {
+     "name": "Osiris Temple",
+     "lat": 36.144981800000004,
+     "lon": -112.18767150000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Oza Butte",
+     "lat": 36.1827604,
+     "lon": -112.06739110000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pattie Butte",
+     "lat": 36.071372100000005,
+     "lon": -112.05600050000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pollux Temple",
+     "lat": 36.1205374,
+     "lon": -112.30267490000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Scylla Butte",
+     "lat": 36.134425900000004,
+     "lon": -112.2593401,
+     "kind": "Peak"
+    },
+    {
+     "name": "Shiva Temple",
+     "lat": 36.1644263,
+     "lon": -112.16100440000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sinking Ship",
+     "lat": 35.9902624,
+     "lon": -111.95877370000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sullivan Peak",
+     "lat": 36.2683168,
+     "lon": -111.98572340000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sumner Point",
+     "lat": 36.1124829,
+     "lon": -112.0765571,
+     "kind": "Peak"
+    },
+    {
+     "name": "The Alligator",
+     "lat": 36.079712300000004,
+     "lon": -112.169262,
+     "kind": "Peak"
+    },
+    {
+     "name": "The Battleship",
+     "lat": 36.0755384,
+     "lon": -112.1385029,
+     "kind": "Peak"
+    },
+    {
+     "name": "The Colonnade",
+     "lat": 36.1633155,
+     "lon": -112.1235034,
+     "kind": "Peak"
+    },
+    {
+     "name": "The Howlands Butte",
+     "lat": 36.0955389,
+     "lon": -112.0096106,
+     "kind": "Peak"
+    },
+    {
+     "name": "The Tipoff",
+     "lat": 36.0915769,
+     "lon": -112.08978200000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Thor Temple",
+     "lat": 36.1305393,
+     "lon": -111.98072110000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Tower of Set",
+     "lat": 36.120815400000005,
+     "lon": -112.1785045,
+     "kind": "Peak"
+    },
+    {
+     "name": "Vesta Temple",
+     "lat": 36.0935931,
+     "lon": -112.26878470000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Whites Butte",
+     "lat": 36.097759800000006,
+     "lon": -112.2315612,
+     "kind": "Peak"
+    },
+    {
+     "name": "Woolsey Butte",
+     "lat": 36.285817200000004,
+     "lon": -111.96572280000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Wotans Throne",
+     "lat": 36.104831700000005,
+     "lon": -111.96027950000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Zoroaster Temple",
+     "lat": 36.118594200000004,
+     "lon": -112.0454452,
+     "kind": "Peak"
+    },
+    {
+     "name": "Charybdis Butte",
+     "lat": 36.1472035,
+     "lon": -112.2590624,
+     "kind": "Peak"
+    },
+    {
+     "name": "Dox Castle",
+     "lat": 36.245813500000004,
+     "lon": -112.3215655,
+     "kind": "Peak"
+    },
+    {
+     "name": "Evans Butte",
+     "lat": 36.2277581,
+     "lon": -112.28961980000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Schellbach Butte",
+     "lat": 36.1477602,
+     "lon": -112.11183630000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sumner Butte",
+     "lat": 36.1133162,
+     "lon": -112.0757238,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mencius Temple",
+     "lat": 36.174703300000004,
+     "lon": -112.2298952,
+     "kind": "Peak"
+    },
+    {
+     "name": "Twin Buttes",
+     "lat": 36.174703300000004,
+     "lon": -112.2298952,
+     "kind": "Peak"
+    },
+    {
+     "name": "Berry Butte",
+     "lat": 36.0205391,
+     "lon": -112.0023871,
+     "kind": "Peak"
+    },
+    {
+     "name": "Tower of Ra",
+     "lat": 36.1411499,
+     "lon": -112.203691,
+     "kind": "Peak"
+    },
+    {
+     "name": "Vista Encantada",
+     "lat": 36.230194600000004,
+     "lon": -111.97382320000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Grand Canyon",
+     "lat": 36.0980405,
+     "lon": -112.09627870000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Plateau Point",
+     "lat": 36.0932613,
+     "lon": -112.116088,
+     "kind": "Place"
+    },
+    {
+     "name": "Mather Point",
+     "lat": 36.061649700000004,
+     "lon": -112.1079462,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Mohave Point",
+     "lat": 36.072369,
+     "lon": -112.1660274,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Powell Point",
+     "lat": 36.0734355,
+     "lon": -112.1509699,
+     "kind": "Attraction"
+    }
+   ]
+  },
+  {
+   "id": "haneda",
+   "name": "Tokyo Haneda Airport",
+   "bbox": {
+    "south": 35.52,
+    "north": 35.57,
+    "west": 139.75,
+    "east": 139.83
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "airport",
+   "bytes": 2050797,
+   "buildings": 3831,
+   "places": []
+  },
+  {
+   "id": "heathrow",
+   "name": "London Heathrow Airport",
+   "bbox": {
+    "south": 51.455,
+    "north": 51.485,
+    "west": -0.5,
+    "east": -0.405
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "airport",
+   "bytes": 1105461,
+   "buildings": 5540,
+   "places": []
+  },
+  {
+   "id": "jfk",
+   "name": "New York JFK Airport",
+   "bbox": {
+    "south": 40.62,
+    "north": 40.665,
+    "west": -73.83,
+    "east": -73.75
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "airport",
+   "bytes": 2284831,
+   "buildings": 4503,
+   "places": []
+  },
+  {
+   "id": "k2",
+   "name": "K2",
+   "bbox": {
+    "south": 35.761,
+    "north": 36.001,
+    "west": 76.395,
+    "east": 76.636
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 645609,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "kennedy",
+   "name": "Kennedy Space Center · Cape Canaveral",
+   "bbox": {
+    "south": 28.38,
+    "north": 28.82,
+    "west": -80.84,
+    "east": -80.52
+   },
+   "startup": true,
+   "source": "osm",
+   "kind": "",
+   "bytes": 7443239,
+   "buildings": 45162,
+   "places": [
+    {
+     "name": "Arthur Dunn Air Park",
+     "lat": 28.6227124,
+     "lon": -80.8353058,
+     "kind": "Airport"
+    },
+    {
+     "name": "Space Coast Regional Airport",
+     "lat": 28.5142066,
+     "lon": -80.7990149,
+     "kind": "Airport"
+    },
+    {
+     "name": "Vehicle Assembly Building",
+     "lat": 28.585613293749997,
+     "lon": -80.650892028125,
+     "kind": "Airport"
+    },
+    {
+     "name": "Flame trench SLC-41",
+     "lat": 28.5833716,
+     "lon": -80.58241862857143,
+     "kind": "Airport"
+    },
+    {
+     "name": "Cape Canaveral SFS Skid Strip",
+     "lat": 28.46755270833333,
+     "lon": -80.56385223125,
+     "kind": "Airport"
+    },
+    {
+     "name": "Launch and Landing Facility",
+     "lat": 28.61498665065789,
+     "lon": -80.69350064605261,
+     "kind": "Airport"
+    },
+    {
+     "name": "Titusville",
+     "lat": 28.612623600000003,
+     "lon": -80.80795450000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Port Saint John",
+     "lat": 28.476224000000002,
+     "lon": -80.7791031,
+     "kind": "Place"
+    },
+    {
+     "name": "Cape Canaveral",
+     "lat": 28.388144200000003,
+     "lon": -80.60564640000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Astronaut Memorial Planetarium & Observatory",
+     "lat": 28.385073000000002,
+     "lon": -80.76213100000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "American Space Museum & US Space Walk of Fame",
+     "lat": 28.610577000000003,
+     "lon": -80.8086712,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Heroes & Legends",
+     "lat": 28.5228636,
+     "lon": -80.6830698,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Journey to Mars",
+     "lat": 28.5240736,
+     "lon": -80.6821994,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Astronaut Encounter",
+     "lat": 28.523431000000002,
+     "lon": -80.6822071,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Playalinda Beach Space Launch Viewpoint",
+     "lat": 28.6439188,
+     "lon": -80.6237955,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Space Shuttle Atlantis",
+     "lat": 28.525172800000004,
+     "lon": -80.6800733,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Rocket Garden",
+     "lat": 28.5235692,
+     "lon": -80.68298270000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Destination Mars",
+     "lat": 28.523425500000002,
+     "lon": -80.68152210000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Hyperdeck",
+     "lat": 28.524459500000003,
+     "lon": -80.6823038,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Shuttle Launch Experience",
+     "lat": 28.5249619,
+     "lon": -80.6797109,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Apollo/Saturn V Center",
+     "lat": 28.6055071,
+     "lon": -80.6696532,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Kennedy Space Center Visitor Complex (Visitor Entrance)",
+     "lat": 28.5153603,
+     "lon": -80.681882,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Rocket Launch Viewpoint",
+     "lat": 28.6206876,
+     "lon": -80.79791870000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Bird blind",
+     "lat": 28.653094600000003,
+     "lon": -80.77698790000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Observation platform",
+     "lat": 28.678688100000002,
+     "lon": -80.77164210000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Observation Tower",
+     "lat": 28.6783736,
+     "lon": -80.77400490000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Exploration tower",
+     "lat": 28.406541100000002,
+     "lon": -80.61790520000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Gateway: The Deep Space Launch Complex®",
+     "lat": 28.5243636,
+     "lon": -80.6830975,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Spaceport KSC",
+     "lat": 28.5243071,
+     "lon": -80.6827717,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Planet Play",
+     "lat": 28.524598100000002,
+     "lon": -80.6818181,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Universe Theater",
+     "lat": 28.523601600000003,
+     "lon": -80.6821982,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Rocket Launch View Point",
+     "lat": 28.4082976,
+     "lon": -80.59546470000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Rocket Launch Viewing",
+     "lat": 28.392176600000003,
+     "lon": -80.59595800000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Atlantis North Lawn",
+     "lat": 28.5258526,
+     "lon": -80.6800867,
+     "kind": "Attraction"
+    },
+    {
+     "name": "MRVN Mars Rover",
+     "lat": 28.5236127,
+     "lon": -80.6815862,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Chat With An Astronaut",
+     "lat": 28.523639600000003,
+     "lon": -80.68135140000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Lockheed Martin",
+     "lat": 28.526616209523816,
+     "lon": -80.78246880000002,
+     "kind": "Attraction"
+    },
+    {
+     "name": "American Police Hall of Fame & Museum",
+     "lat": 28.526851520000005,
+     "lon": -80.78386368666666,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Exhibit Hall",
+     "lat": 28.44407907333333,
+     "lon": -80.57196111333334,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Hangar C",
+     "lat": 28.45905682424243,
+     "lon": -80.54393433636362,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Sands Space History Center",
+     "lat": 28.417278266666667,
+     "lon": -80.60454490000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "North Brevard Historical Museum",
+     "lat": 28.612479620000006,
+     "lon": -80.80734636,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Space Shuttle Inspiration",
+     "lat": 28.61519775882354,
+     "lon": -80.69180301764705,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Brevard Museum of History and Natural Science",
+     "lat": 28.386972818181814,
+     "lon": -80.76327006363637,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Playalinda Beach (Nudist Area)",
+     "lat": 28.703430500000007,
+     "lon": -80.66770046666667,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Cape Canaveral Lighthouse Museum",
+     "lat": 28.460258507142857,
+     "lon": -80.54377610714288,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Redstone Rocket Replica",
+     "lat": 28.43942773,
+     "lon": -80.57330237000002,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Valiant Air Command Warbird Museum",
+     "lat": 28.51855135625,
+     "lon": -80.79436233749999,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Palm Point Behavioral Health",
+     "lat": 28.640354000000002,
+     "lon": -80.83000750000001,
+     "kind": "Facility"
+    },
+    {
+     "name": "Florida Solar Energy Center",
+     "lat": 28.38755378,
+     "lon": -80.75681484,
+     "kind": "Facility"
+    },
+    {
+     "name": "Eastern Florida State College - Cocoa Campus",
+     "lat": 28.382851627999994,
+     "lon": -80.75977204,
+     "kind": "Facility"
+    },
+    {
+     "name": "Parrish Medical Center",
+     "lat": 28.629988570000005,
+     "lon": -80.82266093999999,
+     "kind": "Facility"
+    },
+    {
+     "name": "Kelly Park East",
+     "lat": 28.402469900000003,
+     "lon": -80.6633419,
+     "kind": "Park"
+    },
+    {
+     "name": "Parrish Park",
+     "lat": 28.624162700000003,
+     "lon": -80.79449770000001,
+     "kind": "Park"
+    },
+    {
+     "name": "Mosquito Lagoon Aquatic Preserve",
+     "lat": 28.791935000000002,
+     "lon": -80.77060660000001,
+     "kind": "Park"
+    },
+    {
+     "name": "Kelly Park West",
+     "lat": 28.399897900000003,
+     "lon": -80.66529030000001,
+     "kind": "Park"
+    },
+    {
+     "name": "Travis Park",
+     "lat": 28.3876771,
+     "lon": -80.75919110000001,
+     "kind": "Park"
+    },
+    {
+     "name": "Sam's House at Pine Island",
+     "lat": 28.473056600000003,
+     "lon": -80.7187188,
+     "kind": "Park"
+    },
+    {
+     "name": "Don “Mo” Stradley Memorial Park",
+     "lat": 28.381742600000003,
+     "lon": -80.7628155,
+     "kind": "Park"
+    },
+    {
+     "name": "Manatee Observation Platform",
+     "lat": 28.7375238,
+     "lon": -80.7542768,
+     "kind": "Park"
+    },
+    {
+     "name": "Fay Park",
+     "lat": 28.4695746,
+     "lon": -80.7994486,
+     "kind": "Park"
+    },
+    {
+     "name": "William Manzo Park",
+     "lat": 28.578607320000003,
+     "lon": -80.79932272,
+     "kind": "Park"
+    },
+    {
+     "name": "Rotary Riverfront Park",
+     "lat": 28.567000638888892,
+     "lon": -80.79775100555555,
+     "kind": "Park"
+    },
+    {
+     "name": "Sand Point Park",
+     "lat": 28.618383028205134,
+     "lon": -80.80608861282052,
+     "kind": "Park"
+    },
+    {
+     "name": "Stuart Park",
+     "lat": 28.56436018571429,
+     "lon": -80.81519161428572,
+     "kind": "Park"
+    },
+    {
+     "name": "Space View Park",
+     "lat": 28.613732271428574,
+     "lon": -80.80471330714286,
+     "kind": "Park"
+    },
+    {
+     "name": "Cherie Down Park",
+     "lat": 28.391930421428576,
+     "lon": -80.59713622857144,
+     "kind": "Park"
+    },
+    {
+     "name": "Wueshoff Park",
+     "lat": 28.554702069565224,
+     "lon": -80.82457106956522,
+     "kind": "Park"
+    },
+    {
+     "name": "Kirk Point Park",
+     "lat": 28.563148275000003,
+     "lon": -80.7980472625,
+     "kind": "Park"
+    },
+    {
+     "name": "Health Village East",
+     "lat": 28.62844452,
+     "lon": -80.82275081,
+     "kind": "Park"
+    },
+    {
+     "name": "Manatee Sanctuary Park",
+     "lat": 28.39432168181818,
+     "lon": -80.61819140909091,
+     "kind": "Park"
+    },
+    {
+     "name": "Woody Simpson Park",
+     "lat": 28.38404027222222,
+     "lon": -80.70781916111112,
+     "kind": "Park"
+    },
+    {
+     "name": "Manatee Cove Park",
+     "lat": 28.446300900000004,
+     "lon": -80.71825944999999,
+     "kind": "Park"
+    },
+    {
+     "name": "Kings Park",
+     "lat": 28.444865017391308,
+     "lon": -80.69630661739131,
+     "kind": "Park"
+    },
+    {
+     "name": "Dolphin Park",
+     "lat": 28.431878566666665,
+     "lon": -80.67675829166667,
+     "kind": "Park"
+    },
+    {
+     "name": "Jetty Park",
+     "lat": 28.40727895517242,
+     "lon": -80.5936498586207,
+     "kind": "Park"
+    },
+    {
+     "name": "Space Coast Communities Sports Complex",
+     "lat": 28.436448228571432,
+     "lon": -80.77598247142858,
+     "kind": "Park"
+    },
+    {
+     "name": "Cocoa Manor",
+     "lat": 28.389852519999998,
+     "lon": -80.74342530000001,
+     "kind": "Park"
+    },
+    {
+     "name": "Junny Rios Martinez Park",
+     "lat": 28.390276519999997,
+     "lon": -80.78149788,
+     "kind": "Park"
+    },
+    {
+     "name": "Veterans Memorial Park",
+     "lat": 28.613523054545457,
+     "lon": -80.80416753636365,
+     "kind": "Park"
+    }
+   ]
+  },
+  {
+   "id": "kilimanjaro",
+   "name": "Mount Kilimanjaro",
+   "bbox": {
+    "south": -3.196,
+    "north": -2.956,
+    "west": 37.233,
+    "east": 37.473
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 2348749,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "lax",
+   "name": "Los Angeles International Airport",
+   "bbox": {
+    "south": 33.925,
+    "north": 33.955,
+    "west": -118.44,
+    "east": -118.375
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "airport",
+   "bytes": 2239137,
+   "buildings": 4446,
+   "places": []
+  },
+  {
+   "id": "liberty",
+   "name": "Liberty Island · Statue of Liberty",
+   "bbox": {
+    "south": 40.684,
+    "north": 40.696,
+    "west": -74.052,
+    "east": -74.036
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "landmark",
+   "bytes": 760406,
+   "buildings": 53,
+   "places": []
+  },
+  {
+   "id": "london",
+   "name": "London · Westminster to Tower Bridge",
+   "bbox": {
+    "south": 51.495,
+    "north": 51.515,
+    "west": -0.145,
+    "east": -0.07
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1669708,
+   "buildings": 13431,
+   "places": []
+  },
+  {
+   "id": "matterhorn",
+   "name": "Matterhorn",
+   "bbox": {
+    "south": 45.857,
+    "north": 46.097,
+    "west": 7.538,
+    "east": 7.779
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 3245378,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "mexico-city",
+   "name": "Mexico City · Centro Histórico",
+   "bbox": {
+    "south": 19.40954,
+    "north": 19.45446,
+    "west": -99.16081,
+    "east": -99.11319
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 897292,
+   "buildings": 35268,
+   "places": [],
+   "vegBytes": 13609
+  },
+  {
+   "id": "mont-blanc",
+   "name": "Mont Blanc",
+   "bbox": {
+    "south": 45.713,
+    "north": 45.953,
+    "west": 6.745,
+    "east": 6.985
+   },
+   "startup": false,
+   "source": "dem-only",
+   "kind": "mountain",
+   "bytes": 868045,
+   "buildings": 0,
+   "places": []
+  },
+  {
+   "id": "nairobi",
+   "name": "Nairobi · CBD and Upper Hill",
+   "bbox": {
+    "south": -1.31046,
+    "north": -1.26554,
+    "west": 36.79554,
+    "east": 36.84046
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 797842,
+   "buildings": 27583,
+   "places": [],
+   "vegBytes": 20496
+  },
+  {
+   "id": "nyc",
+   "name": "New York City · Manhattan",
+   "bbox": {
+    "south": 40.695,
+    "north": 40.882,
+    "west": -74.035,
+    "east": -73.9
+   },
+   "startup": false,
+   "source": "osm",
+   "kind": "",
+   "bytes": 11691207,
+   "buildings": 189250,
+   "places": [
+    {
+     "name": "New York Skyports Incorporated Seaplane Base",
+     "lat": 40.7351534,
+     "lon": -73.97290070000001,
+     "kind": "Airport"
+    },
+    {
+     "name": "West 30th Street Heliport",
+     "lat": 40.75504376153846,
+     "lon": -74.00718872307692,
+     "kind": "Airport"
+    },
+    {
+     "name": "Downtown Manhattan Heliport",
+     "lat": 40.70150896842105,
+     "lon": -74.0091969526316,
+     "kind": "Airport"
+    },
+    {
+     "name": "Skyport",
+     "lat": 40.735305134375004,
+     "lon": -73.9739222203125,
+     "kind": "Airport"
+    },
+    {
+     "name": "East 34th Street Heliport",
+     "lat": 40.74240983333334,
+     "lon": -73.97207276666668,
+     "kind": "Airport"
+    },
+    {
+     "name": "New York",
+     "lat": 40.7127281,
+     "lon": -74.00601520000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Laurel Hill",
+     "lat": 40.729824400000005,
+     "lon": -73.922915,
+     "kind": "Peak"
+    },
+    {
+     "name": "Janes Hill",
+     "lat": 40.8117675,
+     "lon": -73.91152550000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Great Hill",
+     "lat": 40.796939300000005,
+     "lon": -73.9588949,
+     "kind": "Peak"
+    },
+    {
+     "name": "Inwood Hill",
+     "lat": 40.8741667,
+     "lon": -73.92583330000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Spuyten Duyvil Hill",
+     "lat": 40.8797222,
+     "lon": -73.9180556,
+     "kind": "Peak"
+    },
+    {
+     "name": "Long Hill",
+     "lat": 40.865,
+     "lon": -73.93166670000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Morris",
+     "lat": 40.8041721,
+     "lon": -73.9436141,
+     "kind": "Peak"
+    },
+    {
+     "name": "Manhattan High Point",
+     "lat": 40.8529816,
+     "lon": -73.938224,
+     "kind": "Peak"
+    },
+    {
+     "name": "Summit Rock",
+     "lat": 40.783139500000004,
+     "lon": -73.97004240000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Vista Rock",
+     "lat": 40.7794109,
+     "lon": -73.969074,
+     "kind": "Peak"
+    },
+    {
+     "name": "Ridgefield",
+     "lat": 40.8342669,
+     "lon": -74.0087505,
+     "kind": "Place"
+    },
+    {
+     "name": "Fairview",
+     "lat": 40.8126006,
+     "lon": -73.99902800000001,
+     "kind": "Place"
+    },
+    {
+     "name": "North Bergen",
+     "lat": 40.8042674,
+     "lon": -74.012084,
+     "kind": "Place"
+    },
+    {
+     "name": "Weehawken",
+     "lat": 40.7695457,
+     "lon": -74.02041770000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Palisades Park",
+     "lat": 40.848155600000005,
+     "lon": -73.997639,
+     "kind": "Place"
+    },
+    {
+     "name": "Ridgefield Park",
+     "lat": 40.8563862,
+     "lon": -74.0249191,
+     "kind": "Place"
+    },
+    {
+     "name": "Hoboken",
+     "lat": 40.743306600000004,
+     "lon": -74.0323752,
+     "kind": "Place"
+    },
+    {
+     "name": "Union City",
+     "lat": 40.779545500000005,
+     "lon": -74.0237512,
+     "kind": "Place"
+    },
+    {
+     "name": "Fort Lee",
+     "lat": 40.8509333,
+     "lon": -73.97013820000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Cliffside Park",
+     "lat": 40.821489400000004,
+     "lon": -73.9876388,
+     "kind": "Place"
+    },
+    {
+     "name": "Guttenberg",
+     "lat": 40.7920454,
+     "lon": -74.00375050000001,
+     "kind": "Place"
+    },
+    {
+     "name": "Kings Bluff",
+     "lat": 40.765105500000004,
+     "lon": -74.0210258,
+     "kind": "Peak"
+    },
+    {
+     "name": "West New York",
+     "lat": 40.785611700000004,
+     "lon": -74.0093129,
+     "kind": "Place"
+    },
+    {
+     "name": "Alphabet City",
+     "lat": 40.7251022,
+     "lon": -73.9795833,
+     "kind": "Place"
+    },
+    {
+     "name": "SoHo",
+     "lat": 40.72288,
+     "lon": -73.9987505,
+     "kind": "Place"
+    },
+    {
+     "name": "Tudor City",
+     "lat": 40.7486231,
+     "lon": -73.97138890000001,
+     "kind": "Place"
+    },
+    {
+     "name": "South Street Seaport",
+     "lat": 40.7057505,
+     "lon": -74.0029056,
+     "kind": "Attraction"
+    },
+    {
+     "name": "New York Studio School of Drawing, Painting and Sculpture",
+     "lat": 40.7324518,
+     "lon": -73.9971981,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Stonewall Inn",
+     "lat": 40.7338163,
+     "lon": -74.00216130000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Paula Cooper Gallery",
+     "lat": 40.747092300000006,
+     "lon": -74.0064354,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Fraunces Tavern Museum",
+     "lat": 40.703387,
+     "lon": -74.01135400000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "National Museum of the American Indian",
+     "lat": 40.704027,
+     "lon": -74.01374700000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Bronx Museum of the Arts",
+     "lat": 40.8310911,
+     "lon": -73.9199471,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Yeshiva University Museum",
+     "lat": 40.737978000000005,
+     "lon": -73.9938312,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Museum of the Moving Image",
+     "lat": 40.756194900000004,
+     "lon": -73.92400690000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Museum of African Art",
+     "lat": 40.725,
+     "lon": -73.99777780000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Lower East Side Tenement Museum",
+     "lat": 40.7187837,
+     "lon": -73.99002660000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "GWB View",
+     "lat": 40.8498716,
+     "lon": -73.9446423,
+     "kind": "Attraction"
+    },
+    {
+     "name": "HBP 187 View",
+     "lat": 40.8509205,
+     "lon": -73.9268503,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Sherman Creek",
+     "lat": 40.8609689,
+     "lon": -73.9183446,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Tortoise",
+     "lat": 40.7679978,
+     "lon": -73.9727565,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Seal",
+     "lat": 40.7683715,
+     "lon": -73.9716059,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Puffin",
+     "lat": 40.7681959,
+     "lon": -73.97133360000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "California Sea Lion",
+     "lat": 40.767819,
+     "lon": -73.9717588,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Gentoo Penguin",
+     "lat": 40.768329900000005,
+     "lon": -73.971457,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Grizzly Bear",
+     "lat": 40.7684264,
+     "lon": -73.9719208,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Snow Monkey",
+     "lat": 40.7681796,
+     "lon": -73.9723113,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Red Panda",
+     "lat": 40.7682913,
+     "lon": -73.97278460000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Snow Leopard",
+     "lat": 40.7686684,
+     "lon": -73.9724099,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Dyckman Farmhouse Museum",
+     "lat": 40.8673822,
+     "lon": -73.92288590000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Rubin Museum of Art",
+     "lat": 40.7400959,
+     "lon": -73.9977377,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Koreatown",
+     "lat": 40.747641900000005,
+     "lon": -73.9865157,
+     "kind": "Place"
+    },
+    {
+     "name": "Flatiron District",
+     "lat": 40.741072200000005,
+     "lon": -73.98965340000001,
+     "kind": "Place"
+    },
+    {
+     "name": "The Brant Foundation Art Study Center",
+     "lat": 40.726068000000005,
+     "lon": -73.9851191,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Half-Moon Overlook",
+     "lat": 40.8800085,
+     "lon": -73.9223353,
+     "kind": "Attraction"
+    },
+    {
+     "name": "The Yankees Museum",
+     "lat": 40.8285709,
+     "lon": -73.9258934,
+     "kind": "Attraction"
+    },
+    {
+     "name": "The Royal Tenenbaum Mansion",
+     "lat": 40.8237942,
+     "lon": -73.9465643,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Children's Cultural Center of Native America",
+     "lat": 40.8321455,
+     "lon": -73.9448716,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Skyscraper Museum",
+     "lat": 40.70575,
+     "lon": -74.017691,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Hall des Lumières",
+     "lat": 40.713744000000005,
+     "lon": -74.005072,
+     "kind": "Attraction"
+    },
+    {
+     "name": "South Street Seaport Museum",
+     "lat": 40.706628,
+     "lon": -74.003676,
+     "kind": "Attraction"
+    },
+    {
+     "name": "American Folk Art Museum",
+     "lat": 40.7732296,
+     "lon": -73.98159580000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Delacorte Musical Clock",
+     "lat": 40.768114700000005,
+     "lon": -73.9711748,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Kiesza - Hideaway",
+     "lat": 40.723087400000004,
+     "lon": -73.9586209,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Granite Prospect",
+     "lat": 40.701995100000005,
+     "lon": -73.99740770000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Tropical Zone",
+     "lat": 40.7676311,
+     "lon": -73.9725255,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Le Carrousel",
+     "lat": 40.7534287,
+     "lon": -73.9838795,
+     "kind": "Attraction"
+    },
+    {
+     "name": "C Rock",
+     "lat": 40.8761232,
+     "lon": -73.9189473,
+     "kind": "Attraction"
+    },
+    {
+     "name": "The Museum at FIT",
+     "lat": 40.746654400000004,
+     "lon": -73.99414730000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Friends Building",
+     "lat": 40.7323594,
+     "lon": -74.00529990000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "One World Observatory",
+     "lat": 40.712949,
+     "lon": -74.0130438,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Museum of Sex",
+     "lat": 40.7440374,
+     "lon": -73.98735760000001,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Rockefeller Center",
+     "lat": 40.758844700000004,
+     "lon": -73.9788005,
+     "kind": "Attraction"
+    },
+    {
+     "name": "Chelsea Market",
+     "lat": 40.742923600000005,
+     "lon": -74.0069958,
+     "kind": "Attraction"
+    }
+   ]
+  },
+  {
+   "id": "paris",
+   "name": "Paris · Seine",
+   "bbox": {
+    "south": 48.84,
+    "north": 48.878,
+    "west": 2.28,
+    "east": 2.37
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 5397877,
+   "buildings": 36853,
+   "places": []
+  },
+  {
+   "id": "port-la",
+   "name": "Port of Los Angeles",
+   "bbox": {
+    "south": 33.705,
+    "north": 33.77,
+    "west": -118.29,
+    "east": -118.205
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "port",
+   "bytes": 2655891,
+   "buildings": 7179,
+   "places": []
+  },
+  {
+   "id": "rainier",
+   "name": "Mount Rainier",
+   "bbox": {
+    "south": 46.75,
+    "north": 46.95,
+    "west": -121.9,
+    "east": -121.6
+   },
+   "startup": false,
+   "source": "osm",
+   "kind": "",
+   "bytes": 5859725,
+   "buildings": 85,
+   "places": [
+    {
+     "name": "Paul Peak",
+     "lat": 46.924192000000005,
+     "lon": -121.896928,
+     "kind": "Peak"
+    },
+    {
+     "name": "Copper Mountain",
+     "lat": 46.7973304,
+     "lon": -121.827599,
+     "kind": "Peak"
+    },
+    {
+     "name": "Hessong Rock",
+     "lat": 46.9238567,
+     "lon": -121.84536580000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Panorama Point",
+     "lat": 46.803562,
+     "lon": -121.72971070000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Fay Peak",
+     "lat": 46.932142600000006,
+     "lon": -121.8485241,
+     "kind": "Peak"
+    },
+    {
+     "name": "Liberty Cap",
+     "lat": 46.863017500000005,
+     "lon": -121.77488340000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Tokaloo Rock",
+     "lat": 46.839241200000004,
+     "lon": -121.84061840000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Meany Crest",
+     "lat": 46.8584425,
+     "lon": -121.66287100000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Glacier Island",
+     "lat": 46.8207907,
+     "lon": -121.813855,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pyramid Peak",
+     "lat": 46.806840900000005,
+     "lon": -121.8119659,
+     "kind": "Peak"
+    },
+    {
+     "name": "Antler Peak",
+     "lat": 46.919963200000005,
+     "lon": -121.63223210000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Cougar Rock",
+     "lat": 46.7652067,
+     "lon": -121.80179330000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "McNeeley Peak",
+     "lat": 46.928090000000005,
+     "lon": -121.6471252,
+     "kind": "Peak"
+    },
+    {
+     "name": "Berry Peak",
+     "lat": 46.9470496,
+     "lon": -121.8940603,
+     "kind": "Peak"
+    },
+    {
+     "name": "Observation Rock",
+     "lat": 46.901773600000006,
+     "lon": -121.80648900000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Iron Mountain",
+     "lat": 46.7931638,
+     "lon": -121.82871,
+     "kind": "Peak"
+    },
+    {
+     "name": "Whitman Crest",
+     "lat": 46.848249800000005,
+     "lon": -121.687211,
+     "kind": "Peak"
+    },
+    {
+     "name": "Crescent Mountain",
+     "lat": 46.948162200000006,
+     "lon": -121.76148800000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sluiskin Mountain",
+     "lat": 46.9463286,
+     "lon": -121.74381000000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Old Desolate",
+     "lat": 46.925141200000006,
+     "lon": -121.7500535,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pacific Point",
+     "lat": 46.9389957,
+     "lon": -121.768432,
+     "kind": "Peak"
+    },
+    {
+     "name": "Saint Andrews Rock",
+     "lat": 46.853455700000005,
+     "lon": -121.7891577,
+     "kind": "Peak"
+    },
+    {
+     "name": "Cowlitz Rocks",
+     "lat": 46.814423700000006,
+     "lon": -121.7041999,
+     "kind": "Peak"
+    },
+    {
+     "name": "Gibraltar Rock",
+     "lat": 46.845820700000004,
+     "lon": -121.74539170000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Pinnacle Peak",
+     "lat": 46.757937000000005,
+     "lon": -121.7325869,
+     "kind": "Peak"
+    },
+    {
+     "name": "Lane Peak",
+     "lat": 46.758006300000005,
+     "lon": -121.75270200000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Denman Peak",
+     "lat": 46.757349700000006,
+     "lon": -121.74337870000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "The Castle",
+     "lat": 46.7578365,
+     "lon": -121.7282447,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Ararat",
+     "lat": 46.7892748,
+     "lon": -121.852322,
+     "kind": "Peak"
+    },
+    {
+     "name": "Aurora Peak",
+     "lat": 46.835480700000005,
+     "lon": -121.86934310000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Baker Point",
+     "lat": 46.886462200000004,
+     "lon": -121.6636933,
+     "kind": "Peak"
+    },
+    {
+     "name": "2nd Burroughs Mountain",
+     "lat": 46.9063177,
+     "lon": -121.68975900000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Castle Peak",
+     "lat": 46.9482214,
+     "lon": -121.84958040000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Chutla Peak",
+     "lat": 46.752763400000006,
+     "lon": -121.7749136,
+     "kind": "Peak"
+    },
+    {
+     "name": "Dege Peak",
+     "lat": 46.918480100000004,
+     "lon": -121.6106376,
+     "kind": "Peak"
+    },
+    {
+     "name": "Eagle Peak",
+     "lat": 46.7556718,
+     "lon": -121.77916640000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Fremont",
+     "lat": 46.9234031,
+     "lon": -121.66670800000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Marcus Peak",
+     "lat": 46.9378332,
+     "lon": -121.6081338,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mildred Point",
+     "lat": 46.8004563,
+     "lon": -121.78252900000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mineral Mountain",
+     "lat": 46.908718300000004,
+     "lon": -121.755098,
+     "kind": "Peak"
+    },
+    {
+     "name": "First Mother Mountain",
+     "lat": 46.9384725,
+     "lon": -121.84205820000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Pleasant",
+     "lat": 46.9276263,
+     "lon": -121.8386978,
+     "kind": "Peak"
+    },
+    {
+     "name": "Point Success",
+     "lat": 46.8458144,
+     "lon": -121.7672074,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Ruth",
+     "lat": 46.8764934,
+     "lon": -121.7160752,
+     "kind": "Peak"
+    },
+    {
+     "name": "Satulick Mountain",
+     "lat": 46.7773307,
+     "lon": -121.83787600000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Skyscraper Mountain",
+     "lat": 46.927194500000006,
+     "lon": -121.69817450000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Tillicum Point",
+     "lat": 46.905361000000006,
+     "lon": -121.82735330000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Tokaloo Spire",
+     "lat": 46.8375782,
+     "lon": -121.84146120000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Faraway Rock",
+     "lat": 46.7739867,
+     "lon": -121.7188086,
+     "kind": "Peak"
+    },
+    {
+     "name": "Goat Island Mountain - West Peak",
+     "lat": 46.880255700000006,
+     "lon": -121.66071400000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Little Tahoma",
+     "lat": 46.849497500000005,
+     "lon": -121.71185380000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "McClure Rock",
+     "lat": 46.8084421,
+     "lon": -121.72315,
+     "kind": "Peak"
+    },
+    {
+     "name": "Plummer Peak",
+     "lat": 46.753434000000006,
+     "lon": -121.73956450000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Steamboat Prow",
+     "lat": 46.871892,
+     "lon": -121.7316859,
+     "kind": "Peak"
+    },
+    {
+     "name": "Puyallup Cleaver",
+     "lat": 46.8456531,
+     "lon": -121.8088783,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sunset",
+     "lat": 46.8764253,
+     "lon": -121.89117490000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Lee",
+     "lat": 46.919555800000005,
+     "lon": -121.8152986,
+     "kind": "Peak"
+    },
+    {
+     "name": "Anvil Rock",
+     "lat": 46.829632200000006,
+     "lon": -121.7257934,
+     "kind": "Peak"
+    },
+    {
+     "name": "Banshee Peak",
+     "lat": 46.8511614,
+     "lon": -121.62052080000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Echo Rock",
+     "lat": 46.9068875,
+     "lon": -121.80051680000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Needle Rock",
+     "lat": 46.8839005,
+     "lon": -121.8123893,
+     "kind": "Peak"
+    },
+    {
+     "name": "Foss Peak",
+     "lat": 46.7550377,
+     "lon": -121.7127827,
+     "kind": "Peak"
+    },
+    {
+     "name": "3rd Burroughs Mountain",
+     "lat": 46.901755,
+     "lon": -121.713525,
+     "kind": "Peak"
+    },
+    {
+     "name": "1st Burroughs Mountain",
+     "lat": 46.912582,
+     "lon": -121.67334880000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Second Mother Mountain",
+     "lat": 46.9463512,
+     "lon": -121.82565450000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Goat Island Mountain",
+     "lat": 46.884292300000006,
+     "lon": -121.64779100000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Division Rock",
+     "lat": 46.9038381,
+     "lon": -121.8472732,
+     "kind": "Peak"
+    },
+    {
+     "name": "Point 6945",
+     "lat": 46.858701800000006,
+     "lon": -121.6428137,
+     "kind": "Peak"
+    },
+    {
+     "name": "Third Cowlitz Chimney",
+     "lat": 46.8577333,
+     "lon": -121.60178660000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Central Cowlitz Chimney",
+     "lat": 46.852414100000004,
+     "lon": -121.61253690000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Main Cowlitz Chimney",
+     "lat": 46.8489215,
+     "lon": -121.60945770000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "North Cowlitz Chimney",
+     "lat": 46.8553343,
+     "lon": -121.6059709,
+     "kind": "Peak"
+    },
+    {
+     "name": "K Spire",
+     "lat": 46.858496300000006,
+     "lon": -121.69917760000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "East Fay Peak",
+     "lat": 46.9324413,
+     "lon": -121.8433155,
+     "kind": "Peak"
+    },
+    {
+     "name": "Tahoma Cleaver",
+     "lat": 46.8428198,
+     "lon": -121.7849386,
+     "kind": "Peak"
+    },
+    {
+     "name": "Columbia Crest",
+     "lat": 46.852872500000004,
+     "lon": -121.7604091,
+     "kind": "Peak"
+    },
+    {
+     "name": "Alta Vista",
+     "lat": 46.792367500000005,
+     "lon": -121.73654880000001,
+     "kind": "Peak"
+    },
+    {
+     "name": "Mount Wow",
+     "lat": 46.7729335,
+     "lon": -121.8987273,
+     "kind": "Peak"
+    },
+    {
+     "name": "Andrew",
+     "lat": 46.8295611,
+     "lon": -121.8547618,
+     "kind": "Peak"
+    },
+    {
+     "name": "Sluiskin Mountain, East",
+     "lat": 46.945816,
+     "lon": -121.7378956,
+     "kind": "Peak"
+    }
+   ]
+  },
+  {
+   "id": "rio",
+   "name": "Rio de Janeiro · Corcovado to Sugarloaf",
+   "bbox": {
+    "south": -22.965,
+    "north": -22.94,
+    "west": -43.22,
+    "east": -43.15
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1375669,
+   "buildings": 15933,
+   "places": []
+  },
+  {
+   "id": "rotterdam",
+   "name": "Port of Rotterdam · Maasvlakte",
+   "bbox": {
+    "south": 51.94,
+    "north": 51.98,
+    "west": 4,
+    "east": 4.08
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "port",
+   "bytes": 2388383,
+   "buildings": 2171,
+   "places": []
+  },
+  {
+   "id": "rural-beauce",
+   "name": "Rural · Beauce farmland, France",
+   "bbox": {
+    "south": 48.23203,
+    "north": 48.26797,
+    "west": 1.62302,
+    "east": 1.67698
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "rural",
+   "bytes": 37811,
+   "buildings": 513,
+   "places": [],
+   "vegBytes": 2250
+  },
+  {
+   "id": "rural-gopalganj",
+   "name": "Rural · villages in Gopalganj, Bangladesh",
+   "bbox": {
+    "south": 22.98703,
+    "north": 23.02297,
+    "west": 89.81048,
+    "east": 89.84952
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "rural",
+   "bytes": 301593,
+   "buildings": 14522,
+   "places": [],
+   "vegBytes": 13870
+  },
+  {
+   "id": "rural-malawi",
+   "name": "Rural · villages near Lilongwe, Malawi",
+   "bbox": {
+    "south": -13.86797,
+    "north": -13.83203,
+    "west": 33.6315,
+    "east": 33.6685
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "rural",
+   "bytes": 62343,
+   "buildings": 2125,
+   "places": [],
+   "vegBytes": 5537
+  },
+  {
+   "id": "rural-tefe",
+   "name": "Rural · Tefé, Amazonas, Brazil",
+   "bbox": {
+    "south": -3.37197,
+    "north": -3.33603,
+    "west": -64.729,
+    "east": -64.693
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "rural",
+   "bytes": 306068,
+   "buildings": 14588,
+   "places": [],
+   "vegBytes": 9144
+  },
+  {
+   "id": "rural-wagga",
+   "name": "Rural · farmland near Wagga Wagga, Australia",
+   "bbox": {
+    "south": -35.06797,
+    "north": -35.03203,
+    "west": 147.27805,
+    "east": 147.32195
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "rural",
+   "bytes": 27911,
+   "buildings": 155,
+   "places": [],
+   "vegBytes": 6425
+  },
+  {
+   "id": "sao-paulo",
+   "name": "São Paulo · Centro to Avenida Paulista",
+   "bbox": {
+    "south": -23.57746,
+    "north": -23.53254,
+    "west": -46.6695,
+    "east": -46.6205
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 2228596,
+   "buildings": 52617,
+   "places": [],
+   "vegBytes": 16429
+  },
+  {
+   "id": "seoul",
+   "name": "Seoul · Jongno to Namsan",
+   "bbox": {
+    "south": 37.54354,
+    "north": 37.58846,
+    "west": 126.95467,
+    "east": 127.01133
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 860451,
+   "buildings": 25174,
+   "places": [],
+   "vegBytes": 17056
+  },
+  {
+   "id": "singapore-port",
+   "name": "Port of Singapore · Pasir Panjang",
+   "bbox": {
+    "south": 1.265,
+    "north": 1.3,
+    "west": 103.75,
+    "east": 103.8
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "port",
+   "bytes": 970690,
+   "buildings": 4348,
+   "places": []
+  },
+  {
+   "id": "sydney",
+   "name": "Sydney Harbour",
+   "bbox": {
+    "south": -33.87,
+    "north": -33.845,
+    "west": 151.195,
+    "east": 151.225
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 1053723,
+   "buildings": 2665,
+   "places": []
+  },
+  {
+   "id": "tokyo",
+   "name": "Tokyo · Minato to Sumida",
+   "bbox": {
+    "south": 35.65,
+    "north": 35.715,
+    "west": 139.735,
+    "east": 139.815
+   },
+   "startup": false,
+   "source": "overture",
+   "kind": "city",
+   "bytes": 6897659,
+   "buildings": 100883,
+   "places": []
+  }
+ ]
+}

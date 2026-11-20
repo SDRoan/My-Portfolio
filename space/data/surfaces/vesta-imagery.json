@@ -1,0 +1,11 @@
+{
+ "file": "vesta_usgs.jpg",
+ "width": 3814,
+ "height": 1908,
+ "grey": true,
+ "source": "Dawn FC HAMO mosaic 74 px/deg (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 433,
+ "fill": false,
+ "bytes": 1253060
+}

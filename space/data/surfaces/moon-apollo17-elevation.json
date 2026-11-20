@@ -1,0 +1,20 @@
+{
+  "file": "moon-apollo17-elevation.i16.gz",
+  "width": 160,
+  "height": 144,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -3058,
+  "maxM": -224,
+  "bytes": 28469,
+  "source": "LRO LOLA LDEM_64 (64 px/deg, ~474 m), NASA PDS Geosciences Node",
+  "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.img",
+  "reference": "heights above the 1737.4 km sphere",
+  "license": "Public domain (NASA)",
+  "bounds": {
+    "south": 19,
+    "north": 21.25,
+    "west": 29.5,
+    "east": 32
+  }
+}

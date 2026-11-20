@@ -1,0 +1,16 @@
+{
+ "file": "moon-apollo17-118-elevation.i16.gz",
+ "width": 333,
+ "height": 307,
+ "scale": 0.1,
+ "bounds": {
+  "west": 30.09765625,
+  "east": 31.3984375,
+  "north": 20.80078125,
+  "south": 19.6015625
+ },
+ "lazy": true,
+ "source": "LRO LOLA 118 m (USGS)",
+ "resolutionM": 118,
+ "bytes": 93620
+}

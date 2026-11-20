@@ -1,0 +1,17 @@
+{
+  "file": "hyperion-elevation.i16.gz",
+  "width": 360,
+  "height": 180,
+  "scale": 2,
+  "encoding": "int16le-row-delta",
+  "minM": -38108,
+  "maxM": 52560,
+  "bytes": 55244,
+  "source": "Thomas shape model, 5° grid (PDS Small Bodies Node)",
+  "url": "https://sbnarchive.psi.edu/pds4/non_mission/ast-sat.thomas.shape-models_V1_0/data/s7hyperion.tab",
+  "license": "Public domain (NASA PDS)",
+  "note": "Thomas Voyager 2 shape model; worst fit 330–30° W north of 30° S, ~95% of the surface within 20 km",
+  "reference": "radius minus 135 km; longitudes converted from west- to east-positive",
+  "shapeFromData": true,
+  "mappedFraction": 1
+}

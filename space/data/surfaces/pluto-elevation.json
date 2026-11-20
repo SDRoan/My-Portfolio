@@ -1,0 +1,26 @@
+{
+  "file": "pluto-elevation.i16.gz",
+  "width": 1555,
+  "height": 777,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -4047,
+  "maxM": 6237,
+  "bytes": 928367,
+  "source": "New Horizons global DEM 300 m (Schenk et al. 2018, USGS Astrogeology) — encounter hemisphere mapped",
+  "license": "Public domain (NASA)",
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Pluto_NewHorizons_Global_DEM_300m_Jul2017_16bit.tif",
+  "reference": "heights re-referenced from the product's 1188.3 km sphere to 1188.3 km",
+  "mappedFraction": 0.4649,
+  "coverage": {
+    "file": "pluto-coverage.i16.gz",
+    "width": 1555,
+    "height": 777,
+    "scale": 0.01,
+    "bytes": 23896
+  },
+  "sourceSize": "24888×12444",
+  "sampling": "every 16th row and column (range requests)",
+  "sourceCentralMeridian": 180,
+  "columnZero": "-180"
+}

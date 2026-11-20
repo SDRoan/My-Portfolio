@@ -1,0 +1,16 @@
+{
+ "file": "venus-maxwell-elevation.i16.gz",
+ "width": 683,
+ "height": 319,
+ "scale": 1,
+ "bounds": {
+  "west": -10.01953125,
+  "east": 19.9951171875,
+  "north": 72.0263671875,
+  "south": 58.0078125
+ },
+ "lazy": true,
+ "source": "Magellan topography 4641 m (USGS)",
+ "resolutionM": 4642,
+ "bytes": 231895
+}

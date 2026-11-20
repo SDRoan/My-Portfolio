@@ -1,0 +1,19 @@
+{
+ "file": "mars-gale-hirise-elevation.i16.gz",
+ "width": 1319,
+ "height": 2297,
+ "scale": 0.5,
+ "bounds": {
+  "west": 137.1241665061248,
+  "east": 137.68047470132112,
+  "north": -4.1296047962656,
+  "south": -5.098399280242866
+ },
+ "lazy": true,
+ "source": "MSL Gale HiRISE DEM mosaic 1 m, sampled at 25 m (USGS)",
+ "resolutionM": 25,
+ "bytes": 1767139,
+ "datumOffsetM": -11.3,
+ "coverage": 0.819,
+ "note": "gaps filled from HRSC–MOLA 200 m; feathered over 800 m"
+}

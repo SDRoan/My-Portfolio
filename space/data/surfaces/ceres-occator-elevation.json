@@ -1,0 +1,16 @@
+{
+ "file": "ceres-occator-elevation.i16.gz",
+ "width": 900,
+ "height": 840,
+ "scale": 1,
+ "bounds": {
+  "west": -128,
+  "east": -113,
+  "north": 27,
+  "south": 13
+ },
+ "lazy": true,
+ "source": "Dawn HAMO DTM 137 m (DLR/USGS)",
+ "resolutionM": 137,
+ "bytes": 555518
+}

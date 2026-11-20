@@ -1,0 +1,16 @@
+{
+ "file": "mars-valles-hrsc-elevation.i16.gz",
+ "width": 2371,
+ "height": 1185,
+ "scale": 1,
+ "bounds": {
+  "west": -78.00663579957636,
+  "east": -62.00648583800401,
+  "north": -2.997919283183691,
+  "south": -10.994620128592047
+ },
+ "lazy": true,
+ "source": "HRSC–MOLA blend 200 m, every 2nd cell (USGS/DLR)",
+ "resolutionM": 399,
+ "bytes": 3057790
+}

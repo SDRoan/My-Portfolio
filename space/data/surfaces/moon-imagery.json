@@ -1,0 +1,10 @@
+{
+ "file": "moon_usgs.jpg",
+ "width": 4043,
+ "height": 2022,
+ "grey": true,
+ "source": "LRO LROC WAC mosaic 100 m (USGS)",
+ "resolutionM": 2700,
+ "fill": false,
+ "bytes": 3224754
+}

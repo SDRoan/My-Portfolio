@@ -1,0 +1,11 @@
+{
+ "file": "mimas_usgs.jpg",
+ "width": 5760,
+ "height": 2880,
+ "grey": true,
+ "source": "Cassini ISS global basemap (DLR, via USGS), 16 px/deg",
+ "surfaceOnly": false,
+ "resolutionM": 215,
+ "fill": false,
+ "bytes": 2061353
+}

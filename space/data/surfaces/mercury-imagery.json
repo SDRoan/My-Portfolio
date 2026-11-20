@@ -1,0 +1,11 @@
+{
+ "file": "mercury_usgs.jpg",
+ "width": 4088,
+ "height": 2045,
+ "grey": true,
+ "source": "MESSENGER MDIS global monochrome mosaic 250 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 3750,
+ "fill": false,
+ "bytes": 3326856
+}

@@ -1,0 +1,61 @@
+Landmark validation — terrain as the simulator builds it (grids + tiles + patches + features)
+
+BODY | NAME | LAT | LON | DEM HEIGHT m | EXPECTED m | RESULT | NOTES
+earth | Kennedy Space Center LC-39A | 28.608 | -80.604 | 10 | 3 | PASS | expected ~3 m, Δ +7
+earth | Mount Everest | 27.988 | 86.925 | 8719 | 8849 | PASS | summit vs base +2895 m; summit within 5 km: 8719 m; expected ~8849 m, Δ -130
+earth | Grand Canyon | 36.054 | -112.140 | 2097 | — | PASS | no reference value
+earth | Mauna Kea | 19.821 | -155.468 | 2299 | 4207 | WARN | summit vs base +1337 m; summit within 10 km: 2573 m; expected ~4207 m, Δ -1634; tolerance ±1052 m at 18553 m cells
+earth | Dead Sea | 31.500 | 35.500 | -233 | -430 | WARN | expected ~-430 m, Δ +197; tolerance ±150 m at 18553 m cells
+earth | Challenger Deep | 11.373 | 142.592 | -9424 | -10935 | WARN | expected ~-10935 m, Δ +1511; tolerance ±656 m at 18553 m cells
+moon | Apollo 11 · Tranquility Base | 0.674 | 23.473 | -1927 | — | PASS | no reference value
+moon | Apollo 17 · Taurus–Littrow | 20.191 | 30.772 | -2628 | — | PASS | no reference value
+moon | Tycho | -43.310 | -11.360 | -1562 | — | PASS | centre vs rim -1438 m
+moon | Copernicus | 9.620 | -20.080 | -3319 | — | PASS | centre vs rim -2430 m
+moon | Shackleton | -89.670 | 129.780 | -2765 | — | PASS | centre vs rim -3596 m
+mars | Olympus Mons | 18.650 | -133.800 | 19967 | 21229 | PASS | summit vs base +20631 m; summit within 150 km: 21168 m; expected ~21229 m, Δ -61
+mars | Gale crater | -5.400 | 137.800 | -1017 | — | PASS | centre vs rim -2271 m
+mars | Jezero crater | 18.380 | 77.580 | -2627 | — | PASS | centre vs rim -527 m
+mars | Hellas Planitia | -42.400 | 70.500 | -6040 | — | PASS | centre vs rim -7740 m
+mars | Valles Marineris | -14.006 | -58.588 | -4875 | — | PASS | no reference value
+mars | Elysium Mons | 25.023 | 147.214 | 10359 | 14100 | PASS | summit vs base +10391 m; summit within 100 km: 14017 m; expected ~14100 m, Δ -83
+mars | Noctis Labyrinthus | -6.362 | -101.189 | 7044 | — | PASS | no reference value
+mars | Arsia Mons | -8.257 | -120.092 | 16365 | 17761 | PASS | summit vs base +9974 m; summit within 118 km: 17749 m; expected ~17761 m, Δ -12
+mercury | Caloris Planitia | 31.652 | 161.985 | -1206 | — | PASS | centre vs rim -1927 m
+mercury | Rembrandt | -32.892 | 87.866 | -4223 | — | PASS | centre vs rim -3437 m
+mercury | Rachmaninoff | 27.661 | 57.370 | -10875 | — | PASS | centre vs rim -9268 m
+venus | Maxwell Montes | 65.200 | 3.300 | 9887 | 10800 | PASS | summit vs base +7060 m; summit within 150 km: 10806 m; expected ~10800 m, Δ +6
+venus | Atalanta Planitia | 45.600 | 165.800 | -550 | — | PASS | below datum: -550 m
+ceres | Occator | 19.819 | -120.665 | 6731 | — | PASS | centre vs rim -3114 m
+ceres | Ahuna Mons | -10.478 | -43.800 | 14285 | — | PASS | summit vs base +4533 m
+ceres | Kerwan | -10.767 | 123.987 | 4463 | — | PASS | centre vs rim -2223 m
+ceres | Vendimia Planitia | 23.000 | 135.000 | 1812 | — | PASS | no reference value
+vesta | Rheasilvia | -71.951 | 86.303 | -25757 | — | PASS | centre vs rim -25021 m
+vesta | Veneneia | -47.932 | -54.324 | -20558 | — | PASS | centre vs rim -16801 m
+vesta | Divalia Fossae | -9.053 | -163.770 | 13051 | — | PASS | no reference value
+vesta | Saturnalia Fossae | 28.051 | 37.055 | -1504 | — | PASS | no reference value
+vesta | Marcia | 8.979 | -20.452 | 5325 | — | PASS | centre vs rim -9345 m
+pluto | Sputnik Planitia | 19.510 | 178.690 | -746 | — | PASS | centre vs rim -1198 m
+pluto | Tenzing Montes | -15.610 | 177.380 | -908 | — | PASS | no reference value
+pluto | Hillary Montes | 3.260 | 169.580 | -781 | — | PASS | no reference value
+charon | Argo Chasma | 27.800 | 80.400 | -4583 | — | PASS | no reference value
+europa | Conamara Chaos | 9.700 | 87.300 | 7 | — | PASS | no reference value
+europa | Pwyll | -25.200 | 88.600 | -2619 | — | PASS | centre vs rim -2692 m
+io | Loki Patera | 13.008 | 51.214 | -1441 | — | PASS | centre vs rim -1498 m
+io | Pele | -18.710 | 104.720 | 4 | — | PASS | no reference value
+io | Boosaule Montes | -3.749 | 90.894 | 9191 | — | PASS | summit vs base +9235 m
+titan | Kraken Mare | 68.000 | 50.000 | -377 | — | PASS | centre vs rim -318 m
+titan | Ligeia Mare | 79.700 | 112.100 | -307 | — | PASS | centre vs rim -232 m
+titan | Selk | 7.000 | 161.000 | -3072 | — | PASS | centre vs rim -3176 m
+enceladus | Damascus Sulcus | -80.590 | 74.130 | -4143 | — | PASS | no reference value
+enceladus | Baghdad Sulcus | -86.910 | 129.460 | -4543 | — | PASS | no reference value
+mimas | Herschel | -1.380 | -111.760 | -1606 | — | PASS | centre vs rim -1798 m
+iapetus | Turgis | 16.900 | -28.400 | -3631 | — | PASS | centre vs rim -5182 m
+iapetus | Engelier | -40.500 | 95.300 | -4886 | — | PASS | centre vs rim -4181 m
+triton | Leviathan Patera | 17.000 | 28.500 | -97 | — | PASS | no reference value
+triton | Tuonela Planitia | 34.000 | 14.500 | -264 | — | PASS | no reference value
+
+{"PASS":49,"WARN":3}
+
+Vesta longitude convention test: 42 Gazetteer craters ≥ 20 km, fraction that are depressions in the Dawn DTM
+  best: east + 0° → 100%   (as-is east+0°: 100%, median of all offsets 52%)
+  next: E+295° 74%, W+65° 69%, W+70° 69%, W+135° 67%

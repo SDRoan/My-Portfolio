@@ -1,0 +1,11 @@
+{
+ "file": "phobos_usgs.webp",
+ "width": 2880,
+ "height": 1440,
+ "grey": true,
+ "source": "Mars Express SRC mosaic 16 px/deg (USGS/DLR)",
+ "surfaceOnly": false,
+ "resolutionM": 25,
+ "fill": false,
+ "bytes": 289022
+}

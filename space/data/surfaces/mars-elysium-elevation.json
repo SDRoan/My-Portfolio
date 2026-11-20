@@ -1,0 +1,16 @@
+{
+ "file": "mars-elysium-elevation.i16.gz",
+ "width": 1024,
+ "height": 960,
+ "scale": 1,
+ "bounds": {
+  "west": 142,
+  "east": 150,
+  "north": 28.5,
+  "south": 21
+ },
+ "lazy": true,
+ "source": "MGS MOLA 463 m (USGS)",
+ "resolutionM": 462,
+ "bytes": 687397
+}

@@ -1,0 +1,24 @@
+{
+  "file": "venus-elevation.i16.gz",
+  "width": 2048,
+  "height": 1024,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -3686,
+  "maxM": 10800,
+  "bytes": 2554438,
+  "source": "Magellan global topography 4641 m (USGS Astrogeology, from the Magellan altimeter GTDR)",
+  "license": "Public domain (NASA/JPL/USGS)",
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Venus_Magellan_Topography_Global_4641m_v02.tif",
+  "reference": "heights re-referenced from the product's 6051.0 km sphere to 6051.8 km",
+  "mappedFraction": 0.9171,
+  "coverage": {
+    "file": "venus-coverage.i16.gz",
+    "width": 2048,
+    "height": 1024,
+    "scale": 0.01,
+    "bytes": 73243
+  },
+  "sourceSize": "8192×4096",
+  "sampling": "every 4th row and column (range requests)"
+}

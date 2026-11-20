@@ -1,0 +1,16 @@
+{
+ "file": "moon-tycho-118-elevation.i16.gz",
+ "width": 1357,
+ "height": 973,
+ "scale": 1,
+ "bounds": {
+  "west": -14,
+  "east": -8.69921875,
+  "north": -41.3984375,
+  "south": -45.19921875
+ },
+ "lazy": true,
+ "source": "LRO LOLA 118 m (USGS)",
+ "resolutionM": 118,
+ "bytes": 979386
+}

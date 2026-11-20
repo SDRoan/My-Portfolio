@@ -1,0 +1,16 @@
+{
+ "file": "mars-noctis-hrsc-elevation.i16.gz",
+ "width": 1185,
+ "height": 1037,
+ "scale": 1,
+ "bounds": {
+  "west": -104.00097475022025,
+  "east": -96.0042739048119,
+  "north": -2.997919283183691,
+  "south": -9.995876056760451
+ },
+ "lazy": true,
+ "source": "HRSC–MOLA blend 200 m, every 2nd cell (USGS/DLR)",
+ "resolutionM": 399,
+ "bytes": 1292526
+}

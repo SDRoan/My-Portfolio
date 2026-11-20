@@ -1,0 +1,16 @@
+{
+ "file": "mars-gale-elevation.i16.gz",
+ "width": 771,
+ "height": 711,
+ "scale": 1,
+ "bounds": {
+  "west": 136.3994226479465,
+  "east": 139.00088102423757,
+  "north": -4.199111477683843,
+  "south": -6.59812173130635
+ },
+ "lazy": true,
+ "source": "HRSC–MOLA blend 200 m (USGS/DLR)",
+ "resolutionM": 200,
+ "bytes": 524745
+}

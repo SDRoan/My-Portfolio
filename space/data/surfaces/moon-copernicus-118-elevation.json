@@ -1,0 +1,16 @@
+{
+ "file": "moon-copernicus-118-elevation.i16.gz",
+ "width": 973,
+ "height": 845,
+ "scale": 1,
+ "bounds": {
+  "west": -22,
+  "east": -18.19921875,
+  "north": 11.30078125,
+  "south": 8
+ },
+ "lazy": true,
+ "source": "LRO LOLA 118 m (USGS)",
+ "resolutionM": 118,
+ "bytes": 632516
+}

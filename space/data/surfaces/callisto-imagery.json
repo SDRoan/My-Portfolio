@@ -1,0 +1,11 @@
+{
+ "file": "callisto_usgs.jpg",
+ "width": 3784,
+ "height": 1893,
+ "grey": true,
+ "source": "Voyager / Galileo SSI mosaic 1 km (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 4002,
+ "fill": false,
+ "bytes": 1366275
+}

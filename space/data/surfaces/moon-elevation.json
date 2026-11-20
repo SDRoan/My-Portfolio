@@ -1,0 +1,14 @@
+{
+  "file": "moon-elevation.i16.gz",
+  "width": 1440,
+  "height": 720,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -8878,
+  "maxM": 10504,
+  "bytes": 1545181,
+  "source": "LRO LOLA LDEM_4 (NASA PDS Geosciences Node)",
+  "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_4.img",
+  "reference": "heights above a 1737.4 km sphere",
+  "license": "Public domain (NASA)"
+}

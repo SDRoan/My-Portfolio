@@ -1,0 +1,16 @@
+{
+ "file": "mars-jezero-elevation.i16.gz",
+ "width": 771,
+ "height": 711,
+ "scale": 1,
+ "bounds": {
+  "west": 76.39717322436127,
+  "east": 78.99863160065235,
+  "north": 19.602039477383926,
+  "south": 17.203029223761405
+ },
+ "lazy": true,
+ "source": "HRSC–MOLA blend 200 m (USGS/DLR)",
+ "resolutionM": 200,
+ "bytes": 426740
+}

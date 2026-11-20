@@ -1,0 +1,16 @@
+{
+ "file": "mars-elysium-hrsc-elevation.i16.gz",
+ "width": 889,
+ "height": 889,
+ "scale": 1,
+ "bounds": {
+  "west": 143.99797551877333,
+  "east": 149.99718822051852,
+  "north": 28.003636568129416,
+  "south": 22.004423866384244
+ },
+ "lazy": true,
+ "source": "HRSC–MOLA blend 200 m, every 2nd cell (USGS/DLR)",
+ "resolutionM": 399,
+ "bytes": 645647
+}

@@ -1,0 +1,27 @@
+{
+  "file": "enceladus-elevation.i16.gz",
+  "width": 720,
+  "height": 360,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -4526,
+  "maxM": 4724,
+  "bytes": 340104,
+  "source": "Cassini ISS global shape model, radius grid 0.5° (Bland et al. 2019, USGS Astrogeology)",
+  "license": "Public domain (NASA/USGS)",
+  "shapeFromData": true,
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Enceladus/enceladus_cassini_iss_shapemodel_bland_2019/enceladus_2019pm_radius.tif",
+  "reference": "heights re-referenced from the product's 251.5 km sphere to 252.1 km",
+  "mappedFraction": 0.9273,
+  "coverage": {
+    "file": "enceladus-coverage.i16.gz",
+    "width": 720,
+    "height": 360,
+    "scale": 0.01,
+    "bytes": 36724
+  },
+  "sourceSize": "720×360",
+  "sampling": "every 1th row and column (range requests)",
+  "sourceCentralMeridian": 180,
+  "columnZero": "-180"
+}

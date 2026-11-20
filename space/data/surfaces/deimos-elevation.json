@@ -1,0 +1,17 @@
+{
+  "file": "deimos-elevation.i16.gz",
+  "width": 360,
+  "height": 180,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -2615,
+  "maxM": 2495,
+  "bytes": 33958,
+  "source": "Thomas shape model, 5° grid (PDS Small Bodies Node)",
+  "url": "https://sbnarchive.psi.edu/pds4/non_mission/ast-sat.thomas.shape-models_V1_0/data/m2deimos.tab",
+  "license": "Public domain (NASA PDS)",
+  "note": "Thomas (1993) Viking-based shape model; ~400 m uncertainty over 200–355° W",
+  "reference": "radius minus 6.2 km; longitudes converted from west- to east-positive",
+  "shapeFromData": true,
+  "mappedFraction": 1
+}

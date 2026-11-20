@@ -1,0 +1,16 @@
+{
+ "file": "mars-olympus-caldera-elevation.i16.gz",
+ "width": 771,
+ "height": 681,
+ "scale": 1,
+ "bounds": {
+  "west": -135.00253060153335,
+  "east": -132.40107222524227,
+  "north": 19.80111346467467,
+  "south": 17.503327272386443
+ },
+ "lazy": true,
+ "source": "HRSC–MOLA blend 200 m (USGS/DLR)",
+ "resolutionM": 200,
+ "bytes": 364242
+}

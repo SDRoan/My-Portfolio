@@ -1,0 +1,16 @@
+{
+ "file": "venus-atalanta-elevation.i16.gz",
+ "width": 910,
+ "height": 683,
+ "scale": 0.1,
+ "bounds": {
+  "west": 139.9658203125,
+  "east": 179.9560546875,
+  "north": 65.0390625,
+  "south": 35.0244140625
+ },
+ "lazy": true,
+ "source": "Magellan topography 4641 m (USGS)",
+ "resolutionM": 4642,
+ "bytes": 739304
+}

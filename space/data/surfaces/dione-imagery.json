@@ -1,0 +1,11 @@
+{
+ "file": "dione_usgs.jpg",
+ "width": 3840,
+ "height": 1920,
+ "grey": true,
+ "source": "Cassini / Voyager mosaic 154 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 919,
+ "fill": false,
+ "bytes": 2181579
+}

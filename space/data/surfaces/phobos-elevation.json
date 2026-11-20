@@ -1,0 +1,19 @@
+{
+  "file": "phobos-elevation.i16.gz",
+  "width": 699,
+  "height": 349,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -3085,
+  "maxM": 2772,
+  "bytes": 214107,
+  "source": "Mars Express HRSC global DEM 2 px/deg (DLR, via USGS Astrogeology)",
+  "license": "Public domain / ESA-DLR-FU Berlin release via USGS",
+  "shapeFromData": true,
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Phobos_ME_HRSC_DEM_Global_2ppd.tif",
+  "reference": "heights re-referenced from the product's 11.1 km sphere to 11.27 km",
+  "mappedFraction": 1,
+  "coverage": null,
+  "sourceSize": "699×349",
+  "sampling": "every 1th row and column (range requests)"
+}

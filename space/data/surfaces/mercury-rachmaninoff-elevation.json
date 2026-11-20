@@ -1,0 +1,16 @@
+{
+ "file": "mercury-rachmaninoff-elevation.i16.gz",
+ "width": 704,
+ "height": 576,
+ "scale": 1,
+ "bounds": {
+  "west": 52,
+  "east": 63,
+  "north": 32,
+  "south": 23
+ },
+ "lazy": true,
+ "source": "MESSENGER DEM 665 m (USGS)",
+ "resolutionM": 665,
+ "bytes": 403659
+}

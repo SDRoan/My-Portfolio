@@ -1,0 +1,11 @@
+{
+ "file": "europa_usgs.jpg",
+ "width": 3926,
+ "height": 1964,
+ "grey": true,
+ "source": "Voyager / Galileo SSI mosaic 500 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 2498,
+ "fill": false,
+ "bytes": 1651355
+}

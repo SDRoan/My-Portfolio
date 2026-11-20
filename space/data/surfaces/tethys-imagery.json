@@ -1,0 +1,11 @@
+{
+ "file": "tethys_usgs.jpg",
+ "width": 3840,
+ "height": 1920,
+ "grey": true,
+ "source": "Cassini ISS mosaic 293 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 869,
+ "fill": false,
+ "bytes": 1787343
+}

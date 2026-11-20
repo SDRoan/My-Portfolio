@@ -1,0 +1,11 @@
+{
+ "file": "iapetus_usgs.webp",
+ "width": 5760,
+ "height": 2880,
+ "grey": true,
+ "source": "Cassini / Voyager mosaic 783 m (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 801,
+ "fill": false,
+ "bytes": 1970022
+}

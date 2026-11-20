@@ -1,0 +1,11 @@
+{
+ "file": "io_usgs.webp",
+ "width": 3815,
+ "height": 1908,
+ "grey": false,
+ "source": "Galileo SSI / Voyager colour-merge mosaic 1 km (USGS)",
+ "surfaceOnly": false,
+ "resolutionM": 3000,
+ "fill": false,
+ "bytes": 588548
+}

@@ -1,0 +1,14 @@
+{
+  "file": "mars-elevation.i16.gz",
+  "width": 1440,
+  "height": 720,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -8068,
+  "maxM": 21134,
+  "bytes": 1325001,
+  "source": "MGS MOLA MEGDR, 4 px/deg (NASA PDS Geosciences Node)",
+  "url": "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg004/megt90n000cb.img",
+  "reference": "heights relative to the MOLA areoid",
+  "license": "Public domain (NASA)"
+}

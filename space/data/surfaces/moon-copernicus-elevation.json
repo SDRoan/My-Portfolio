@@ -1,0 +1,20 @@
+{
+  "file": "moon-copernicus-elevation.i16.gz",
+  "width": 320,
+  "height": 272,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -3595,
+  "maxM": 802,
+  "bytes": 103747,
+  "source": "LRO LOLA LDEM_64 (64 px/deg, ~474 m), NASA PDS Geosciences Node",
+  "url": "https://pds-geosciences.wustl.edu/lro/lro-l-lola-3-rdr-v1/lrolol_1xxx/data/lola_gdr/cylindrical/img/ldem_64.img",
+  "reference": "heights above the 1737.4 km sphere",
+  "license": "Public domain (NASA)",
+  "bounds": {
+    "south": 7.5,
+    "north": 11.75,
+    "west": -22.5,
+    "east": -17.5
+  }
+}

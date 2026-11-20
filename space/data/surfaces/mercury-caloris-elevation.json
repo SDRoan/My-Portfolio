@@ -1,0 +1,16 @@
+{
+ "file": "mercury-caloris-elevation.i16.gz",
+ "width": 1344,
+ "height": 1280,
+ "scale": 1,
+ "bounds": {
+  "west": 138,
+  "east": 180,
+  "north": 52,
+  "south": 12
+ },
+ "lazy": true,
+ "source": "MESSENGER DEM 665 m, every 2nd cell (USGS)",
+ "resolutionM": 1331,
+ "bytes": 1887670
+}

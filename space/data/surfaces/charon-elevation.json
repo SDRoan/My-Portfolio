@@ -1,0 +1,24 @@
+{
+  "file": "charon-elevation.i16.gz",
+  "width": 1586,
+  "height": 793,
+  "scale": 1,
+  "encoding": "int16le-row-delta",
+  "minM": -14044,
+  "maxM": 6947,
+  "bytes": 867307,
+  "source": "New Horizons global DEM 300 m (Schenk et al. 2018, USGS Astrogeology) — encounter hemisphere mapped",
+  "license": "Public domain (NASA)",
+  "url": "https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Charon_NewHorizons_Global_DEM_300m_Jul2017_16bit.tif",
+  "reference": "heights re-referenced from the product's 606.0 km sphere to 606 km",
+  "mappedFraction": 0.4568,
+  "coverage": {
+    "file": "charon-coverage.i16.gz",
+    "width": 1586,
+    "height": 793,
+    "scale": 0.01,
+    "bytes": 23057
+  },
+  "sourceSize": "12693×6347",
+  "sampling": "every 8th row and column (range requests)"
+}

@@ -1,0 +1,16 @@
+{
+ "file": "mars-olympus-elevation.i16.gz",
+ "width": 1920,
+ "height": 1728,
+ "scale": 1,
+ "bounds": {
+  "west": -141,
+  "east": -126,
+  "north": 25.5,
+  "south": 12
+ },
+ "lazy": true,
+ "source": "MGS MOLA 463 m (USGS)",
+ "resolutionM": 462,
+ "bytes": 2639981
+}
